@@ -1,0 +1,1 @@
+[header][name][The Beginning][desc][Another \'The Future\'][texture][textureMap.png][bgImage][none][/header][160,3,40,40]

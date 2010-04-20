@@ -10,8 +10,9 @@
 		public var vely:int = 0;
 		public var velx:int = 0;
 		public var speed:uint = 3;
-		public var imon:Boolean = false;
-		public var ldir:Boolean = true;
+		public var action:uint = 0;
+		public var imon:Boolean = false; // On|Off = true|false
+		public var ldir:Boolean = true;  // Right|Left = true|false
 		public var jumpHeight:uint = 20;
 		//create bitmap with transparent canvas
 		public var display:Bitmap;
@@ -51,25 +52,36 @@
 			display.y = -32;
 			this.addChild(display);
 		}
-		private function animate():void{
-			//if(vely != 3){action = 3; trace(vely );}
-			//if(velx < 0){action = action +1;}
-			if(action == 0){
-				trace('standing');
-			}
-			if(action == 1){
-				trace('walk right');
-			}
-			if(action == 2){
-				trace('walk left');
-			}
-			if(action == 3){
-				trace('jump right');
-			}
-			if(action == 4){
-				trace('jump left');
+		private function animate(act:String = null):void{
+			if(ldir){ // moving right
+				if(imon){
+					if(velx != 0){
+						trace('moving right');
+					}else{
+						trace('standing right');
+					}
+				}else{
+					trace('falling right');			
+				}
+				if(act == 'throw'){
+					trace('throwing right');		
+				}
+			}else{ //moving left
+				if(imon){
+					if(velx != 0){
+						trace('moving left');
+					}else{
+						trace('standing left');
+					}
+				}else{
+					trace('falling left');			
+				}
+				if(act == 'throw'){
+					trace('throwing left');		
+				}
 			}
 		}
+		//check if any keys are pressed.
 		private function chkeys():Boolean {
 			var tmp:Boolean = false;
 			for(var i:String in KeyMap.keyMap){
@@ -77,8 +89,9 @@
 			}
 			return tmp;
 		}
-		//
+		//move avatar
 		public function moveMe() {
+			
 			// velocitize y
 			if (this.vely < MAX_VEL_Y) {
 				this.vely += this.speed;
@@ -97,22 +110,14 @@
 				if(this.velx < MAX_VEL_X){
 					this.velx += this.speed;
 				}
-				if(imon){
-					animate(1);
-				}else{
-					animate(3);
-				}
+				this.ldir = true;
 			}
 			// A or LEFT_ARROW move left
 			if (KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
 				if(this.velx > (MAX_VEL_X*-1)){
 					this.velx -= this.speed;
 				}
-				if(imon){
-					animate(2);
-				}else{
-					animate(4);
-				}
+				this.ldir = false;
 			}
 			// SPACEBAR or UP_ARROW jump 
 			if (KeyMap.keyMap[32] || KeyMap.keyMap[38]) {
@@ -123,8 +128,12 @@
 					this.vely = -jumpHeight;
 				}
 			}
-			//if both player and avatar are doing nothing:
-			if(!imon && !chkeys()){animate(0);}
+			// CTRL key 
+			if (KeyMap.keyMap[17]) {
+				animate('throw');
+			}
+			//animate skin
+			animate();
 		}
 	}
 }

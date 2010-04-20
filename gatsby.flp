@@ -1,6 +1,6 @@
 ﻿<flash_project name="gatsby" version="1">
     <project_folder name="game" expanded="true">
-        <project_folder name="engine" expanded="true">
+        <project_folder name="engine" expanded="false">
             <project_folder name="actors" expanded="true">
                 <project_file path="./game/engine/actors/Hero.as" filetype="as" />
                 <project_file path="./game/engine/actors/MapObject.as" filetype="as" />

@@ -38,6 +38,7 @@ package engine{
 		public var mapTexture:String = '';
 		public var mapTileSize:uint = 8;
 		public var mapDisplayScale:uint = 2;
+		public var hero = 'ff';
 		//eventually object deffinitions from 
 		//BrushDefs instead of static array
 		//brushes
@@ -67,7 +68,6 @@ package engine{
 			//mapData.addEventListener(Event.COMPLETE, parseMapData);
 			//TODO:  use text loader instead of objects on stage
 			
-			trace(stage.getChildAt(1));
 			objectArray.push(stage.getChildAt(1));
 			objectArray.push(stage.getChildAt(2));
 		}
@@ -82,8 +82,8 @@ package engine{
 		//show the background image
 		public function imgLoadSuccess(evt:*){
 			var img:Bitmap = new Bitmap(evt.target.content.bitmapData);
-			img.scaleX = 2;
-			img.scaleY = 2;
+			//img.scaleX = 2;
+			//img.scaleY = 2;
 			addChildAt(img,0);
 		}
 		public function imgLoadFail(evt:*){
@@ -119,6 +119,8 @@ package engine{
 					}else if(mapObj[i][0] == 3){
 						uri = "plat_lg.png";
 					}*/
+					
+
 					objectArray.push(new Block(objProps[mapObj[i][0]][0],objProps[mapObj[i][0]][1],"textures/"+uri));
 					var tmpX:int = 8*Math.round(mapObj[i][1]/8);
 					var tmpY:int = 8*Math.round(mapObj[i][2]/8);
@@ -135,26 +137,6 @@ package engine{
 			trace("map loaded: "+mapName);
 			//??really
 			dispatchEvent(new Event("complete"));
-		}
-		// test for collision with characters
-		public function objectCheckHit(characterObject:MovieClip):Boolean {
-			// assume not on the ground
-			characterObject.imon = false;
-			// for each ground object on the map
-			for (var obj in objectArray) {
-				// if they touch...
-				//****************************************
-				//TODO: remove hitTestObject
-				// use'distance checking' design pattern
-				// then move to MapObject to use event broadcast
-				// instead of loop
-				//*****************************************
-				if (objectArray[obj].hitTestObject(characterObject)) {
-				//if (objectArray[obj].behave(characterObject)) {
-					objectArray[obj].behave(characterObject,this);
-				}
-			}
-			return false;
 		}
 		//****************************************
 		//TODO: fix this

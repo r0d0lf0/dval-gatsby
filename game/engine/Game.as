@@ -1,6 +1,6 @@
 ﻿package engine{
 	
-	import flash.events.KeyboardEvent;
+	//import flash.events.KeyboardEvent;
 	import flash.events.Event;
 	import flash.display.MovieClip;
 	import flash.display.Stage;
@@ -11,14 +11,16 @@
 	
 	public class Game extends MovieClip {
 
-		private const MOVE_BUFFER:int = 100;
+		private const MOVE_BUFFER:int = 300;
 		private var screenWidth:Number;
 		private var screenHeight:Number;
-
+		public var keys:KeyMap;
 		public var map:Map = new Map();
 		public var hero:Hero = new Hero();
-		public var block:Block = new Block();
-		public var block2:Block = new Block();
+		
+		//temp map
+		public var block:Block = new Block(22);
+		public var block2:Block = new Block(8);
 		
 		public function Game() {
 			//trace("game loaded");
@@ -31,30 +33,46 @@
 		private function addedToStage(evt) {
 			buildDisplay();
 		}
+		
 		private function buildDisplay() {
+/*******************************************************************
+// MAP PLATFORMS LOADED HERE
+/*******************************************************************
+// This is some Temporary code that is building a simple map, 
+// instead of loading frm .txt file.
+// Will be replaced with new map parser.
+/*******************************************************************/
 			//tempmap
 			stage.addChild(block);
 			block.x = -20;
 			block.y = 378;
 			stage.addChild(block2);
 			block2.x = 320;
-			block2.y = 300;
+			block2.y = 275;
+
+/*******************************************************************
+// End temp map
+/*******************************************************************/
 			//continuing...
+			keys = new KeyMap();
+			stage.addChild(keys);
+			
 			stage.addChild(map);
 			stage.addChild(hero);
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-			stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+			hero.name = 'hero'; ///??really, wtf
 			stage.addEventListener(Event.ENTER_FRAME, runEngine);
 			
 			screenWidth = (stage.stageWidth/2);
 			screenHeight = (stage.stageHeight/2);
 			
+			//soon to be load from text file map....
 			//map.getMap('maps/lvl_01_01.txt');
 		}
+		
 		private function runEngine(evt) {
 			//invoke emotion in hero
 			hero.moveMe();
-			map.objectCheckHit(hero);
+			//map.objectCheckHit(hero);
 			// moves the hero or map, pending hero position
 			// up|down
 			//if ((hero.y < screenHeight-MOVE_BUFFER && hero.vely<0) || (hero.y > screenHeight+MOVE_BUFFER && hero.vely>0)) {
@@ -92,13 +110,6 @@
 					//}
 				//}
 			}
-		}
-		//update keyMappin class
-		public function keyDownHandler(evt:KeyboardEvent):void {
-			KeyMap.keyMap[evt.keyCode] = true;
-		}
-		public function keyUpHandler(evt:KeyboardEvent):void {
-			KeyMap.keyMap[evt.keyCode] = false;
 		}
 	}
 }

@@ -8,7 +8,8 @@ package controls{
 	public class KeyMap extends Sprite {
 		
 		private static var _keyMap:Array=new Array();
-		
+		public static const KEY_DOWN:String = KeyboardEvent.KEY_DOWN;
+		public static const KEY_UP:String = KeyboardEvent.KEY_UP;
 		public function KeyMap():void {
 			// map control keys
 			_keyMap[32]=false; //SPACEBAR
@@ -28,32 +29,36 @@ package controls{
 			_keyMap[88]=false; //x
 			
 			_keyMap[17]=false; //CTRL
-			//keyMap[??]=false; //ALT
+			//keyMap[Keyboard]=false; //ALT
 			
-			//if we havn't already assigned the key listeners...
 			//where in the spacetime are we, with regards to Stage
-			if(!stage.hasEventListener(KeyboardEvent.KEY_DOWN)){
-				if(stage){
-					stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-					stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
-				}else{
-					addEventListener(Event.ADDED_TO_STAGE,subInit);
+			if(stage != null){
+				if(!stage.hasEventListener(KeyboardEvent.KEY_DOWN)){
+				buildKeys();
 				}
+			}else{
+				addEventListener(Event.ADDED_TO_STAGE,subInit);
 			}
 		}
 		//load listeners after stage is loaded
 		private function subInit(evt:Event):void{
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-			stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+			buildKeys();
 			removeEventListener(Event.ADDED_TO_STAGE,subInit);
 		}
-		// onKeyDown set array item True
+		//
+		private function buildKeys():void{
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+			stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+		}
+		// onKeyDown set array item True, broadcast event
 		public function keyDownHandler(evt:KeyboardEvent):void {
 			_keyMap[evt.keyCode]=true;
+			dispatchEvent(new Event(KEY_DOWN))
 		}
 		// onKeyUp set same item False
 		public function keyUpHandler(evt:KeyboardEvent):void {
 			_keyMap[evt.keyCode]=false;
+			dispatchEvent(new Event(KEY_UP))
 		}
 		// return reference to array
 		public static function get keyMap():Array{

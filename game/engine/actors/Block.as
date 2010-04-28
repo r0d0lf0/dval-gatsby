@@ -15,14 +15,14 @@
 			//if (characterObject.y+characterObject.height < this.y+(this.height/2)+map.y) {
 				//trace(objectArray[obj].name+' whack');
 				// stop moving down
-				characterObject.vely = 0;
+				characterObject.vely = 0-characterObject.speed;
 				// place on the ground
-				//characterObject.imon = true;
+				characterObject.imon = true;
 				characterObject.ihit = true;
 				// puts the character on the ground and adds a 1 pixel contact buffer
 				// allows smoothwr use of moving platformses
-				//characterObject.y = (this.y+map.y)-characterObject.height+1;
-				characterObject.y = this.y;
+				//characterObject.y = (this.y+stage.map.y)-characterObject.height+1;
+				//characterObject.y = this.y+characterObject.speed;
 			//}
 		}
 	}

@@ -67,9 +67,13 @@ package engine{
 		public function buildMap() {
 			//mapData.addEventListener(Event.COMPLETE, parseMapData);
 			//TODO:  use text loader instead of objects on stage
-			
-			objectArray.push(stage.getChildAt(1));
-			objectArray.push(stage.getChildAt(2));
+			for(var n=0; n<this.numChildren; n++){
+				trace(this.getChildAt(n));
+				objectArray.push(this.getChildAt(n));
+			}
+			trace(this.numChildren);
+			//objectArray.push(stage.getChildAt(1));
+			//objectArray.push(stage.getChildAt(2));
 		}
 		public function getMap(level:String) {
 			mapData.loadFile(level);
@@ -77,7 +81,7 @@ package engine{
 		// parse map to flash object
 		public function parseMapData(evt:Event) {
 			//display array of objects returned from processing
-			displayMap(TextParser.textToArray(evt.target.data));
+			//displayMap(TextParser.textToArray(evt.target.data));
 		}
 		//show the background image
 		public function imgLoadSuccess(evt:*){
@@ -120,10 +124,11 @@ package engine{
 						uri = "plat_lg.png";
 					}*/
 					
-
+					//write map objects to array in global memory
+					//objectArray is complete list of objects in map
 					objectArray.push(new Block(objProps[mapObj[i][0]][0],objProps[mapObj[i][0]][1],"textures/"+uri));
-					var tmpX:int = 8*Math.round(mapObj[i][1]/8);
-					var tmpY:int = 8*Math.round(mapObj[i][2]/8);
+					var tmpX:int = Math.round(mapObj[i][1]);
+					var tmpY:int = Math.round(mapObj[i][2]);
 					objectArray[objectArray.length-1].x = tmpX;
 					objectArray[objectArray.length-1].y = tmpY;
 					this.addChild(objectArray[objectArray.length-1]);
@@ -133,7 +138,7 @@ package engine{
 			//TODO: Fix getLeftBound
 			//**********************
 			//this.bounds = getLeftBound(objectArray);
-			this.bounds = 1180;
+			this.bounds = 800;
 			trace("map loaded: "+mapName);
 			//??really
 			dispatchEvent(new Event("complete"));

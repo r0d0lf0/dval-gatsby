@@ -62,12 +62,12 @@
 			buildHero();
 		}
 		private function buildHero():void{
-			trace("hero loaded");
+			//trace("hero loaded");
 			keys.addEventListener(KeyMap.KEY_UP, onKeyUp);
 			skinHero();
 		}
 		private function onKeyUp(evt:Event):void{
-			trace('hopefully....');
+			//trace('hopefully....');
 			aFlag = true;
 			aPos = 1;
 		}
@@ -102,10 +102,10 @@
 			if(act == 'duck'){
 				aMax = 2;
 				if(ldir){
-					trace('ducking right');
+					//trace('ducking right');
 					aStat = 4;
 				}else{
-					trace('ducking left');
+					//trace('ducking left');
 					aStat = 5;
 				}
 				/********************************************************/
@@ -130,10 +130,10 @@
 				aMax = 2;
 				aFlag = true;
 				if(ldir){
-					trace('throwing right');
+					//trace('throwing right');
 					aStat = 6;
 				}else{
-					trace('throwing left');
+					//trace('throwing left');
 					aStat = 7;
 				}
 				//slow anim
@@ -180,7 +180,7 @@
 				}
 				//slow anim
 				if(!(frame % 2)){
-					trace('step');
+					//trace('step');
 					aPos++;
 				}
 				//reset to first frame on loop
@@ -284,7 +284,7 @@
 				}else
 				if (!chkeys()){
 					if (aFlag){
-						trace('animatine');
+						//trace('animatine');
 					 	animate();
 					}else if(velx == 0){
 						animate('stand');

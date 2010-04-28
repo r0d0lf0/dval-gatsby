@@ -10,7 +10,7 @@
 
 	dynamic public class MapObject extends Sprite {
 
-		public var unit:uint = 32;
+		public var unit:uint = 16;
 		public var ID:uint;
 		public var w:uint=1;
 		public var h:uint=1;
@@ -70,19 +70,19 @@
 			/*****************************************************/
 			
 			var reActor:* = stage.getChildByName('hero');
-				
-			if(this.y+this.height>=reActor.y-reActor.vely){
-				if(this.x+this.width > reActor.x && this.x < reActor.x+32){
+			
+			//if(this.y+this.height>=reActor.y-reActor.vely){
+				//if(this.x+this.width > reActor.x && this.x < reActor.x+32){
 					//now check for hit, it is only called on relevant blocks
 					if(this.hitTestObject(reActor)){
-						//trace(stage.getChildByName('hero').name);
+						//trace(this.name);
 						//hahahahah yes. I can call a blank method. and it's subclass's method is used !!
 						reActor.imon = true;
 						reActor.ihit = true;
 						behave(reActor);
 					}
-				}
-			}
+				//}
+			//}
 		}
 		//show the background image
 		public function txtureLoadSuccess(evt:*) {
@@ -94,7 +94,7 @@
 		}
 		//show blank
 		public function textureLoadFail(evt:*=null) {
-			var tmpData:BitmapData = new BitmapData((this.w*this.unit),(this.h*this.unit),false,0xFFFFFF);
+			var tmpData:BitmapData = new BitmapData((this.w*this.unit),(this.h*this.unit),true,0x88EEEE00);
 			var tmp:Bitmap = new Bitmap(tmpData);
 			this.addChild(tmp);
 		}

@@ -1,7 +1,7 @@
 ﻿<flash_project name="gatsby" version="1">
     <project_folder name="game" expanded="true">
-        <project_folder name="engine" expanded="false">
-            <project_folder name="actors" expanded="false">
+        <project_folder name="engine" expanded="true">
+            <project_folder name="actors" expanded="true">
                 <project_file path="./game/engine/actors/Hero.as" filetype="as" />
                 <project_file path="./game/engine/actors/MapObject.as" filetype="as" />
                 <project_file path="./game/engine/actors/Block.as" filetype="as" />
@@ -10,17 +10,15 @@
             <project_file path="./game/engine/LevelEditor.as" filetype="as" />
             <project_file path="./game/engine/Map.as" filetype="as" />
         </project_folder>
-        <project_folder name="system" expanded="false">
-            <project_file path="./game/system/gImageLoader.as" filetype="as" />
-            <project_file path="./game/system/HeaderTextParser.as" filetype="as" />
+        <project_folder name="system" expanded="true">
             <project_file path="./game/system/ImageLoader.as" filetype="as" />
             <project_file path="./game/system/TextLoader.as" filetype="as" />
             <project_file path="./game/system/TextParser.as" filetype="as" />
         </project_folder>
-        <project_folder name="controls" expanded="false">
+        <project_folder name="controls" expanded="true">
             <project_file path="./game/controls/KeyMap.as" filetype="as" />
         </project_folder>
-        <project_folder name="maps" expanded="false">
+        <project_folder name="maps" expanded="true">
             <project_file path="./game/maps/lvl_01_01.txt" filetype="txt" />
         </project_folder>
         <project_folder name="textures" expanded="false">

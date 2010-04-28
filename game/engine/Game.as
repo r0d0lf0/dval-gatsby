@@ -11,7 +11,7 @@
 	
 	public class Game extends MovieClip {
 
-		private const MOVE_BUFFER:int = 300;
+		private const MOVE_BUFFER:int = 100;
 		private var screenWidth:Number;
 		private var screenHeight:Number;
 		public var keys:KeyMap;
@@ -19,8 +19,8 @@
 		public var hero:Hero = new Hero();
 		
 		//temp map
-		public var block:Block = new Block(22);
-		public var block2:Block = new Block(8);
+		//public var block:Block = new Block(22);
+		//public var block2:Block = new Block(8);
 		
 		public function Game() {
 			//trace("game loaded");
@@ -43,13 +43,13 @@
 // Will be replaced with new map parser.
 /*******************************************************************/
 			//tempmap
-			stage.addChild(block);
+			/*map.addChild(block);
 			block.x = -20;
 			block.y = 378;
-			stage.addChild(block2);
+			map.addChild(block2);
 			block2.x = 320;
 			block2.y = 275;
-
+*/
 /*******************************************************************
 // End temp map
 /*******************************************************************/
@@ -75,40 +75,40 @@
 			//map.objectCheckHit(hero);
 			// moves the hero or map, pending hero position
 			// up|down
-			//if ((hero.y < screenHeight-MOVE_BUFFER && hero.vely<0) || (hero.y > screenHeight+MOVE_BUFFER && hero.vely>0)) {
-				//map.y -= hero.vely;
-			//} else {
+			if ((hero.y < screenHeight-MOVE_BUFFER && hero.vely<0) || (hero.y > screenHeight+MOVE_BUFFER && hero.vely>0)) {
+				map.y -= hero.vely;
+			} else {
 				hero.y += hero.vely;
-			//}
+			}
 			// left|right
 			if (hero.velx < 0) {
-				//if (map.x < 0) {
+				if (map.x < 0) {
 					if (hero.x > screenWidth-MOVE_BUFFER) {
 						hero.x += hero.velx;
-					//} else {
-						//map.x -= hero.velx;
+					} else {
+						map.x -= hero.velx;
 					}
-				//} else {
-					//map.x = 0;
-					//hero.x += hero.velx;
-					//if (hero.x<0) {
-						//hero.x = 0;
-					//}
-				//}
+				} else {
+					map.x = 0;
+					hero.x += hero.velx;
+					if (hero.x<0) {
+						hero.x = 0;
+					}
+				}
 			} else if (hero.velx > 0){
-				//if (map.x > ((map.bounds*-1)+(screenWidth*2)-20)) {
+				if (map.x > (screenWidth*2)-map.width) {
 					if (hero.x < screenWidth+MOVE_BUFFER) {
 						hero.x += hero.velx;
-					//} else {
-						//map.x -= hero.velx;
+					} else {
+						map.x -= hero.velx;
 					}
-				//} else {
-					//map.x = (map.bounds*-1)+(screenWidth*2)-20;
-					//hero.x += hero.velx;
-					//if (hero.x > (screenWidth*2)-hero.width) {
-						//hero.x = (screenWidth*2)-hero.width;
-					//}
-				//}
+				} else {
+					map.x = (screenWidth*2)-map.width;
+					hero.x += hero.velx;
+					if (hero.x > (screenWidth*2)-hero.width) {
+						hero.x = (screenWidth*2)-hero.width;
+					}
+				}
 			}
 		}
 	}

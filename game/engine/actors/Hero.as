@@ -1,15 +1,17 @@
 ﻿package engine.actors{
 	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	import flash.geom.Rectangle;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.utils.ByteArray;
+	import flash.geom.Point;
 	import flash.events.Event;
 	import controls.KeyMap;
 
 	public class Hero extends MovieClip {
 		//CHANGE THESE
-		public var jumpHeight:uint = 20; //exponential. 20 jumps 3x higher than 10
+		public var jumpHeight:uint = 24; //exponential. 20 jumps 3x higher than 10
 		public var speed:Number = 2;  //how much the velocity changes on each frameEvent
 		public var fric:Number = 1;  //frictional coefficient of go
 		//DON'T CHANGE THESE
@@ -20,7 +22,7 @@
 		private var keys:KeyMap = new KeyMap();
 		private var action:uint = 0;
 		private var frame:uint = 1;
-		private var ldir:Boolean = true;  // Right|Left = true|false
+		public var ldir:Boolean = true;  // Right|Left = true|false
 		// 1.
 		//HeroSkin is subclass of bitmapData. this loads the SpriteSheet into memory
 		private var animData:HeroSkin = new HeroSkin(0,0);
@@ -42,11 +44,6 @@
 		
 		// MAX_VEL_Y has to be less than half the height of most narrow platform.
 		// otherwise you will fall through the ground
-		/***********************************************************************
-		//TODO: check for colision befor hitting ground. 
-		//TODO's in Map.as need to be completed for this to work
-		// else use as is
-		/***********************************************************************/
 		const MAX_VEL_Y:Number = 11; // so min platform height should be 22.
 		const MAX_VEL_X:Number = 8;
 		// constructor, geesh
@@ -63,22 +60,19 @@
 		}
 		private function buildHero():void{
 			//trace("hero loaded");
-			keys.addEventListener(KeyMap.KEY_UP, onKeyUp);
+			keys.addEventListener(KeyMap.KEY_UP, onKeyRelease);
 			skinHero();
 		}
-		private function onKeyUp(evt:Event):void{
-			//trace('hopefully....');
+		// keeps anim going if it needs to
+		private function onKeyRelease(evt:Event):void{
 			aFlag = true;
-			aPos = 1;
 		}
-		//show skin
-		//this is overall characteristics of displayed bitmapData
-		public function skinHero() {
+		//show some skin
+		private function skinHero() {
 			//reset array pointer (necessary so we can read array from beginning)
 			heroBytes.position = 0;
-			//update the data in our displayed bitmap
 			displayData.setPixels(heroPaste,heroBytes);
-			//fix bad choices
+			//adjust bitmap positio in sprite
 			display.y = -64;
 			display.x = -16;
 			//make more biggerrer
@@ -90,14 +84,13 @@
 		//updates the copy rectangle
 		// based on hero state and player actions
 		private function animate(act:String = null):void{
+			//if the player is dormant
 			if(act == null){
-				//if(aFlag){
-					aPos++;
-					if(aPos >= aMax){
-						aPos = aMax;
-						aFlag = false;
-					}
-				//}
+				aPos++;
+				if(aPos >= aMax){
+					aPos = aMax;
+					aFlag = false;
+				}
 			}else
 			if(act == 'duck'){
 				aMax = 2;
@@ -108,11 +101,6 @@
 					//trace('ducking left');
 					aStat = 5;
 				}
-				/********************************************************/
-				//TODO: DONE!
-				//FIXME
-				//figure out how to stop anim loop
-				/*********************************************************/
 				//slow anim
 				if(!(frame % 2)){
 					aPos++;
@@ -122,9 +110,6 @@
 					frame = 0;
 					aPos = 2;
 				}
-				//get data and advance frame
-				//heroCopy = new Rectangle(aPos*tile,aStat*tile,tile,tile);
-				//frame++;
 			}else
 			if(act == 'throw'){
 				aMax = 2;
@@ -138,17 +123,14 @@
 				}
 				//slow anim
 				if(!(frame % 2)){
-					trace('GO');
 					aPos++;
 				}
 				//if not animating, start animating
 				if(!(frame % 4)){
+				useWeapon();
 					frame = 0;
 					aPos = 1;
 				}
-				//get data and advance frame
-				//heroCopy = new Rectangle(aPos*tile,aStat*tile,tile,tile);
-				//frame++;
 			}else
 			if(act == 'fall'){
 				frame = 0;
@@ -156,12 +138,10 @@
 					//trace('falling right');
 					aStat = 2;
 					aPos = 2;
-					//heroCopy = new Rectangle(aPos*tile,aStat*tile,tile,tile);
 				}else{
 					//trace('falling left');
 					aStat = 3;
 					aPos = 2;
-					//heroCopy = new Rectangle(aPos*tile,aStat*tile,tile,tile);
 				}
 			}else
 			if(act == 'walk'){
@@ -183,26 +163,69 @@
 					//trace('step');
 					aPos++;
 				}
-				//reset to first frame on loop
-				/*if(!this.aFlag){
-					this.aFlag = true;
-					aPos = 1;
-				}*/
-				//get data and advance frame
-				//heroCopy = new Rectangle(aPos*tile,aStat*tile,tile,tile);
-				//frame++;
 			}else
 			if(act == 'stand'){
 				frame = 0;
 				aPos = 0;
 			}
+			//advance copy rectangle pointer
+			//and update bitmap with new data
 			frame++;
 			heroCopy = new Rectangle(aPos*tile,aStat*tile,tile,tile);
 			heroBytes = animData.getPixels(heroCopy);
 			heroBytes.position = 0;
 			displayData.setPixels(heroPaste,heroBytes);
 		}
-		
+		//make hat from existing texture resource
+		private function hat():Sprite{
+			var p:Point = localToGlobal(new Point(0,-32));
+			var hatCopy = new Rectangle(12,0,11,3);
+			var hatBytes = animData.getPixels(hatCopy);
+			hatBytes.position = 0;
+			var hatPaste:Rectangle = new Rectangle(0,0,11,3); //paste
+			var displayHat:BitmapData  = new BitmapData(11,3,true,0x00000000);
+			displayHat.setPixels(hatPaste,hatBytes);
+			var hat:Bitmap = new Bitmap(displayHat);
+			hat.scaleX = 2;
+			hat.scaleY = 2;
+			var atk:Sprite = new Sprite();
+			atk.addChild(hat);
+			atk.x = p.x;
+			atk.y = p.y;
+			//atk.d = ldir;
+			return atk;
+		}
+		private function useWeapon():void{
+			//add weapon attack
+			var h = hat();
+			var t = stage.getChildByName('map');
+			h.x -= t.x-velx;
+			h.y -= t.y+vely;
+			t.addChild(h);
+			if(ldir){
+				h.addEventListener(Event.ENTER_FRAME,rtFrm);
+			}else{
+				h.addEventListener(Event.ENTER_FRAME,ltFrm);
+			}
+			h.addEventListener(Event.REMOVED_FROM_STAGE,htRemove);
+		}
+		//shoot right
+		private function rtFrm(evt:Event):void{
+			evt.target.x += 11;
+		}
+		//shoot left
+		private function ltFrm(evt:Event):void{
+			evt.target.x -= 11;
+		}
+		//free resorces at end of hat
+		private function htRemove(evt:Event):void{
+			try{
+				evt.target.removeEventListener(Event.ENTER_FRAME,rtFrm);
+			}finally{
+				evt.target.removeEventListener(Event.ENTER_FRAME,ltFrm);
+			}
+			evt.target.removeEventListener(Event.REMOVED_FROM_STAGE,htRemove);
+		}
 		//move avatar
 		public function moveMe():void {
 			
@@ -224,6 +247,22 @@
 			if(!imon){
 				// CTRL key 
 				if (KeyMap.keyMap[17]) {
+					//allow throw while moving
+					// A or LEFT_ARROW move left
+					// D or RIGHT_ARROW move right
+					if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {
+						if(this.velx < MAX_VEL_X){
+							this.velx += this.speed;
+						}
+						this.ldir = true;
+					}else
+					// A or LEFT_ARROW move left
+					if (KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
+						if(this.velx > (MAX_VEL_X*-1)){
+							this.velx -= this.speed;
+						}
+						this.ldir = false;
+					}
 					animate('throw');
 				}else
 				// D or RIGHT_ARROW move right
@@ -262,9 +301,22 @@
 					this.vely = -jumpHeight;
 					imon = false;
 				}else
+				/**************************************************/
+				//Sub-State 2.1. -- Ducking
+				/**************************************************/
 				// S key or DOWN_ARROW duck 
 				if (KeyMap.keyMap[83] || KeyMap.keyMap[40]) {
-						animate('duck');
+					//allow turnaround while ducking
+					// A or LEFT_ARROW move left
+					if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {
+					this.ldir = true;
+					}else
+					// A or LEFT_ARROW move left
+					if (KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
+						this.ldir = false;
+					}
+					animate('duck');
+				/**************************************************/
 				}else
 				// D or RIGHT_ARROW move right
 				if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {

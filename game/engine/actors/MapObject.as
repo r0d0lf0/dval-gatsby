@@ -4,6 +4,7 @@
 	import flash.display.Graphics;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.geom.Point;
 	import flash.events.Event;
 
 	import system.ImageLoader;
@@ -15,8 +16,9 @@
 		public var w:uint=1;
 		public var h:uint=1;
 		public var tex:String = '';
-		public var bitDaty:BitmapData;
-		private var reActor:*;
+		protected var me:Point = localToGlobal(new Point(0,0));
+		//public var bitDaty:BitmapData;
+		private var hero:*;
 		//so nice
 		public var imgLdr = new ImageLoader(txtureLoadSuccess,textureLoadFail);
 		//The constructor 
@@ -54,51 +56,50 @@
 			//written this way for levelEDitor compatibility
 			//if tex is null, just load a charle (white square)
 			if (tex != null && tex != undefined && tex!= '') {
-				imgLdr.load(this.tex);
+				imgLdr.load(tex);
 			} else {
 				textureLoadFail();
 			}
 		}
-		//NEW!
-		//check if the ground hit the Hero
+		//check if the thing hit the Hero
 		private function onFrame(evt:Event):void{
-			/*****************************************************/
-			//TODO:  DONE
-			//This is where I need to perfor the hit test rewrite
-			//use distance calculations, instead of hitTestObject()
-			//it has noticable performance increase
-			/*****************************************************/
 			
-			var reActor:* = stage.getChildByName('hero');
+			var hero:* = stage.getChildByName('hero');
+			var hhw = 10; //hero.width/2;
+			//move it with the map
+			this.me = localToGlobal(new Point(0,0));
+			var mhw = this.width/2;
 			
-			//if(this.y+this.height>=reActor.y-reActor.vely){
-				//if(this.x+this.width > reActor.x && this.x < reActor.x+32){
-					//now check for hit, it is only called on relevant blocks
-					if(this.hitTestObject(reActor)){
-						//trace(this.name);
-						//hahahahah yes. I can call a blank method. and it's subclass's method is used !!
-						reActor.imon = true;
-						reActor.ihit = true;
-						behave(reActor);
-					}
-				//}
-			//}
+			var dx = (me.x+mhw) - (hero.x+hhw+hero.velx+10);
+			var ox = (hhw+mhw) - Math.abs(dx);
+			//if x: set up y check
+			if(ox > 0){
+				var hhh = 32; //hero.height/2;
+				var mhh = this.height/2;
+				var dy = (me.y+mhh) - (hero.y-hhh+hero.vely+hero.speed);
+				var oy = (hhh+mhh) - Math.abs(dy);
+				//if y: it's a hit
+				if(oy > 0){
+					behave({dx:dx,ox:ox,dy:dy,oy:oy},hero);
+					hero.ihit = true;
+				}
+			}
 		}
 		//show the background image
 		public function txtureLoadSuccess(evt:*) {
 			var tmpData:BitmapData = evt.target.content.bitmapData;
 			var tmp:Bitmap = new Bitmap(tmpData);
-			tmp.scaleX = 2;
-			tmp.scaleY = 2;
+			//tmp.scaleX = 2;
+			//tmp.scaleY = 2;
 			this.addChild(tmp);
 		}
 		//show blank
 		public function textureLoadFail(evt:*=null) {
-			var tmpData:BitmapData = new BitmapData((this.w*this.unit),(this.h*this.unit),true,0x88EEEE00);
+			var tmpData:BitmapData = new BitmapData((this.w*this.unit),(this.h*this.unit),true,0x00FFFFFF);
 			var tmp:Bitmap = new Bitmap(tmpData);
 			this.addChild(tmp);
 		}
-		public function behave(characterObject):void {
+		public function behave(smackData:Object, characterObject:*):void {
 			//this is overwritten by each unique subclass
 		}
 	}

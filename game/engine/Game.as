@@ -48,7 +48,9 @@
 				stage.removeChild(hero);
 				stage.removeEventListener(Event.ENTER_FRAME, runEngine);
 			}
+			trace(lmap.toString());
 			map = lmap
+			if(lmap.toString() != '[object StartScreen]'){
 			map.name = 'map';
 			hero.name = 'hero'; 
 			if(spawnPoint != null){
@@ -64,6 +66,9 @@
 			stage.addChild(map);
 			stage.addChild(hero);
 			stage.addEventListener(Event.ENTER_FRAME, runEngine);
+			}else{
+				stage.addChild(map);
+			}
 		}
 		//update positions on every frame. 
 		//Checks if hero is in the MOVE_BUFFER, and move Hero.

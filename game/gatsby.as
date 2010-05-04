@@ -3,11 +3,10 @@
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
 	import engine.Game;
-	//import engine.Map;
-	import engine.maps.lvl1_1;
-	//import maps.lvl1_2;
+	import engine.maps.*;
 
 	public class gatsby extends Game {
+		//load game vars into 'global' memory
 		
 		private var startSplash:MovieClip = new StartScreen();
 		

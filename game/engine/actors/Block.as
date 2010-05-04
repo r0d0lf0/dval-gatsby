@@ -40,7 +40,7 @@
 			else{
 				if(dy < 0){
 					//bottom
-					characterObject.y = me.y+60+this.height;
+					characterObject.y = me.y+characterObject.height+this.height;
 					characterObject.vely = 0;
 				}
 				else{

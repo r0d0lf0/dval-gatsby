@@ -65,7 +65,7 @@
 		private function onFrame(evt:Event):void{
 			
 			var hero:* = stage.getChildByName('hero');
-			var hhw = 10; //hero.width/2;
+			var hhw = 15; //hero.width/2;
 			//move it with the map
 			this.me = localToGlobal(new Point(0,0));
 			var mhw = this.width/2;
@@ -74,7 +74,7 @@
 			var ox = (hhw+mhw) - Math.abs(dx);
 			//if x: set up y check
 			if(ox > 0){
-				var hhh = 32; //hero.height/2;
+				var hhh = 48; //hero.height/2;
 				var mhh = this.height/2;
 				var dy = (me.y+mhh) - (hero.y-hhh+hero.vely+hero.speed);
 				var oy = (hhh+mhh) - Math.abs(dy);

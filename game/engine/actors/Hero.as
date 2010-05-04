@@ -14,15 +14,19 @@
 		public var jumpHeight:uint = 24; //exponential. 20 jumps 3x higher than 10
 		public var speed:Number = 2;  //how much the velocity changes on each frameEvent
 		public var fric:Number = 1;  //frictional coefficient of go
+		// MAX_VEL_Y has to be less than half the height of most narrow platform.
+		// otherwise you will fall through the ground
+		const MAX_VEL_Y:Number = 11; // so min platform height should be 22.
+		const MAX_VEL_X:Number = 8;
 		//DON'T CHANGE THESE
 		public var vely:int = 0;
 		public var velx:int = 0;
 		public var imon:Boolean = false; // On|Off the ground = true|false (stnading sure-footedly)
 		public var ihit:Boolean = false; // On|Off any object = true|false (smack a wall, hit by baddy)
+		public var ldir:Boolean = true;  // Right|Left = true|false
 		private var keys:KeyMap = new KeyMap();
 		private var action:uint = 0;
 		private var frame:uint = 1;
-		public var ldir:Boolean = true;  // Right|Left = true|false
 		// 1.
 		//HeroSkin is subclass of bitmapData. this loads the SpriteSheet into memory
 		private var animData:HeroSkin = new HeroSkin(0,0);
@@ -42,10 +46,6 @@
 		private var heroCopy:Rectangle = new Rectangle(aPos*tile,aStat*tile,tile,tile); //copy
 		private var heroBytes:ByteArray = animData.getPixels(heroCopy); // the pixels in the heroDisplay
 		
-		// MAX_VEL_Y has to be less than half the height of most narrow platform.
-		// otherwise you will fall through the ground
-		const MAX_VEL_Y:Number = 11; // so min platform height should be 22.
-		const MAX_VEL_X:Number = 8;
 		// constructor, geesh
 		public function Hero():void {
 			//trace("game loaded");
@@ -73,11 +73,11 @@
 			heroBytes.position = 0;
 			displayData.setPixels(heroPaste,heroBytes);
 			//adjust bitmap positio in sprite
-			display.y = -64;
-			display.x = -16;
+			display.y = -96;
+			display.x = -24;
 			//make more biggerrer
-			display.scaleX = 2;
-			display.scaleY = 2;
+			display.scaleX = 3;
+			display.scaleY = 3;
 			//plop it on stage for all to see
 			this.addChild(display);
 		}
@@ -186,8 +186,8 @@
 			var displayHat:BitmapData  = new BitmapData(11,3,true,0x00000000);
 			displayHat.setPixels(hatPaste,hatBytes);
 			var hat:Bitmap = new Bitmap(displayHat);
-			hat.scaleX = 2;
-			hat.scaleY = 2;
+			hat.scaleX = 3;
+			hat.scaleY = 3;
 			var atk:Sprite = new Sprite();
 			atk.addChild(hat);
 			atk.x = p.x;

@@ -1,23 +1,10 @@
-﻿//////////////////////////////////////////////////////////
-//Modify this somehow to alternately load textures.
-// i.e. I should be able to load all brush shapes as white geoms,
-// or I should be able to load them as mapped textures.
-//Secondly, scale should be adjustable. Then I can load an
-// untextured, smaller version into the navigation panel. maybe
-// also use this for some level effects, like:
-// 'drink me -> shrink', 'eat me -> grow'
-// 
-package engine{
+﻿package engine{
 
 	import flash.events.Event;
-	//import flash.display.Sprite;
 	import flash.display.MovieClip;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.events.EventDispatcher;
-	import flash.display.Stage;
 	import engine.actors.MapObject;
-	import system.ImageLoader;
 
 
 	dynamic public class Map extends MovieClip {
@@ -35,6 +22,7 @@ package engine{
 			}
 		}
 		private function addedToStage(evt):void {
+			removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			buildMap();
 		}
 		public function buildMap():void {

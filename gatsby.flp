@@ -11,12 +11,12 @@
             <project_folder name="maps" expanded="true">
                 <project_file path="./game/engine/maps/lvl1_1.as" filetype="as" />
                 <project_file path="./game/engine/maps/lvl1_2.as" filetype="as" />
-                <project_file path="./game/engine/maps/StartScreen.as" filetype="as" />
+                <project_file path="./game/engine/maps/scrnStart.as" filetype="as" />
             </project_folder>
             <project_file path="./game/engine/Game.as" filetype="as" />
             <project_file path="./game/engine/Map.as" filetype="as" />
         </project_folder>
-        <project_folder name="system" expanded="true">
+        <project_folder name="system" expanded="false">
             <project_file path="./game/system/ImageLoader.as" filetype="as" />
             <project_file path="./game/system/TextLoader.as" filetype="as" />
             <project_file path="./game/system/TextParser.as" filetype="as" />

@@ -1,17 +1,12 @@
 ﻿package engine.actors{
 	
-	import flash.display.MovieClip;
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
 	import flash.utils.getDefinitionByName;
 	import engine.actors.MapObject;
-	import engine.maps.*;
 	import controls.KeyMap;
-	//import flash.events.Event;
 
 	dynamic public class Door extends MapObject{
-		
-		//public static const OPEN_DOOR:String = 'doorOpen';
 		
 		public function Door(w=1,h=1,tex = null):void{
 			super(w,h,tex);
@@ -30,7 +25,7 @@
 					//as name of the door determines which level to load
 					var classRef:Class = getDefinitionByName(String('engine.maps.'+this.name)) as Class;
 					var levelToLoad:Object = new classRef(parent['lvlLoader']); 
-					//call loadLevel() from reference
+					//call loadLevel() from parent reference to global namespace
 					parent['lvlLoader'].loadLevel(DisplayObject(levelToLoad),new Point(16,480));
 				}
 			}

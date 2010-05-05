@@ -1,13 +1,11 @@
 ﻿package engine{
 	
-	import flash.events.Event;
 	import flash.display.MovieClip;
 	import flash.display.Stage;
+	import flash.events.Event;
 	import flash.geom.Point;
 	import controls.KeyMap;
 	import engine.Map;
-	
-	//import engine.lvl1_1;
 	import engine.actors.Hero;
 	
 	public class Game extends MovieClip {
@@ -18,54 +16,53 @@
 		public var keys:KeyMap;
 		public var map:Map;
 		public var hero:Hero = new Hero();
-		//find where in flash spacetime are we
+		
 		public function Game() {
-			//trace("game loaded");
+			//find where in flash spacetime are we
 			if (stage != null) {
-				buildDisplay();
+				buildEnviron();
 			} else {
 				addEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			}
 		}
 		private function addedToStage(evt) {
-			buildDisplay();
+			removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			buildEnviron();
 		}
-		//put everything we're using on stage so we can examine its properties
-		private function buildDisplay() {
+		//once onStage, set basic globals
+		private function buildEnviron() {
 			//controls
 			keys = new KeyMap();
 			stage.addChild(keys);
-			//level
-			//loadLevel(new lvl1_1());
 			//used in calculating movement buffer
 			screenWidth = (stage.stageWidth/2);
 			screenHeight = (stage.stageHeight/2);
 		}
-		//clears old and sets new
+		//clears old and set new
 		public function loadLevel(lmap:Map,spawnPoint:Point = null):void{
 			if(stage.getChildByName('map')){
 				stage.removeChild(map);
 				stage.removeChild(hero);
 				stage.removeEventListener(Event.ENTER_FRAME, runEngine);
 			}
-			trace(lmap.toString());
+			//trace(lmap.toString().substring(7,10));
 			map = lmap
-			if(lmap.toString() != '[object StartScreen]'){
 			map.name = 'map';
 			hero.name = 'hero'; 
-			if(spawnPoint != null){
-				hero.x = spawnPoint.x; 
-				hero.y = spawnPoint.y; 
-			}else{
-				hero.x = 16; 
-				hero.y = 300; 
-			}
-			hero.ldir = true;
-			hero.imon = false;
-			hero.vely = 0;
-			stage.addChild(map);
-			stage.addChild(hero);
-			stage.addEventListener(Event.ENTER_FRAME, runEngine);
+			if(lmap.toString().substring(8,11) == 'lvl'){
+				if(spawnPoint != null){
+					hero.x = spawnPoint.x; 
+					hero.y = spawnPoint.y; 
+				}else{
+					hero.x = 16; 
+					hero.y = 200; 
+				}
+				hero.ldir = true;
+				hero.imon = false;
+				hero.vely = 0;
+				stage.addChild(map);
+				stage.addChild(hero);
+				stage.addEventListener(Event.ENTER_FRAME, runEngine);
 			}else{
 				stage.addChild(map);
 			}
@@ -85,7 +82,7 @@
 			// left|right
 			if (hero.velx < 0) {
 				if (map.x < 0) {
-					if (hero.x > (screenWidth-MOVE_BUFFER)-40) {
+					if (hero.x > (screenWidth-MOVE_BUFFER)) {
 						hero.x += hero.velx;
 					} else {
 						map.x -= hero.velx;
@@ -99,7 +96,7 @@
 				}
 			} else if (hero.velx > 0){
 				if (map.x > (screenWidth*2)-map.width) {
-					if (hero.x < (screenWidth+MOVE_BUFFER)-40) {
+					if (hero.x < (screenWidth+MOVE_BUFFER)) {
 						hero.x += hero.velx;
 					} else {
 						map.x -= hero.velx;

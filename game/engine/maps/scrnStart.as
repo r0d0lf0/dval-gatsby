@@ -4,12 +4,11 @@
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 
-	  dynamic public class scrnStart extends Map {
-		//load game vars into 'global' memory
+	dynamic public class scrnStart extends Map {
 		
-		public function scrnStart(ldr:*=null):void {
-			//sets lvlLoader
-			super(ldr);
+		public function scrnStart(game:*=null):void {
+			//sets global reference to game
+			super(game);
 			//check for flash spacetime coordinates
 			if (stage != null) {
 				buildDisplay();
@@ -31,7 +30,7 @@
 			//remove vaccant listeners
 			start_btn.removeEventListener(MouseEvent.CLICK, startHandler);
 			//load level 1_1
-			lvlLoader.loadLevel(new lvl1_1(lvlLoader));
+			game.newLevel(new lvl1_1(game));
 			//remove start screen
 			parent.removeChild(this);
 		}

@@ -3,12 +3,10 @@
 	import engine.Map;
 
 	dynamic public class lvl1_1 extends Map {
-		
 
-		public function lvl1_1(ldr:*=null) {
+		public function lvl1_1(game:*=null) {
 			//
-			//trace('loaded');
-			super(ldr);
+			super(game);
 		}
 	}//end class
 }//end package

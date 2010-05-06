@@ -39,33 +39,76 @@
 			screenHeight = (stage.stageHeight/2);
 		}
 		//clears old and set new
-		public function loadLevel(lmap:Map,spawnPoint:Point = null):void{
+		public function newLevel(lmap:Map,pSpawn:Point = null,pMapOffset:Point = null):void{
+			//if we already have map, remove it (we wouldn't call this unless we're done a level anyway)
 			if(stage.getChildByName('map')){
-				stage.removeChild(map);
-				stage.removeChild(hero);
-				stage.removeEventListener(Event.ENTER_FRAME, runEngine);
+				destroyLevel();
 			}
-			//trace(lmap.toString().substring(7,10));
+			//set up map and hero environmental vars
 			map = lmap
 			map.name = 'map';
-			hero.name = 'hero'; 
+			hero.name = 'hero';
+			//if we're loading a level (prefixed by 'lvl'):
 			if(lmap.toString().substring(8,11) == 'lvl'){
-				if(spawnPoint != null){
-					hero.x = spawnPoint.x; 
-					hero.y = spawnPoint.y; 
-				}else{
-					hero.x = 16; 
+				//load and populate level
+				createLevel(pSpawn,pMapOffset);
+			}
+			else{// we're probably loading a splashScreen (prefixed by 'scrn')
+				// so just add the splash screen.
+				createSplash(pSpawn,pMapOffset);
+			}
+			/**************************************************************/
+			//TODO: other 'level' types. possibly such as: 
+			//scrnEnd, scrnSequence, lvlSequence, lvlboss, lvlBonus1_1, etc. 
+			/**************************************************************/
+			
+		}
+		//load new splash
+		public function createSplash(pSpawn:Point = null,pMapOffset:Point = null):void{
+				stage.addChild(map);
+		}
+		//load new stuff, start engine
+		public function createLevel(pSpawn:Point = null,pMapOffset:Point = null):void{
+				/*************** Hero display set up ************************/
+				//check if hero spawn point is default:
+				if(pSpawn != null){
+					hero.x = pSpawn.x; 
+					hero.y = pSpawn.y; 
+				}else{// use default
+					hero.x = 20; 
 					hero.y = 200; 
 				}
+				//assume we want to start the level 'looking right'
 				hero.ldir = true;
+				//try and prevent jump....
 				hero.imon = false;
 				hero.vely = 0;
+				/**************** Map display set up***********************/
+				if(pMapOffset != null){
+					map.x = pMapOffset.x; 
+					map.y = pMapOffset.y; 
+				}else{// use default
+					map.x = 0; 
+					map.y = 0; 
+				}
+				/**************** Level ***********************/
+				//add all the pieces to the stage
 				stage.addChild(map);
 				stage.addChild(hero);
 				stage.addEventListener(Event.ENTER_FRAME, runEngine);
-			}else{
-				stage.addChild(map);
+			
+		}
+		//remove anything that would interfere with a clean  load
+		public function destroyLevel():void{
+			stage.removeChild(map);
+			if(stage.getChildByName('hero')){
+				stage.removeChild(hero);
+				stage.removeEventListener(Event.ENTER_FRAME, runEngine);
 			}
+		}
+		//TODO:  make this
+		public function pauseToggle():void{
+			
 		}
 		//update positions on every frame. 
 		//Checks if hero is in the MOVE_BUFFER, and move Hero.
@@ -73,6 +116,10 @@
 		private function runEngine(evt) {
 			//invoke emotion in hero
 			hero.moveMe();
+			/****************************************************/
+			//TODO: change up|down logic to prevent over-scrolling
+			//should be able to base off of left|right logic
+			/****************************************************/
 			// up|down
 			if ((hero.y < screenHeight-MOVE_BUFFER && hero.vely<0) || (hero.y > screenHeight+MOVE_BUFFER && hero.vely>0)) {
 				map.y -= hero.vely;
@@ -110,5 +157,6 @@
 				}
 			}
 		}
-	}
-}
+		
+	}//end class
+}//end package

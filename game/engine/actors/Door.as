@@ -1,9 +1,9 @@
 ﻿package engine.actors{
 	
+	import engine.actors.MapObject;
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
-	import flash.utils.getDefinitionByName;
-	import engine.actors.MapObject;
+	import flash.utils.getDefinitionByName; //sometime, the things we learn...
 	import controls.KeyMap;
 
 	dynamic public class Door extends MapObject{
@@ -24,9 +24,9 @@
 					//this is both awesome and important
 					//as name of the door determines which level to load
 					var classRef:Class = getDefinitionByName(String('engine.maps.'+this.name)) as Class;
-					var levelToLoad:Object = new classRef(parent['lvlLoader']); 
+					var levelToLoad:Object = new classRef(parent['game']); 
 					//call loadLevel() from parent reference to global namespace
-					parent['lvlLoader'].loadLevel(DisplayObject(levelToLoad),new Point(16,480));
+					parent['game'].newLevel(DisplayObject(levelToLoad),new Point(16,480));
 				}
 			}
 		}

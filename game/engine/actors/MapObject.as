@@ -1,7 +1,6 @@
 ﻿package engine.actors{
 
 	import flash.display.Sprite;
-	//import flash.display.Graphics;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.geom.Point;
@@ -62,6 +61,7 @@
 			}
 		}
 		//check if the thing hit the Hero
+		//look up "Axis based collisions"
 		private function onFrame(evt:Event):void{
 			
 			var hero:* = stage.getChildByName('hero');
@@ -89,8 +89,8 @@
 		public function txtureLoadSuccess(evt:*) {
 			var tmpData:BitmapData = evt.target.content.bitmapData;
 			var tmp:Bitmap = new Bitmap(tmpData);
-			//tmp.scaleX = 2;
-			//tmp.scaleY = 2;
+			tmp.scaleX = 2;
+			tmp.scaleY = 2;
 			this.addChild(tmp);
 		}
 		//show blank

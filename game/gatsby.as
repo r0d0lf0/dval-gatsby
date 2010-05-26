@@ -7,7 +7,7 @@
 		
 		public function gatsby() {
 			//start!
-			stage.addChild(new scrnStart(this));
+			newLevel(new scrnStart(this));
 		}
 	}//end class
 }//end package

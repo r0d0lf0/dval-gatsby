@@ -26,7 +26,7 @@
 					var classRef:Class = getDefinitionByName(String('engine.maps.'+this.name)) as Class;
 					var levelToLoad:Object = new classRef(parent['game']); 
 					//call loadLevel() from parent reference to global namespace
-					parent['game'].newLevel(DisplayObject(levelToLoad),new Point(16,480));
+					parent['game'].newLevel(DisplayObject(levelToLoad),new Point(16,100),new Point(0,0));
 				}
 			}
 		}

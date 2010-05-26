@@ -26,6 +26,8 @@
 				//trace(this.getChildAt(n));
 				objectArray.push(this.getChildAt(n));
 			}
+			//move to bottom screen of map
+			this.y = 0-(this.height - (game.screenHeight*2));
 		}
 	}
 }

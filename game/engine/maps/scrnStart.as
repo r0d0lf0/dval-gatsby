@@ -31,8 +31,6 @@
 			start_btn.removeEventListener(MouseEvent.CLICK, startHandler);
 			//load level 1_1
 			game.newLevel(new lvl1_1(game));
-			//remove start screen
-			parent.removeChild(this);
 		}
 	}//end class
 }//end package

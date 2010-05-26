@@ -11,8 +11,8 @@
 	public class Game extends MovieClip {
 
 		private const MOVE_BUFFER:int = 60;
-		private var screenWidth:Number;
-		private var screenHeight:Number;
+		public var screenWidth:Number;
+		public var screenHeight:Number;
 		public var keys:KeyMap;
 		public var map:Map;
 		public var hero:Hero = new Hero();
@@ -59,7 +59,7 @@
 			}
 			/**************************************************************/
 			//TODO: other 'level' types. possibly such as: 
-			//scrnEnd, scrnSequence, lvlSequence, lvlboss, lvlBonus1_1, etc. 
+			//scrnEnd, scrnSequence, lvlSequence, lvlboss, lvlBonus_1, etc. 
 			/**************************************************************/
 			
 		}
@@ -69,50 +69,64 @@
 		}
 		//load new stuff, start engine
 		public function createLevel(pSpawn:Point = null,pMapOffset:Point = null):void{
-				/*************** Hero display set up ************************/
-				//check if hero spawn point is default:
-				if(pSpawn != null){
-					hero.x = pSpawn.x; 
-					hero.y = pSpawn.y; 
-				}else{// use default
-					hero.x = 20; 
-					hero.y = 200; 
-				}
-				//assume we want to start the level 'looking right'
-				hero.ldir = true;
-				//try and prevent jump....
-				hero.imon = false;
-				hero.vely = 0;
-				/**************** Map display set up***********************/
-				if(pMapOffset != null){
-					map.x = pMapOffset.x; 
-					map.y = pMapOffset.y; 
-				}else{// use default
-					map.x = 0; 
-					map.y = 0; 
-				}
-				/**************** Level ***********************/
-				//add all the pieces to the stage
-				stage.addChild(map);
-				stage.addChild(hero);
-				stage.addEventListener(Event.ENTER_FRAME, runEngine);
 			
+			/*************** Hero display set up ************************/
+			if(pSpawn == null){
+				hero.x = 0; 
+				hero.y = 0; 
+			}else{
+				hero.x = pSpawn.x; 
+				hero.y = pSpawn.y; 
+			}
+			//assume we want to start the level 'looking right'
+			hero.ldir = true;
+			//try and prevent jump....(or find different command for entering the door)
+			hero.imon = false;
+			hero.vely = 0;
+			
+			/**************** Map display set up***********************/
+			if(pMapOffset == null){
+				map.x = 0; 
+				map.y = 0; 
+			}else{//
+				map.x = pMapOffset.x; 
+				map.y = pMapOffset.y; 
+			}
+			/**************** Level ***********************/
+			//add all the pieces to the stage
+			stage.addChild(map);
+			stage.addChild(hero);
+			startEngine();
 		}
 		//remove anything that would interfere with a clean  load
 		public function destroyLevel():void{
 			stage.removeChild(map);
 			if(stage.getChildByName('hero')){
 				stage.removeChild(hero);
-				stage.removeEventListener(Event.ENTER_FRAME, runEngine);
+				stopEngine();
 			}
 		}
-		//TODO:  make this
+		//simple pause
 		public function pauseToggle():void{
+			if(stage.hasEventListener(Event.ENTER_FRAME)){
+				stopEngine();
+			}else{
+				startEngine();
+			}
+		}
+		//
+		public function startEngine():void{
+			stage.addEventListener(Event.ENTER_FRAME, runEngine);
 			
 		}
-		//update positions on every frame. 
+		//
+		public function stopEngine():void{
+			stage.removeEventListener(Event.ENTER_FRAME, runEngine);
+			
+		}
+		//update positions on every frame.  
 		//Checks if hero is in the MOVE_BUFFER, and move Hero.
-		//else hero is at MOVE_BUFFER limit and map scrolls instead.
+		//else hero is at MOVE_BUFFER limit and map scrolls instead. 
 		private function runEngine(evt) {
 			//invoke emotion in hero
 			hero.moveMe();

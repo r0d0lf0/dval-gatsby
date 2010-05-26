@@ -8,28 +8,33 @@
 	import flash.geom.Point;
 	import flash.events.Event;
 	import controls.KeyMap;
+	import engine.actors.Weapon;
 
 	public class Hero extends MovieClip {
 		//CHANGE THESE
 		public var jumpHeight:uint = 24; //exponential. 20 jumps 3x higher than 10
-		public var speed:Number = 2;  //how much the velocity changes on each frameEvent
+		public var Yspeed:Number = 2;  //how much the velocity changes on each frameEvent
+		public var Xspeed:Number = 1.4;
 		public var fric:Number = 1;  //frictional coefficient of go
-		// MAX_VEL_Y has to be less than half the height of most narrow platform.
+		public var hat:Weapon = new Weapon(1);
+		//public var airFric:Number = 1; // not sure yet 
+		// MAX_VEL_Y has to be less than the height of most shallow platform.
 		// otherwise you will fall through the ground
-		const MAX_VEL_Y:Number = 11; // so min platform height should be 22.
-		const MAX_VEL_X:Number = 8;
+		const MAX_VEL_Y:Number = 8; // so min platform height should be 22.
+		const MAX_VEL_X:Number = 4;
 		//DON'T CHANGE THESE
-		public var vely:int = 0;
-		public var velx:int = 0;
+		public var vely:Number = 0;
+		public var velx:Number = 0;
 		public var imon:Boolean = false; // On|Off the ground = true|false (stnading sure-footedly)
 		public var ihit:Boolean = false; // On|Off any object = true|false (smack a wall, hit by baddy)
-		public var ldir:Boolean = true;  // Right|Left = true|false
+		public var ldir:Boolean = true;  // Right|Left = true|false (last direction player went)
 		private var keys:KeyMap = new KeyMap();
 		private var action:uint = 0;
 		private var frame:uint = 1;
 		// 1.
 		//HeroSkin is subclass of bitmapData. this loads the SpriteSheet into memory
 		private var animData:HeroSkin = new HeroSkin(0,0);
+		private var weaponData:WeaponSkins = new WeaponSkins(0,0);
 		// 2.
 		//create bitmap with transparent canvas. This is what we see.
 		private var displayData:BitmapData = new BitmapData(32,32,true,0x00000000);
@@ -73,24 +78,24 @@
 			heroBytes.position = 0;
 			displayData.setPixels(heroPaste,heroBytes);
 			//adjust bitmap positio in sprite
-			display.y = -96;
-			display.x = -24;
+			display.y = -64;
+			display.x = -16;
 			//make more biggerrer
-			display.scaleX = 3;
-			display.scaleY = 3;
+			display.scaleX = 2;
+			display.scaleY = 2;
 			//plop it on stage for all to see
 			this.addChild(display);
 		}
 		//updates the copy rectangle
 		// based on hero state and player actions
 		private function animate(act:String = null):void{
+			/*****************************************************/
+			//TODO: have actions also check for aMax;
+			//it gets set, but never used
+			/****************************************************/
 			//if the player is dormant
 			if(act == null){
 				aPos++;
-				if(aPos >= aMax){
-					aPos = aMax;
-					aFlag = false;
-				}
 			}else
 			if(act == 'duck'){
 				aMax = 2;
@@ -127,12 +132,13 @@
 				}
 				//if not animating, start animating
 				if(!(frame % 4)){
-				useWeapon();
+				//useWeapon();
 					frame = 0;
 					aPos = 1;
 				}
 			}else
 			if(act == 'fall'){
+				aMax = 3
 				frame = 0;
 				if(ldir){
 					//trace('falling right');
@@ -145,6 +151,7 @@
 				}
 			}else
 			if(act == 'walk'){
+				aMax = 6;
 				if(ldir){
 					//trace('walking right');
 					aStat = 0;
@@ -153,13 +160,13 @@
 					aStat = 1;
 				}
 				//if not animating, start animating
-				if(!(frame % 8)){
+				if(!(frame % 16)){
 					frame = 1;
 					aPos = 1;
 					//aFlag = false;
 				}
 				//slow anim
-				if(!(frame % 2)){
+				if(!(frame % 4)){
 					//trace('step');
 					aPos++;
 				}
@@ -168,7 +175,12 @@
 				frame = 0;
 				aPos = 0;
 			}
-			//advance copy rectangle pointer
+			if(aPos >= aMax){
+				aPos = aMax;
+				aFlag = false;
+			}
+			
+			//advance the 'copy' rectangle
 			//and update bitmap with new data
 			frame++;
 			heroCopy = new Rectangle(aPos*tile,aStat*tile,tile,tile);
@@ -176,7 +188,7 @@
 			heroBytes.position = 0;
 			displayData.setPixels(heroPaste,heroBytes);
 		}
-		//make hat from existing texture resource
+		/*//make hat from existing texture resource
 		private function hat():Sprite{
 			var p:Point = localToGlobal(new Point(0,-32));
 			var hatCopy = new Rectangle(12,0,11,3);
@@ -192,7 +204,6 @@
 			atk.addChild(hat);
 			atk.x = p.x;
 			atk.y = p.y;
-			//atk.d = ldir;
 			return atk;
 		}
 		private function useWeapon():void{
@@ -225,13 +236,13 @@
 				evt.target.removeEventListener(Event.ENTER_FRAME,ltFrm);
 			}
 			evt.target.removeEventListener(Event.REMOVED_FROM_STAGE,htRemove);
-		}
+		}*/
 		//move avatar
 		public function moveMe():void {
 			
 			// velocitize y (gravity)
 			if (this.vely < MAX_VEL_Y) {
-				this.vely += this.speed;
+				this.vely += this.Yspeed;
 			}
 			
 			// de-velocitize x (friction)
@@ -252,14 +263,14 @@
 					// D or RIGHT_ARROW move right
 					if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {
 						if(this.velx < MAX_VEL_X){
-							this.velx += this.speed;
+							this.velx += this.Xspeed;
 						}
 						this.ldir = true;
 					}else
 					// A or LEFT_ARROW move left
 					if (KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
 						if(this.velx > (MAX_VEL_X*-1)){
-							this.velx -= this.speed;
+							this.velx -= this.Xspeed;
 						}
 						this.ldir = false;
 					}
@@ -268,7 +279,7 @@
 				// D or RIGHT_ARROW move right
 				if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {
 					if(this.velx < MAX_VEL_X){
-						this.velx += this.speed;
+						this.velx += this.Xspeed;
 					}
 					this.ldir = true;
 					animate('fall');
@@ -276,7 +287,7 @@
 				// A or LEFT_ARROW move left
 				if (KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
 					if(this.velx > (MAX_VEL_X*-1)){
-						this.velx -= this.speed;
+						this.velx -= this.Xspeed;
 					}
 					this.ldir = false;
 					animate('fall');
@@ -297,7 +308,7 @@
 				// SPACEBAR or UP_ARROW jump 
 				if (KeyMap.keyMap[32] || KeyMap.keyMap[38]) {
 					// -speed breaks the moving platform buffer s well as still platforms.
-					this.y -= speed;
+					this.y -= Yspeed;
 					this.vely = -jumpHeight;
 					imon = false;
 				}else
@@ -321,7 +332,7 @@
 				// D or RIGHT_ARROW move right
 				if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {
 					if(this.velx < MAX_VEL_X){
-						this.velx += this.speed;
+						this.velx += this.Xspeed;
 					}
 					this.ldir = true;
 					animate('walk');
@@ -329,7 +340,7 @@
 				// A or LEFT_ARROW move left
 				if (KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
 					if(this.velx > (MAX_VEL_X*-1)){
-						this.velx -= this.speed;
+						this.velx -= this.Xspeed;
 					}
 					this.ldir = false;
 					animate('walk');
@@ -342,13 +353,14 @@
 						animate('stand');
 					}else if (velx != 0){
 						animate('walk');
-					}
+						}
 				}
+				//the cure for NAS (Nerve Attenuation Syndrom)  if you don't believe me, comment it out.
+				if(Math.abs(velx) <= (0.1+Xspeed-fric)){velx = 0;}
 				//assume we are no longer on something, in case 
 				//we fell off a moving plat or something
 				ihit = false;
 				imon = false;
-				
 			}
 		}
 		

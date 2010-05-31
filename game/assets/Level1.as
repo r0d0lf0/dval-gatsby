@@ -1,0 +1,1 @@
+﻿package assets{    import engine.assets.*;    import engine.actors.*;        public class Level1 extends Level {                public function Level1(hero:Hero) {            super(hero);        }		    }}

@@ -1,6 +1,6 @@
 package engine.assets {
     
-    import engine.assets.IGameAsset;
+    import engine.assets.*;
     import flash.display.MovieClip;
     import engine.*;
 	import engine.actors.*;
@@ -8,28 +8,25 @@ package engine.assets {
     
  
    // Levels are any GameAsset that uses a Hero to guide its li
-   public class Level extends MovieClip implements IGameAsset {
+   public class Level extends Asset implements IGameAsset {
        
        protected var hero:Hero;
-       protected var assets:Array;
+       protected var map_objects:Array;
        protected var map:Map;
-       protected var status:String = "just fine";
        protected var count = 0;
        
        public function Level(hero:Hero) {
+           super();
            this.hero = hero;
            trace("Level created.");
-       }
-       
-       public function getStatus():String {
-           return status;
+           status = "just fine";
        }
        
        private function killHero() {
            
        }
        
-       public function update():Boolean {
+       override public function update():Boolean {
            count++;
            if(count > 60) {
                status = "COMPLETE";

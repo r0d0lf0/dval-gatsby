@@ -18,7 +18,7 @@ package engine {
             
             this.hero = hero;
             this.assets = assets;
-            
+            this.addChild(assets[current_asset]);
         }
         
 		public function start() {   

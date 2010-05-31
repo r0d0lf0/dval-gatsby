@@ -49,6 +49,7 @@ package engine{
           
           // create a game engine with all our new assets and our new hero
           game_engine = new GameEngine(hero, assets);
+          stage.addChild(game_engine);
           addEventListener(Event.ENTER_FRAME, game_engine.update);
 
         }

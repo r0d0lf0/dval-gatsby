@@ -10,6 +10,8 @@ package controls{
 		private static var _keyMap:Array=new Array();
 		public static const KEY_DOWN:String = KeyboardEvent.KEY_DOWN;
 		public static const KEY_UP:String = KeyboardEvent.KEY_UP;
+		private static var last_key_pressed:int;
+		
 		public function KeyMap():void {
 			// map control keys
 			_keyMap[32]=false; //SPACEBAR
@@ -53,6 +55,7 @@ package controls{
 		// onKeyDown set array item True, broadcast event
 		public function keyDownHandler(evt:KeyboardEvent):void {
 			_keyMap[evt.keyCode]=true;
+			last_key_pressed = evt.keyCode;
 			dispatchEvent(new Event(KEY_DOWN))
 		}
 		// onKeyUp set same item False
@@ -63,6 +66,10 @@ package controls{
 		// return reference to array
 		public static function get keyMap():Array{
 			return _keyMap;
+		}
+		
+		public function getLastKey():int {
+		    return last_key_pressed;
 		}
 	}
 }

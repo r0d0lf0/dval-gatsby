@@ -27,7 +27,7 @@ package {
 		
 		public function gatsby() {
 			//start!
-			game = new NewGame();
+			game = new NewGame(this);
 			//game.start();
 			
 		}

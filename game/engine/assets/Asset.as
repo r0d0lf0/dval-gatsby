@@ -4,13 +4,16 @@ package engine.assets {
     import engine.assets.IGameAsset;
     import flash.events.Event;
 	import flash.display.MovieClip;
+    import flash.display.Stage;
     
     public class Asset extends MovieClip implements IGameAsset {
         
+        protected var ldr;
         protected var status:String = "status";  // Boomstick!
         private var keys:KeyMap = new KeyMap(); // Assets should be the only guys with the KeyMap
                                                 // since they are the only ones guaranteed to exist
-        public function Asset() {
+        public function Asset(ldr) {
+            this.ldr = ldr;
             if (stage != null) {
 				config();
 			} else {
@@ -32,11 +35,11 @@ package engine.assets {
 		}
 		
 		private function onKeyRelease(e) {
-		    trace("released!");
+		    //trace("released!");
 		}
 		
 		private function onKeyPress(e) {
-            trace("You pressed the " + keys.getLastKey() + " key.");
+            //trace("You pressed the " + keys.getLastKey() + " key.");
 		}
         
         public function update():Boolean {
@@ -45,6 +48,10 @@ package engine.assets {
         
         public function getStatus():String {
             return status;
+        }
+        
+        public function attachLdr(ldr) {
+            this.ldr = ldr;
         }
         
         

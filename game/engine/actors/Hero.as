@@ -238,9 +238,9 @@
 			evt.target.removeEventListener(Event.REMOVED_FROM_STAGE,htRemove);
 		}*/
 		//move avatar
-		public function moveMe():void {
-			
-			// velocitize y (gravity)
+		
+		private function applyPhysics():void {
+		    // velocitize y (gravity)
 			if (this.vely < MAX_VEL_Y) {
 				this.vely += this.Yspeed;
 			}
@@ -248,9 +248,15 @@
 			// de-velocitize x (friction)
 			if (this.velx > 0) {
 				this.velx -= fric;
-			}else if (this.velx < 0) {
+			} else if (this.velx < 0) {
 				this.velx += fric;
 			}
+		}
+		
+		public function moveMe():void {
+		    
+			applyPhysics(); // apply our enviromental variables
+
 			
 			/**************************************************/
 			//State 1. -- Falling
@@ -356,6 +362,7 @@
 						}
 				}
 				//the cure for NAS (Nerve Attenuation Syndrom)  if you don't believe me, comment it out.
+				// (the black shakes!)
 				if(Math.abs(velx) <= (0.1+Xspeed-fric)){velx = 0;}
 				//assume we are no longer on something, in case 
 				//we fell off a moving plat or something

@@ -17,17 +17,21 @@
 				addEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			}
 		}
+		
 		private function addedToStage(evt):void {
 			removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			buildMap();
 		}
+		
 		private function buildMap():void {
+		    // loop through all the child objects attached to this library item, and put
+		    // references to them into a local array
 			for(var n=0; n<this.numChildren; n++){
 				//trace(this.getChildAt(n));
 				objectArray.push(this.getChildAt(n));
 			}
 			//move to bottom screen of map
-			this.y = 0-(this.height - (game.screenHeight*2));
+			//this.y = 0-(this.height - (game.screenHeight*2));
 		}
 	}
 }

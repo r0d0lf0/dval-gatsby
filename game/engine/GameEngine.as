@@ -13,9 +13,10 @@ package engine {
         private var current_level;
         private var game_started:Boolean;
         private var current_asset = 0;
+        private var ldr;
         
-        public function GameEngine(hero, assets) {
-            
+        public function GameEngine(hero, assets, ldr) {
+            this.ldr = ldr;
             this.hero = hero;
             this.assets = assets;
             this.addChild(assets[current_asset]);

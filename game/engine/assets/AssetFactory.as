@@ -9,8 +9,10 @@ package engine.assets {
         
         private var game:NewGame;
         private var hero:Hero;
+        private var ldr;
         
-        public function AssetFactory(game:NewGame, hero:Hero) {
+        public function AssetFactory(game:NewGame, hero:Hero, ldr) {
+            this.ldr = ldr;
             this.game = game;
             this.hero = hero;
             trace("AssetFactory created.");
@@ -22,7 +24,7 @@ package engine.assets {
             switch(asset_name) {
                 
                 case 'level_1':
-                    return new Level1(hero);
+                    return new Level1(hero, ldr);
                 
             }
             

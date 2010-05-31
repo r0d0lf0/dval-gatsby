@@ -45,7 +45,7 @@
 				destroyLevel();
 			}
 			//set up map and hero environmental vars
-			map = lmap
+			map = lmap;
 			map.name = 'map';
 			hero.name = 'hero';
 			//if we're loading a level (prefixed by 'lvl'):

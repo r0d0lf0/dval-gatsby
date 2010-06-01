@@ -35,9 +35,11 @@ package engine.assets {
        public function Level(hero:Hero, ldr) {
            super(ldr);
            this.hero = hero;
-           map = maps[0];
+           addChild(map);
+           addChild(hero);
+           hero.name = 'hero';
+           map.name = 'map';
            trace("Level created.");
-           
            status = "ACTIVE";
        }
        

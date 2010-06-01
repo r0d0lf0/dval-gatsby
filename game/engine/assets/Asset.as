@@ -10,11 +10,10 @@ package engine.assets {
         
         protected var ldr;
         protected var status;
-        private var keys:KeyMap = new KeyMap(); // Assets should be the only guys with the KeyMap
+        protected var keys:KeyMap = new KeyMap(); // Assets should be the only guys with the KeyMap
                                                 // since they are the only ones guaranteed to exist
         public function Asset(ldr) {
             status = "UNCONFIGURED";
-
             this.ldr = ldr;
             if (stage != null) {
 				config();

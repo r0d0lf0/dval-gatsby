@@ -10,6 +10,7 @@
 
 	dynamic public class MapObject extends Sprite {
 
+        public var object_type = "interactive";
 		public var unit:uint = 16;
 		public var ID:uint;
 		public var w:uint=1;
@@ -17,6 +18,7 @@
 		public var tex:String = '';
 		protected var me:Point = localToGlobal(new Point(0,0));
 		private var hero:*;
+		private var ldr;
 		//so nice
 		public var imgLdr = new ImageLoader(textureLoadSuccess,textureLoadFail);
 		//The constructor 
@@ -63,7 +65,7 @@
 		//look up "Axis based collisions"
 		private function onFrame(evt:Event):void{
 			//hero x axis
-			var hero:* = stage.getChildByName('hero');
+			//var hero:* = ldr.getChildByName('hero');
 			var hhw = hero.width/4; // Hero Half-Width
 			//mapObject x axis
 			this.me = localToGlobal(new Point(0,0));
@@ -107,6 +109,14 @@
 		}
 		public function behave(smackData:Object, characterObject:*):void {
 			//this is overwritten by each unique subclass
+		}
+		
+		public function setLdr(ldr) {
+		    this.ldr = ldr;
+		}
+		
+		public function setHero(hero) {
+		    this.hero = hero;
 		}
 	}
 }

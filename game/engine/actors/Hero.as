@@ -240,6 +240,8 @@
 		//move avatar
 		
 		private function applyPhysics():void {
+			
+			
 		    // velocitize y (gravity)
 			if (this.vely < MAX_VEL_Y) {
 				this.vely += this.Yspeed;

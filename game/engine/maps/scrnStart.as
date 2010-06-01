@@ -30,7 +30,7 @@
 			//remove vaccant listeners
 			start_btn.removeEventListener(MouseEvent.CLICK, startHandler);
 			//load level 1_1
-			game.newLevel(new lvl1_1(game));
+			game.newLevel(new Level1_Map1(game));
 		}
 	}//end class
 }//end package

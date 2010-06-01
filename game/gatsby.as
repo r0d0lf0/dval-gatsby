@@ -1,4 +1,4 @@
-﻿/*
+﻿
 // this is the old start statement
 package {
 
@@ -13,24 +13,5 @@ package {
 		}
 	}//end class
 }//end package
-*/
 
-// here's the new one
-package {
-
-	import engine.NewGame;
-	//import engine.maps.scrnStart;
-
-	public class gatsby extends NewGame {
-		
-		private var game:NewGame;
-		
-		public function gatsby() {
-			//start!
-			game = new NewGame(this);
-			//game.start();
-			
-		}
-	}//end class
-}//end package
 

@@ -9,10 +9,12 @@ package engine.assets {
     public class Asset extends MovieClip implements IGameAsset {
         
         protected var ldr;
-        protected var status:String = "status";  // Boomstick!
+        protected var status;
         private var keys:KeyMap = new KeyMap(); // Assets should be the only guys with the KeyMap
                                                 // since they are the only ones guaranteed to exist
         public function Asset(ldr) {
+            status = "UNCONFIGURED";
+
             this.ldr = ldr;
             if (stage != null) {
 				config();
@@ -32,6 +34,7 @@ package engine.assets {
             this.addChild(keys);
 			keys.addEventListener(KeyMap.KEY_UP, onKeyRelease); // attatch our keyboard functions, we'll route them
 			keys.addEventListener(KeyMap.KEY_DOWN, onKeyPress); // elsewhere later if we need them
+		    status = "ACTIVE";
 		}
 		
 		private function onKeyRelease(e) {

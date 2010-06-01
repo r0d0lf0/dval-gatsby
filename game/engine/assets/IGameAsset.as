@@ -1,6 +1,6 @@
 package engine.assets {
     
-    // GameAssets get plugged into the onEnterFrame action, and return their status to the Game
+    // GameAssets get plugged into the onEnterFrame action, and return true until they want to exit
     public interface IGameAsset {
         
         function update():Boolean;

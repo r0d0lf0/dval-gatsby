@@ -23,7 +23,9 @@ package engine.assets {
             
             switch(asset_name) {
                 
-                case 'level_1':
+                case 'StartScreen':
+                    return new StartScreen(ldr);
+                case 'Level1':
                     return new Level1(hero, ldr);
                 
             }

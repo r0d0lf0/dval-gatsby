@@ -2,9 +2,9 @@
 
 	import engine.Map;
 
-	dynamic public class Level1_Map1 extends Map {
+	dynamic public class lvl1_Map1 extends Map {
 
-		public function Level1_Map1(game:*=null) {
+		public function lvl1_Map1(game:*=null) {
 			//
 			super(game);
 		}

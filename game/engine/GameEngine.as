@@ -14,6 +14,7 @@ package engine {
         private var game_started:Boolean;
         private var current_asset = 0;
         private var ldr;
+        private var status = "UNCONFIGURED";
         
         public function GameEngine(hero, assets, ldr) {
             this.ldr = ldr;
@@ -35,6 +36,7 @@ package engine {
         
 		public function start() {
 		   addChild(assets[0]);
+		   status = "READY";
 		}
 		
 		public function update(e) {
@@ -43,11 +45,13 @@ package engine {
 		    if(!assets[current_asset].update()) {
 		        switch(assets[current_asset].getStatus()) {
 		            case 'COMPLETE':
+		                removeChild(assets[current_asset]);
 		                if((current_asset + 1) == assets.length) {
 		                    trace("You win."); // you've beaten the game, end it
 		                    return false;
 		                } else {
 		                    current_asset++; // otherwise, move to the next asset
+		                    addChild(assets[current_asset]);
 		                }
 		                break;
 		            case 'HERO_DIED':
@@ -64,6 +68,10 @@ package engine {
 		        
 		    }
 		    
+		}
+		
+		public function getStatus():String {
+		    return status;
 		}
         
     }

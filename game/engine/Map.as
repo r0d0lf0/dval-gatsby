@@ -28,10 +28,15 @@
 		    // references to them into a local array
 			for(var n=0; n<this.numChildren; n++){
 				//trace(this.getChildAt(n));
-				objectArray.push(this.getChildAt(n));
+				var myChild = this.getChildAt(n);
+				if(myChild.object_type == "interactive") {
+				    myChild.setLdr(game);
+				}
+				objectArray.push(myChild);
 			}
 			//move to bottom screen of map
 			//this.y = 0-(this.height - (game.screenHeight*2));
+			trace("objects constructed.");
 		}
 	}
 }

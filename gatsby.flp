@@ -14,10 +14,11 @@
                 <project_file path="./game/engine/maps/lvl1_2.as" filetype="as" />
                 <project_file path="./game/engine/maps/scrnStart.as" filetype="as" />
             </project_folder>
-            <project_folder name="assets" expanded="true">
+            <project_folder name="assets" expanded="false">
                 <project_file path="./game/engine/assets/AssetFactory.as" filetype="as" />
                 <project_file path="./game/engine/assets/IGameAsset.as" filetype="as" />
                 <project_file path="./game/engine/assets/Level.as" filetype="as" />
+                <project_file path="./game/engine/assets/Asset.as" filetype="as" />
             </project_folder>
             <project_file path="./game/engine/Game.as" filetype="as" />
             <project_file path="./game/engine/Map.as" filetype="as" />
@@ -25,7 +26,7 @@
             <project_file path="./game/engine/NewGame.as" filetype="as" />
             <project_file path="./game/engine/Scoreboard.as" filetype="as" />
         </project_folder>
-        <project_folder name="system" expanded="true">
+        <project_folder name="system" expanded="false">
             <project_file path="./game/system/ImageLoader.as" filetype="as" />
             <project_file path="./game/system/TextLoader.as" filetype="as" />
             <project_file path="./game/system/TextParser.as" filetype="as" />
@@ -37,6 +38,9 @@
             <project_file path="./game/textures/level_alpha.png" filetype="png" />
             <project_file path="./game/textures/char_nick.png" filetype="png" />
             <project_file path="./game/textures/weapons.png" filetype="png" />
+        </project_folder>
+        <project_folder name="assets" expanded="false">
+            <project_file path="./game/assets/Level1.as" filetype="as" />
         </project_folder>
         <project_file path="./game/gatsby.fla" filetype="fla" profile="" def_file="true" />
         <project_file path="./game/gatsby.as" filetype="as" />

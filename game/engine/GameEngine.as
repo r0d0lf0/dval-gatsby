@@ -19,11 +19,22 @@ package engine {
             this.ldr = ldr;
             this.hero = hero;
             this.assets = assets;
-            this.addChild(assets[current_asset]);
+            //trace(assets[0].getStatus());
+            //start!
+			if (stage != null) {
+				start();
+			} else {
+				addEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			}
         }
         
-		public function start() {   
-		   
+        private function addedToStage(evt) {
+            removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+            start();
+        }
+        
+		public function start() {
+		   addChild(assets[0]);
 		}
 		
 		public function update(e) {

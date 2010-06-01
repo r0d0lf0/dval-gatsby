@@ -10,6 +10,7 @@
                 <project_file path=".:game/engine/actors/Weapon.as" filetype="as" />
             </project_folder>
             <project_folder name="maps" expanded="false">
+                <project_file path=".:game/engine/maps/Level1_Map1.as" filetype="as" />
                 <project_file path=".:game/engine/maps/lvl1_1.as" filetype="as" />
                 <project_file path=".:game/engine/maps/lvl1_2.as" filetype="as" />
                 <project_file path=".:game/engine/maps/scrnStart.as" filetype="as" />

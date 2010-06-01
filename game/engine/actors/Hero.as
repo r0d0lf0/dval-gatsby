@@ -78,11 +78,11 @@
 			heroBytes.position = 0;
 			displayData.setPixels(heroPaste,heroBytes);
 			//adjust bitmap positio in sprite
-			display.y = -64;
-			display.x = -16;
+			display.y = -32;
+			display.x = -8;
 			//make more biggerrer
-			display.scaleX = 2;
-			display.scaleY = 2;
+			display.scaleX = 1;
+			display.scaleY = 1;
 			//plop it on stage for all to see
 			this.addChild(display);
 		}

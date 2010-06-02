@@ -14,7 +14,8 @@
 		public var wPower:int = 1;
 		private var wTile:int = 8;
 		//private var weaponSkin:WeaponSkins = new WeaponSkins(0,0); //automatically imported from gatsby.fla
-		private var weaponData:WeaponSkins = new WeaponSkins(0,0);
+		public var weaponData:WeaponSkins = new WeaponSkins(0,0);
+		public var atk:Sprite = new Sprite();
 
 		//make hat from existing texture resource
 		public function Weapon(pwr:int=0):void{
@@ -26,14 +27,14 @@
 			var displayHat:BitmapData  = new BitmapData(16,8,true,0x00000000);
 			displayHat.setPixels(hatPaste,hatBytes);
 			var hat:Bitmap = new Bitmap(displayHat);
-			hat.scaleX = 2;
-			hat.scaleY = 2;
-			var atk:Sprite = new Sprite();
-			//atk.addChild(hat);
+			//hat.scaleX = 2;
+			//hat.scaleY = 2;
+			atk.addChild(hat);
 		}
-		private function useWeapon():void{
+		public function useWeapon(ldir:Boolean):void{
 			//add weapon attack
 			var t = stage.getChildByName('map');
+			var h = stage.getChildByName('hero');
 			/******************************************************
 			/*@TODO: this is the section that is broken:  
 			/* "h = new hat()"   needs to be transposed to  "this"
@@ -42,24 +43,26 @@
 			/* also:
 			/* velx and vely are from hero. you could just substitute 14;
 			/******************************************************
-			var h = hat();
-			h.x -= t.x-velx;
-			h.y -= t.y+vely;
-			t.addChild(h);
+			var h = hat();*/
+			atk.x = h.x-14;
+			atk.y = h.y+14;
 			if(ldir){
-				h.addEventListener(Event.ENTER_FRAME,rtFrm);
+				atk.addEventListener(Event.ENTER_FRAME,rtFrm);
 			}else{
-				h.addEventListener(Event.ENTER_FRAME,ltFrm);
+				atk.addEventListener(Event.ENTER_FRAME,ltFrm);
 			}
-			h.addEventListener(Event.REMOVED_FROM_STAGE,htRemove);
-			*/
+			atk.addEventListener(Event.REMOVED_FROM_STAGE,htRemove);
+			trace('added to '+t);
+			t.addChild(atk);
 		}
 		//shoot right
 		private function rtFrm(evt:Event):void{
+			trace('tick right' + atk.x);
 			evt.target.x += 11;
 		}
 		//shoot left
 		private function ltFrm(evt:Event):void{
+			trace('tick left');
 			evt.target.x -= 11;
 		}
 		//free resorces at end of hat

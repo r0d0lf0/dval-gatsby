@@ -34,7 +34,7 @@
 		// 1.
 		//HeroSkin is subclass of bitmapData. this loads the SpriteSheet into memory
 		private var animData:HeroSkin = new HeroSkin(0,0);
-		private var weaponData:WeaponSkins = new WeaponSkins(0,0);
+		//private var weaponData:WeaponSkins = new WeaponSkins(0,0);
 		// 2.
 		//create bitmap with transparent canvas. This is what we see.
 		private var displayData:BitmapData = new BitmapData(32,32,true,0x00000000);
@@ -66,6 +66,7 @@
 		private function buildHero():void{
 			//trace("hero loaded");
 			keys.addEventListener(KeyMap.KEY_UP, onKeyRelease);
+			//addChild(hat);
 			skinHero();
 		}
 		// keeps anim going if it needs to
@@ -188,55 +189,6 @@
 			heroBytes.position = 0;
 			displayData.setPixels(heroPaste,heroBytes);
 		}
-		/*//make hat from existing texture resource
-		private function hat():Sprite{
-			var p:Point = localToGlobal(new Point(0,-32));
-			var hatCopy = new Rectangle(12,0,11,3);
-			var hatBytes = animData.getPixels(hatCopy);
-			hatBytes.position = 0;
-			var hatPaste:Rectangle = new Rectangle(0,0,11,3); //paste
-			var displayHat:BitmapData  = new BitmapData(11,3,true,0x00000000);
-			displayHat.setPixels(hatPaste,hatBytes);
-			var hat:Bitmap = new Bitmap(displayHat);
-			hat.scaleX = 3;
-			hat.scaleY = 3;
-			var atk:Sprite = new Sprite();
-			atk.addChild(hat);
-			atk.x = p.x;
-			atk.y = p.y;
-			return atk;
-		}
-		private function useWeapon():void{
-			//add weapon attack
-			var h = hat();
-			var t = stage.getChildByName('map');
-			h.x -= t.x-velx;
-			h.y -= t.y+vely;
-			t.addChild(h);
-			if(ldir){
-				h.addEventListener(Event.ENTER_FRAME,rtFrm);
-			}else{
-				h.addEventListener(Event.ENTER_FRAME,ltFrm);
-			}
-			h.addEventListener(Event.REMOVED_FROM_STAGE,htRemove);
-		}
-		//shoot right
-		private function rtFrm(evt:Event):void{
-			evt.target.x += 11;
-		}
-		//shoot left
-		private function ltFrm(evt:Event):void{
-			evt.target.x -= 11;
-		}
-		//free resorces at end of hat
-		private function htRemove(evt:Event):void{
-			try{
-				evt.target.removeEventListener(Event.ENTER_FRAME,rtFrm);
-			}finally{
-				evt.target.removeEventListener(Event.ENTER_FRAME,ltFrm);
-			}
-			evt.target.removeEventListener(Event.REMOVED_FROM_STAGE,htRemove);
-		}*/
 		//move avatar
 		
 		private function applyPhysics():void {
@@ -264,7 +216,7 @@
 			if(!imon){
 				// CTRL key 
 				if (KeyMap.keyMap[17]) {
-					//allow throw while moving
+					//allow throw while falling
 					// A or LEFT_ARROW move left
 					// D or RIGHT_ARROW move right
 					if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {
@@ -280,6 +232,7 @@
 						}
 						this.ldir = false;
 					}
+					hat.useWeapon(this.ldir);
 					animate('throw');
 				}else
 				// D or RIGHT_ARROW move right
@@ -309,6 +262,7 @@
 			{
 				// CTRL key 
 				if (KeyMap.keyMap[17]) {
+					hat.useWeapon(this.ldir);
 					animate('throw');
 				}else
 				// SPACEBAR or UP_ARROW jump 

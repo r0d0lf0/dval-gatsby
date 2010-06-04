@@ -5,10 +5,12 @@
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.events.Event;
+	import engine.IObserver;
+	import engine.ISubject;
 
 	import system.ImageLoader;
 
-	dynamic public class MapObject extends Sprite {
+	dynamic public class MapObject extends Sprite implements IObserver {
 
         public var object_type = "interactive";
 		public var unit:uint = 16;
@@ -64,15 +66,22 @@
 		//check if the thing hit the Hero
 		//look up "Axis based collisions"
 		private function onFrame(evt:Event):void{
-			//hero x axis
-			//var hero:* = ldr.getChildByName('hero');
+			
+		}
+		
+		private function checkCollision(hero) {
+		    
+		    //hero x axis
 			var hhw = hero.width/4; // Hero Half-Width
+			
 			//mapObject x axis
 			this.me = localToGlobal(new Point(0,0));
 			var mhw = this.width/2; // MapObject Half-Width
+			
 			//distance and overlap between them
 			var dx = (me.x+mhw) - (hero.x+hhw+hero.velx+hero.Xspeed);  //distance x
 			var ox = (hhw+mhw) - Math.abs(dx);  //overlap x
+			
 			/*************** Check for collision ********************/
 			//if there is a collision on the X axis:
 			if(ox > 0){
@@ -89,10 +98,11 @@
 					//we have a hit! mapObject should 'behave' accordingly
 					behave({dx:dx,ox:ox,dy:dy,oy:oy},hero);
 					//tell the hero he hit something (this effects animation)
-					hero.ihit = true;
+					//hero.ihit = true;
 				}
 			}
 		}
+		
 		//show the background image
 		public function textureLoadSuccess(evt:*):void {
 			var tmpData:BitmapData = evt.target.content.bitmapData;
@@ -117,6 +127,10 @@
 		
 		public function setHero(hero) {
 		    this.hero = hero;
+		}
+		
+		public function notify(subject:ISubject) {
+		    checkCollision(subject);
 		}
 	}
 }

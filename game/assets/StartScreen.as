@@ -1,7 +1,7 @@
 package assets {
     
     import controls.KeyMap;
-    import engine.assets.*;
+    import engine.assetPrototypes.*;
     import flash.display.MovieClip;
     import flash.display.DisplayObject;
  

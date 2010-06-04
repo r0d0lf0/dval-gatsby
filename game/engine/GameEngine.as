@@ -4,7 +4,7 @@ package engine {
     import flash.events.Event;
     import engine.*;
     import engine.actors.*;
-	import engine.assets.*;
+	import engine.assetPrototypes.*;
     
     public class GameEngine extends MovieClip {
         

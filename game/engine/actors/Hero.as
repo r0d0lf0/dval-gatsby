@@ -9,8 +9,13 @@
 	import flash.events.Event;
 	import controls.KeyMap;
 	import engine.actors.Weapon;
+	import engine.*;
 
-	public class Hero extends MovieClip {
+	public class Hero extends MovieClip implements ISubject {
+	    
+	    // Here's where the observer pattern stuff goes
+	    private var observers:Array;
+	    
 		//CHANGE THESE
 		public var jumpHeight:uint = 24; //exponential. 20 jumps 3x higher than 10
 		public var Yspeed:Number = 2;  //how much the velocity changes on each frameEvent
@@ -53,6 +58,7 @@
 		
 		// constructor, geesh
 		public function Hero():void {
+		    observers = new Array(); // initialize our observers array
 			//trace("game loaded");
 			if (stage != null) {
 				buildHero();
@@ -208,7 +214,6 @@
 		public function moveMe():void {
 		    
 			applyPhysics(); // apply our enviromental variables
-
 			
 			/**************************************************/
 			//State 1. -- Falling
@@ -323,6 +328,8 @@
 				ihit = false;
 				imon = false;
 			}
+			
+			notifyObservers();
 		}
 		
 		//check if any keys are pressed. (helper function)
@@ -333,5 +340,27 @@
 			}
 			return tmp;
 		}
+		
+		
+		// OBSERVER PATTERN METHODS BELOW
+		public function subscribeObserver(new_observer:IObserver):void {
+		    observers.push(new_observer);
+		}
+		
+		public function unsubscribeObserver(new_observer:IObserver):void {
+		    for(var ob:int=0; ob<observers.length; ob++) {
+		        if(observers[ob]==new_observer) {
+		            observers.splice(ob, 1);
+		            break;
+		        }
+		    }
+		}
+		
+		public function notifyObservers():void {
+		    for(var my_observer in observers) {
+		        observers[my_observer].notify(this);
+		    }
+		}
+		
 	}
 }

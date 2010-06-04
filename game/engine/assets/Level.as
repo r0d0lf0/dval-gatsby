@@ -31,6 +31,8 @@ package engine.assets {
        private const MOVE_BUFFER:int = 60;
 	   protected var screenWidth:Number;
 	   protected var screenHeight:Number;
+	   
+	   protected var current_time:Number = 0;
        
        public function Level(hero:Hero, ldr) {
            super(ldr);
@@ -83,8 +85,8 @@ package engine.assets {
 		}
        
        override public function update():Boolean {
-           //invoke emotion in hero
-			hero.moveMe();
+            current_time++; // advance the tick clock
+			hero.moveMe(); //invoke emotion in hero
 			/****************************************************/
 			//TODO: change up|down logic to prevent over-scrolling
 			//should be able to base off of left|right logic
@@ -125,7 +127,14 @@ package engine.assets {
 					}
 				}
 			}
-           return true;
+		   
+           if(current_time > 200) {
+               status = "COMPLETE";
+               return false;
+           } else {
+               return true;
+               alert("things!");
+           }
        }
        
        private function start():void {

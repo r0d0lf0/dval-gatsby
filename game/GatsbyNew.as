@@ -28,7 +28,6 @@ package {
 		    game = new NewGame(this);
             this.addChild(game);
     	    trace("initialized.");
-
 		}
 	}//end class
 }//end package

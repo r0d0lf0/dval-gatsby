@@ -11,8 +11,7 @@ package engine.assets {
         private var hero:Hero;
         private var ldr;
         
-        public function AssetFactory(game:NewGame, hero:Hero, ldr) {
-            this.ldr = ldr;
+        public function AssetFactory(game:NewGame, hero:Hero) {
             this.game = game;
             this.hero = hero;
             trace("AssetFactory created.");
@@ -24,9 +23,9 @@ package engine.assets {
             switch(asset_name) {
                 
                 case 'StartScreen':
-                    return new StartScreen(ldr);
+                    return new StartScreen(game);
                 case 'Level1':
-                    return new Level1(hero, ldr);
+                    return new Level1(hero, game);
                 
             }
             

@@ -13,11 +13,11 @@ package engine {
         private var current_level;
         private var game_started:Boolean;
         private var current_asset = 0;
-        private var ldr;
+        private var game;
         private var status = "UNCONFIGURED";
         
-        public function GameEngine(hero, assets, ldr) {
-            this.ldr = ldr;
+        public function GameEngine(hero, assets, game) {
+            this.game = game;
             this.hero = hero;
             this.assets = assets;
             //trace(assets[0].getStatus());
@@ -48,7 +48,7 @@ package engine {
 		                removeChild(assets[current_asset]);
 		                if((current_asset + 1) == assets.length) {
 		                    trace("You win."); // you've beaten the game, end it
-		                    return false;
+		                    game.reset();
 		                } else {
 		                    current_asset++; // otherwise, move to the next asset
 		                    addChild(assets[current_asset]);

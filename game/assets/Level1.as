@@ -1,0 +1,1 @@
+﻿package assets{    import engine.assetPrototypes.*;    import engine.actors.*;	import engine.maps.*;	import engine.NewGame;        public class Level1 extends Level {                // an array to hold our map swfs        public function Level1(game:NewGame, hero:Hero) {            super(game, hero);        }            }}

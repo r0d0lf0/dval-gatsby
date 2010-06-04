@@ -11,7 +11,7 @@
 		public var game:MovieClip;
 		private var hero:Hero;
 		
-		public function Map(game, hero):void {
+		public function Map(game:*=null, hero:*=null):void {
 			//trace("game loaded");
 			this.game = game;
 			this.hero = hero;
@@ -32,6 +32,7 @@
 		    // references to them into a local array
 			for(var n=0; n<this.numChildren; n++){
 				//trace(this.getChildAt(n));
+				objectArray.push(this.getChildAt(n));
 				var myChild = this.getChildAt(n);
 				if(myChild is IObserver) {
 				    hero.subscribeObserver(myChild);

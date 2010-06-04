@@ -1,10 +1,10 @@
-package engine {
+﻿package engine {
     
     import flash.display.MovieClip;
     import flash.events.Event;
     import engine.*;
     import engine.actors.*;
-	import engine.assetPrototypes.*;
+	//import engine.assetPrototypes.*;
     
     public class GameEngine extends MovieClip {
         
@@ -35,13 +35,13 @@ package engine {
         }
         
 		public function start() {
-		   addChild(assets[0]);
+		  // addChild(assets[0]);
 		   status = "READY";
 		}
 		
 		public function update(e) {
 		    
-		    // update the asset, if it returns false, see why it stopped
+		  /*  // update the asset, if it returns false, see why it stopped
 		    if(!assets[current_asset].update()) {
 		        switch(assets[current_asset].getStatus()) {
 		            case 'COMPLETE':
@@ -67,7 +67,7 @@ package engine {
 		        }
 		        
 		    }
-		    
+		    */
 		}
 		
 		public function getStatus():String {

@@ -9,13 +9,13 @@
                 <project_file path="./game/engine/actors/Door.as" filetype="as" />
                 <project_file path="./game/engine/actors/Weapon.as" filetype="as" />
             </project_folder>
-            <project_folder name="maps" expanded="false">
+            <project_folder name="maps" expanded="true">
                 <project_file path="./game/engine/maps/lvl1_1.as" filetype="as" />
                 <project_file path="./game/engine/maps/lvl1_2.as" filetype="as" />
                 <project_file path="./game/engine/maps/scrnStart.as" filetype="as" />
                 <project_file path="./game/engine/maps/lvl1_Map1.as" filetype="as" />
             </project_folder>
-            <project_folder name="assets" expanded="true">
+            <project_folder name="assets" expanded="false">
                 <project_file path="./game/engine/assets/Asset.as" filetype="as" />
                 <project_file path="./game/engine/assets/AssetFactory.as" filetype="as" />
                 <project_file path="./game/engine/assets/IGameAsset.as" filetype="as" />

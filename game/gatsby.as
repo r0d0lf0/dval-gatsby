@@ -5,7 +5,7 @@ package {
 	import flash.display.MovieClip;
     import flash.events.Event;
 	
-	public class Gatsby extends MovieClip {
+	dynamic public class Gatsby extends MovieClip {
 	
 		public var game:Game = new Game();
 		

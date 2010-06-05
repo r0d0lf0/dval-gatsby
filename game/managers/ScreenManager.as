@@ -1,17 +1,22 @@
 ﻿package managers{
 
 	import flash.display.MovieClip;
+	import flash.display.Stage;
 	import flash.utils.getDefinitionByName;
+	import Game;
 
 	dynamic public class ScreenManager extends MovieClip {
 		
-		private var screenList:Array = new Array('gameOpen','lvl1_map1','lvl1_map2','gameEnd');
-
-		public function ScreenManager():void {
-			//trace('Hello World!');
-		}
+		static private var screenList:Array = new Array('gameOpen','lvl1_map1','lvl1_map2','gameEnd');
+		static public var currentScreen:String;
+		static public var game:Game;
 		
-		public function setScreen(screen:String):void{
+		//public function ScreenManager():void {
+			// the constructor is unecessary in a static class
+		//}
+		
+		// simple combo
+		static public function setScreen(screen:String):void{
 			clearScreen();
 			for(var i in screenList){
 				if(screenList[i] == screen){
@@ -20,21 +25,35 @@
 				}
 			}
 		}
-		public function loadScreen(screen:String):void{
+		// allows itteration
+		static public function nextScreen():void{
+			clearScreen();
+			for(var i in screenList){
+				if(screenList[i] == currentScreen){
+					loadScreen(screen);
+					trace(screen);
+				}
+			}
+		}
+		//load a new screen or level
+		static public function loadScreen(screen:String):void{
 			
 			var ClassReference:Class = getDefinitionByName(screen) as Class;
 			var peep = new ClassReference();
-           this.addChild(peep);
+			currentScreen = screen;
+        	game.addChild(peep);
 
 		}
-		public function clearScreen():void{
-			for( var i in this){
-				this.removeChild(this[i]);
+		//removes everything but the ScreenManager
+		static public function clearScreen():void{
+			for(var i:int=0;i<game.numChildren; i++){
+				trace(game.numChildren);
+				game.removeChild(game.getChildAt(i));
 			}
 		}
 		// returns a list of screens,
 		//a specific screen, or an empty array
-		public function getScreens(screen:int = -1):Array {
+		static public function getScreens(screen:int = -1):Array {
 			var tempArr:Array = new Array();
 			if (screen < 0){
 				tempArr = screenList;
@@ -43,6 +62,10 @@
 			}
 			trace(tempArr);
 			return tempArr;
+		}
+		
+		static public function setGame(g:Game):void{
+			game = g;
 		}
 		
 	}//end class

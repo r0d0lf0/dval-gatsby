@@ -4,7 +4,7 @@
             <project_file path="./game/controls/HeroControl.as" filetype="as" />
             <project_file path="./game/controls/KeyMap.as" filetype="as" />
         </project_folder>
-        <project_folder name="engine" expanded="false">
+        <project_folder name="engine" expanded="true">
             <project_folder name="actors" expanded="true">
                 <project_folder name="behavior" expanded="true">
                     <project_file path="./game/engine/actors/behavior/Behaviour.as" filetype="as" />
@@ -42,6 +42,8 @@
                 <project_file path="./game/engine/actors/MapObject.as" filetype="as" />
                 <project_file path="./game/engine/actors/Observer.as" filetype="as" />
                 <project_file path="./game/engine/actors/IActor.as" filetype="as" />
+                <project_file path="./game/engine/actors/Actor.as" filetype="as" />
+                <project_file path="./game/engine/actors/IMapObject.as" filetype="as" />
             </project_folder>
             <project_file path="./game/engine/Engine.as" filetype="as" />
             <project_file path="./game/engine/IMap.as" filetype="as" />
@@ -51,12 +53,14 @@
             <project_file path="./game/engine/scrnStart.as" filetype="as" />
             <project_file path="./game/engine/SplashScreen.as" filetype="as" />
         </project_folder>
-        <project_folder name="managers" expanded="true">
+        <project_folder name="managers" expanded="false">
             <project_file path="./game/managers/LevelManager.as" filetype="as" />
             <project_file path="./game/managers/ScreenManager.as" filetype="as" />
         </project_folder>
         <project_file path="./game/Game.as" filetype="as" />
         <project_file path="./game/Gatsby.fla" filetype="fla" profile="" />
         <project_file path="./game/Gatsby.as" filetype="as" />
+        <project_file path="./game/GameOld.as" filetype="as" />
+        <project_file path="./game/gatsby@15.as" filetype="as" />
     </project_folder>
 </flash_project>

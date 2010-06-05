@@ -2,14 +2,16 @@
 // this is the old start statement
 package {
 
-	import Game;
+	import flash.display.MovieClip;
     import flash.events.Event;
 	
-	public class Gatsby extends Game {
+	public class Gatsby extends MovieClip {
 	
+		public var game:Game = new Game();
 		
-		public function gatsby() {
+		public function Gatsby() {
 			//
+			this.addChild(game);
 		}
 	}//end class
 }//end package

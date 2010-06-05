@@ -256,7 +256,7 @@
 					this.ldir = false;
 					animate('fall');
 				}else
-				if (!chkeys()){
+				if (!KeyMap.chkeys()){
 					animate('fall');
 				}
 			}else
@@ -310,7 +310,7 @@
 					this.ldir = false;
 					animate('walk');
 				}else
-				if (!chkeys()){
+				if (!KeyMap.chkeys()){
 					if (aFlag){
 						//trace('animatine');
 					 	animate();
@@ -332,14 +332,6 @@
 			notifyObservers();
 		}
 		
-		//check if any keys are pressed. (helper function)
-		private function chkeys():Boolean {
-			var tmp:Boolean = false;
-			for(var i:String in KeyMap.keyMap){
-				if(KeyMap.keyMap[i]){tmp = true;}
-			}
-			return tmp;
-		}
 		
 		
 		// OBSERVER PATTERN METHODS BELOW

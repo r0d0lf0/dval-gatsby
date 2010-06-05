@@ -5,7 +5,7 @@
             <project_file path="./game/controls/KeyMap.as" filetype="as" />
         </project_folder>
         <project_folder name="engine" expanded="true">
-            <project_folder name="actors" expanded="true">
+            <project_folder name="actors" expanded="false">
                 <project_folder name="behavior" expanded="true">
                     <project_file path="./game/engine/actors/behavior/Behaviour.as" filetype="as" />
                     <project_file path="./game/engine/actors/behavior/IBehaviour.as" filetype="as" />
@@ -52,9 +52,11 @@
             <project_file path="./game/engine/Scoreboard.as" filetype="as" />
             <project_file path="./game/engine/scrnStart.as" filetype="as" />
             <project_file path="./game/engine/SplashScreen.as" filetype="as" />
+            <project_file path="./game/engine/EngineOld.as" filetype="as" />
         </project_folder>
-        <project_folder name="managers" expanded="false">
+        <project_folder name="managers" expanded="true">
             <project_file path="./game/managers/LevelManager.as" filetype="as" />
+            <project_file path="./game/managers/SplashManager.as" filetype="as" />
             <project_file path="./game/managers/ScreenManager.as" filetype="as" />
         </project_folder>
         <project_file path="./game/Game.as" filetype="as" />

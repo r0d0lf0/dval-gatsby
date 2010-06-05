@@ -1,19 +1,34 @@
 ﻿package{
 	
 	import flash.display.MovieClip;
+	import flash.events.Event;
 	import managers.ScreenManager;
 	
-	public class Game extends MovieClip {
+	dynamic public class Game extends MovieClip {
 	
-		public var scrnManager:ScreenManager = new ScreenManager();
+		//public var scrnManager:ScreenManager = new ScreenManager();
 	
 		public function Game():void{
 			
-			addChild(scrnManager);
+			if(stage){
+				buildEnviron();
+			}else{
+				addEventListener(Event.ADDED_TO_STAGE, initBuild);
+			}
+		}
+		
+		private function initBuild(evt:Event):void{
+			buildEnviron()
+		}
+		private function buildEnviron():void{
 			
-			scrnManager.getScreens();
-			scrnManager.setScreen('gameOpen');
-			
+			//addChild(scrnManager);
+			//method check
+			ScreenManager.getScreens();
+			//this gets done only once, here.
+			ScreenManager.setGame(this);
+			//load game open
+			ScreenManager.setScreen('gameOpen');
 		}
 		
 	}//end class

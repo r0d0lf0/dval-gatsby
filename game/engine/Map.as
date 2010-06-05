@@ -2,8 +2,8 @@
 
 	import flash.events.Event;
 	import flash.display.MovieClip;
-    import engine.actors.Hero;
-    import engine.IObserver;
+    import engine.actors.player.Hero;
+    import engine.actors.IObserver;
     
 	dynamic public class Map extends MovieClip {
 		
@@ -33,9 +33,10 @@
 			for(var n=0; n<this.numChildren; n++){
 				//trace(this.getChildAt(n));
 				objectArray.push(this.getChildAt(n));
+				
 				var myChild = this.getChildAt(n);
 				if(myChild is IObserver) {
-				    hero.subscribeObserver(myChild);
+				   // hero.subscribeObserver(myChild);
 				}
 			}
 			//move to bottom screen of map

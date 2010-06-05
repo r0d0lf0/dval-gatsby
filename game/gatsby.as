@@ -1,33 +1,15 @@
-
+﻿
 // this is the old start statement
 package {
 
-	import engine.NewGame;
+	import Game;
     import flash.events.Event;
-	import flash.display.MovieClip;
 	
-	public class GatsbyNew extends MovieClip {
+	public class Gatsby extends Game {
 	
-	    private var game:NewGame;
 		
-		public function GatsbyNew() {
-			//start!
-			if (stage != null) {
-				init();
-			} else {
-				addEventListener(Event.ADDED_TO_STAGE, addedToStage);
-			}
-		}
-		
-		private function addedToStage() {
-		    removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
-		    init();
-		}
-		
-		private function init() {
-		    game = new NewGame(this);
-            this.addChild(game);
-    	    trace("initialized.");
+		public function gatsby() {
+			//
 		}
 	}//end class
 }//end package

@@ -1,10 +1,10 @@
 ﻿<flash_project name="gatsby" version="1">
     <project_folder name="game" expanded="true">
-        <project_folder name="controls" expanded="true">
+        <project_folder name="controls" expanded="false">
             <project_file path="./game/controls/HeroControl.as" filetype="as" />
             <project_file path="./game/controls/KeyMap.as" filetype="as" />
         </project_folder>
-        <project_folder name="engine" expanded="true">
+        <project_folder name="engine" expanded="false">
             <project_folder name="actors" expanded="true">
                 <project_folder name="behavior" expanded="true">
                     <project_file path="./game/engine/actors/behavior/Behaviour.as" filetype="as" />

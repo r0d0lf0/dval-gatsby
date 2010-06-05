@@ -4,8 +4,10 @@
 	import flash.display.Stage;
 	import flash.utils.getDefinitionByName;
 	import Game;
+	import engine.Engine
+	import controls.KeyMap;
 
-	dynamic public class ScreenManager extends MovieClip {
+	dynamic public class ScreenManager {
 		
 		static private var screenList:Array = new Array('gameOpen','lvl1_map1','lvl1_map2','gameEnd');
 		static public var currentScreen:String;
@@ -21,19 +23,21 @@
 			for(var i in screenList){
 				if(screenList[i] == screen){
 					loadScreen(screen);
-					trace(screen);
+					trace(currentScreen);
 				}
 			}
 		}
 		// allows itteration
 		static public function nextScreen():void{
 			clearScreen();
+			var place:int = 0;
 			for(var i in screenList){
 				if(screenList[i] == currentScreen){
-					loadScreen(screen);
-					trace(screen);
+					place = i;
 				}
 			}
+			trace(currentScreen);
+			ScreenManager.loadScreen(screenList[place+1]);
 		}
 		//load a new screen or level
 		static public function loadScreen(screen:String):void{
@@ -47,8 +51,11 @@
 		//removes everything but the ScreenManager
 		static public function clearScreen():void{
 			for(var i:int=0;i<game.numChildren; i++){
-				trace(game.numChildren);
-				game.removeChild(game.getChildAt(i));
+				var gc:* = game.getChildAt(i);
+				if(!(gc is Engine) && !(gc is KeyMap)){
+					game.removeChild(game.getChildAt(i));
+					trace('cleared');
+				}
 			}
 		}
 		// returns a list of screens,
@@ -60,7 +67,6 @@
 			}else if (int(screen)){
 				tempArr = new Array(screenList[screen]);
 			}
-			trace(tempArr);
 			return tempArr;
 		}
 		

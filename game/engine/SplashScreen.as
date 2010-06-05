@@ -4,8 +4,11 @@
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import managers.ScreenManager;
+	import engine.ISubscriber; //??needed
+	import engine.Subscriber;
+	import controls.KeyMap;
 
-	dynamic public class SplashScreen extends MovieClip {
+	dynamic public class SplashScreen extends MovieClip implements ISubscriber{
 		
 		public function SplashScreen():void {
 			//check for flash spacetime coordinates
@@ -18,6 +21,7 @@
 		//on stage
 		private function addedToStage(evt) {
 			removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			addSubscription(this);
 			buildDisplay();
 		}
 		//Now we can go about our daily business of adding button handlers.
@@ -42,6 +46,22 @@
 		private function removedFromStage(evt) {
 			this.removeEventListener(MouseEvent.CLICK, buttonHandler);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, removedFromStage);
+			cancelSubscription(this);
+		}
+		
+		public function addSubscription(target:MovieClip):void{
+			Subscriber.addSubscription(target);
+		}
+		public function cancelSubscription(target:MovieClip):void{
+			Subscriber.cancelSubscription(target);
+		}
+		//called each frame
+		public function update():void{
+			//if spacebar
+			if(KeyMap.getLastKey() == 32 && !KeyMap.chkeys()){
+				cancelSubscription(this);
+				ScreenManager.nextScreen();
+			}
 		}
 	}//end class
 }//end package

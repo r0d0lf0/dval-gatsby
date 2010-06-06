@@ -7,7 +7,7 @@ package engine.actors {
         private var move_velocity = 2;
         
         public function EnemyMover() {
-            trace("Enemy Walker Created.");
+            trace("Enemy Mover Created.");
         }
         
         public function notify(subject):void {

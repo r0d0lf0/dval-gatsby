@@ -1,6 +1,6 @@
 package engine.actors {
     
-    public class Enemy extends MapObject {
+    public class Enemy extends Actor implements IObserver {
         
         protected var HP:Number = 10;
         protected var attack_strength:Number = 1;
@@ -11,7 +11,8 @@ package engine.actors {
         
         // this should get the enterFrame tick like everything else
         public function update() {
-            if(!HP) {
+            // if we're alive, keep on trucking.  otherwise, die.
+            if(HP <= 0) {
                 return false;
             } else {
                 return true;
@@ -24,6 +25,16 @@ package engine.actors {
             if(HP <= 0) {
                 HP = 0;
             }
+        }
+        
+        public function notify(subject):void {
+            trace("I've been notified.");
+        }
+        
+        private function checkCollision(subject) {
+            // check to see if we've collided with our subject, if we have
+            // you should probably damage him, or maybe if he jumps from the
+            // top, he can squish you.  Whatevs.
         }
         
     }

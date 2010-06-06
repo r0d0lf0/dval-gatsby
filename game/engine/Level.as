@@ -10,7 +10,7 @@
 		protected var currentMapIndex:Number = 0;
 		protected var currentScreen;
 		protected var status:String = 'UNINITIALIZED';
-		protected var startScreen = new LevelStart();
+		//protected var startScreen = new LevelStart();
 		// add in stuff for level start screen later
 		
  		public function Level():void{

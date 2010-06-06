@@ -66,6 +66,7 @@
             <project_file path="./game/engine/EngineOld.as" filetype="as" />
             <project_file path="./game/engine/ISubscriber.as" filetype="as" />
             <project_file path="./game/engine/Subscriber.as" filetype="as" />
+            <project_file path="./game/engine/ILevel.as" filetype="as" />
         </project_folder>
         <project_folder name="managers" expanded="true">
             <project_file path="./game/managers/LevelManager.as" filetype="as" />

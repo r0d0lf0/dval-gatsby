@@ -9,7 +9,7 @@
 
 	dynamic public class ScreenManager {
 		
-		static private var screenList:Array = new Array('gameOpen','lvl_1','lvl1_map2','gameEnd');
+		static private var screenList:Array = new Array('gameOpen','Level1','lvl1_map2','gameEnd');
 		static public var currentScreen:String;
 		static public var game:Game;
 		
@@ -23,7 +23,6 @@
 			for(var i in screenList){
 				if(screenList[i] == screen){
 					loadScreen(screen);
-					trace(currentScreen);
 				}
 			}
 		}
@@ -36,16 +35,20 @@
 					place = i;
 				}
 			}
-			trace(currentScreen);
 			ScreenManager.loadScreen(screenList[place+1]);
 		}
 		//load a new screen or level
 		static public function loadScreen(screen:String):void{
 			
-			
-			if(screen.toString().substring(8,11) == 'lvl'){
+			trace('search: '+screen.toString().search('Level'));
+			if(screen.toString().search('Level')>-1){
 				//load level
-				
+				trace(String('engine.levels.'+screen));
+				var ClassReference:Class = getDefinitionByName(String('engine.levels.'+screen)) as Class;
+				var peep = new ClassReference();
+				currentScreen = screen;
+				game.addChild(peep);
+				trace('leveled');
 			}else{
 				var ClassReference:Class = getDefinitionByName(screen) as Class;
 				var peep = new ClassReference();

@@ -10,7 +10,7 @@
                     <project_file path="./game/engine/actors/behavior/Behaviour.as" filetype="as" />
                     <project_file path="./game/engine/actors/behavior/IBehaviour.as" filetype="as" />
                 </project_folder>
-                <project_folder name="bosses" expanded="true">
+                <project_folder name="bosses" expanded="false">
                     <project_file path="./game/engine/actors/bosses/Boss.as" filetype="as" />
                     <project_file path="./game/engine/actors/bosses/IBoss.as" filetype="as" />
                 </project_folder>
@@ -45,14 +45,14 @@
                 <project_file path="./game/engine/actors/Actor.as" filetype="as" />
                 <project_file path="./game/engine/actors/IMapObject.as" filetype="as" />
             </project_folder>
-            <project_folder name="levels" expanded="false">
+            <project_folder name="levels" expanded="true">
                 <project_file path="./game/engine/levels/Level1.as" filetype="as" />
             </project_folder>
             <project_folder name="physics" expanded="false">
                 <project_file path="./game/engine/physics/IPhysics.as" filetype="as" />
                 <project_file path="./game/engine/physics/Physics.as" filetype="as" />
             </project_folder>
-            <project_folder name="sound" expanded="true">
+            <project_folder name="sound" expanded="false">
                 <project_file path="./game/engine/sound/SoundChan.as" filetype="as" />
                 <project_file path="./game/engine/sound/SoundMix.as" filetype="as" />
             </project_folder>

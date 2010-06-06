@@ -35,7 +35,7 @@
 			trace(mevt.target);
 			switch(mevt.target.name){
 				case 'start_btn':
-					ScreenManager.setScreen('lvl1_map1');
+					ScreenManager.setScreen('Level1');
 					break;
 				default:
 					trace('doh!');

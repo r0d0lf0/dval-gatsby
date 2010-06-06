@@ -1,12 +1,12 @@
 ﻿<flash_project name="gatsby" version="1">
     <project_folder name="game" expanded="true">
-        <project_folder name="controls" expanded="false">
+        <project_folder name="controls" expanded="true">
             <project_file path="./game/controls/HeroControl.as" filetype="as" />
             <project_file path="./game/controls/KeyMap.as" filetype="as" />
         </project_folder>
-        <project_folder name="engine" expanded="false">
-            <project_folder name="actors" expanded="true">
-                <project_folder name="behavior" expanded="true">
+        <project_folder name="engine" expanded="true">
+            <project_folder name="actors" expanded="false">
+                <project_folder name="behavior" expanded="false">
                     <project_file path="./game/engine/actors/behavior/Behaviour.as" filetype="as" />
                     <project_file path="./game/engine/actors/behavior/IBehaviour.as" filetype="as" />
                 </project_folder>
@@ -45,6 +45,17 @@
                 <project_file path="./game/engine/actors/Actor.as" filetype="as" />
                 <project_file path="./game/engine/actors/IMapObject.as" filetype="as" />
             </project_folder>
+            <project_folder name="levels" expanded="false">
+                <project_file path="./game/engine/levels/Level1.as" filetype="as" />
+            </project_folder>
+            <project_folder name="physics" expanded="false">
+                <project_file path="./game/engine/physics/IPhysics.as" filetype="as" />
+                <project_file path="./game/engine/physics/Physics.as" filetype="as" />
+            </project_folder>
+            <project_folder name="sound" expanded="true">
+                <project_file path="./game/engine/sound/SoundChan.as" filetype="as" />
+                <project_file path="./game/engine/sound/SoundMix.as" filetype="as" />
+            </project_folder>
             <project_file path="./game/engine/Engine.as" filetype="as" />
             <project_file path="./game/engine/IMap.as" filetype="as" />
             <project_file path="./game/engine/Level.as" filetype="as" />
@@ -65,6 +76,5 @@
         <project_file path="./game/Gatsby.fla" filetype="fla" profile="" />
         <project_file path="./game/Gatsby.as" filetype="as" />
         <project_file path="./game/GameOld.as" filetype="as" />
-        <project_file path="./game/gatsby@15.as" filetype="as" />
     </project_folder>
 </flash_project>

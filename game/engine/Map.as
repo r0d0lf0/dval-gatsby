@@ -36,5 +36,9 @@
 			//this.y = 0-(this.height - (game.screenHeight*2));
 			trace("objects referenced.");
 		}
+		
+		public function update():Boolean {
+		    return true;
+		}
 	}
 }

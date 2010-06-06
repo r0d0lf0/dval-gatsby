@@ -5,9 +5,10 @@
 	
 	public class Level extends MovieClip {
 	
-
 		private var mapList:Array = new Array();
-		trace('massta');
+		
+ 		public function Level():void{
+			trace('massta');
 		
 		}
 		

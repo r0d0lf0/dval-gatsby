@@ -3,6 +3,7 @@
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import engine.screens.*;
+	import engine.Scoreboard;
 	
 	dynamic public class Level extends MovieClip implements IScreen {
 	
@@ -10,6 +11,8 @@
 		protected var currentMapIndex:Number = 0;
 		protected var currentScreen;
 		protected var status:String = 'UNINITIALIZED';
+		protected var scoreboard:Scoreboard;
+		
 		//protected var startScreen = new LevelStart();
 		// add in stuff for level start screen later
 		
@@ -25,7 +28,8 @@
 			buildLevel();
 		}
 		public function buildLevel():void{
-	        
+	        scoreboard = new Scoreboard();
+	        addChild(scoreboard);
 		}
 		
 		public function getStatus():String {

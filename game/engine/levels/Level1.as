@@ -3,7 +3,7 @@
 	//import flash.display.MovieClip;
 	import engine.Level;
 	import engine.screens.*;
-	import managers.LevelManager;
+	import managers.MapManager;
 	import managers.TimerManager;
 	
 	public class Level1 extends Level {

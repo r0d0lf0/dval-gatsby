@@ -9,7 +9,7 @@
 
 	dynamic public class ScreenManager {
 		
-		static private var screenList:Array = new Array('gameOpen','lvl1_map1','lvl1_map2','gameEnd');
+		static private var screenList:Array = new Array('gameOpen','lvl_1','lvl1_map2','gameEnd');
 		static public var currentScreen:String;
 		static public var game:Game;
 		
@@ -42,10 +42,16 @@
 		//load a new screen or level
 		static public function loadScreen(screen:String):void{
 			
-			var ClassReference:Class = getDefinitionByName(screen) as Class;
-			var peep = new ClassReference();
-			currentScreen = screen;
-        	game.addChild(peep);
+			
+			if(screen.toString().substring(8,11) == 'lvl'){
+				//load level
+				
+			}else{
+				var ClassReference:Class = getDefinitionByName(screen) as Class;
+				var peep = new ClassReference();
+				currentScreen = screen;
+				game.addChild(peep);
+			}
 
 		}
 		//removes everything but the ScreenManager

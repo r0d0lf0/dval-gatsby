@@ -2,11 +2,7 @@
 	
 	import flash.display.MovieClip;
 	import flash.events.Event;
-<<<<<<< local
 	import engine.screens.*;
-=======
-	import managers.MapManager;
->>>>>>> other
 	
 	dynamic public class Level extends MovieClip implements IScreen {
 	

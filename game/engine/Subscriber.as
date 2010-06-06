@@ -11,7 +11,6 @@
 		static function addSubscription(target:MovieClip):void{
 			subscriptions.push(target);
 		};
-		
 		//removes item form array via copy/rebuild
 		static function cancelSubscription(target:MovieClip):void{
 			var tmp:Array = new Array();

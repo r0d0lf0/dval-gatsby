@@ -6,6 +6,8 @@
 	import Game;
 	import engine.Engine
 	import controls.KeyMap;
+	import engine.screens.*;
+	import engine.levels.*;
 
 	dynamic public class ScreenManager {
 		
@@ -17,70 +19,30 @@
 			// the constructor is unecessary in a static class
 		//}
 		
-		// simple combo
-		static public function setScreen(screen:String):void{
-			clearScreen();
-			for(var i in screenList){
-				if(screenList[i] == screen){
-					loadScreen(screen);
-				}
-			}
-		}
-		// allows itteration
-		static public function nextScreen():void{
-			clearScreen();
-			var place:int = 0;
-			for(var i in screenList){
-				if(screenList[i] == currentScreen){
-					place = i;
-				}
-			}
-			ScreenManager.loadScreen(screenList[place+1]);
-		}
 		//load a new screen or level
-		static public function loadScreen(screen:String):void{
+		public function getScreen(screen:String) {
 			
-			trace('search: '+screen.toString().search('Level'));
+			/*trace('search: '+screen.toString().search('Level'));
 			if(screen.toString().search('Level')>-1){
 				//load level
 				trace(String('engine.levels.'+screen));
 				var ClassReference:Class = getDefinitionByName(String('engine.levels.'+screen)) as Class;
 				var peep = new ClassReference();
 				currentScreen = screen;
-				game.addChild(peep);
-				trace('leveled');
+				return peep;
 			}else{
 				var ClassReference:Class = getDefinitionByName(screen) as Class;
 				var peep = new ClassReference();
 				currentScreen = screen;
-				game.addChild(peep);
+				return peep;
+			}*/
+			
+			if(screen == 'gameOpen') {
+			    return new gameOpen();
+			} else if(screen == 'Level1') {
+			    return new Level1();
 			}
 
-		}
-		//removes everything but the ScreenManager
-		static public function clearScreen():void{
-			for(var i:int=0;i<game.numChildren; i++){
-				var gc:* = game.getChildAt(i);
-				if(!(gc is Engine) && !(gc is KeyMap)){
-					game.removeChild(game.getChildAt(i));
-					trace('cleared');
-				}
-			}
-		}
-		// returns a list of screens,
-		//a specific screen, or an empty array
-		static public function getScreens(screen:int = -1):Array {
-			var tempArr:Array = new Array();
-			if (screen < 0){
-				tempArr = screenList;
-			}else if (int(screen)){
-				tempArr = new Array(screenList[screen]);
-			}
-			return tempArr;
-		}
-		
-		static public function setGame(g:Game):void{
-			game = g;
 		}
 		
 	}//end class

@@ -8,16 +8,33 @@
 
 	dynamic public class MapManager {
 		
-		static private var mapList:Array = new Array();
+		static private var mapList:Array;
 		static public var currentMap:String;
 		static public var level:Level;
 		
-		//public function MapManager():void {
-			// the constructor is unecessary in a static class
-		//}
+        public function LevelManager(mapList:Array) {
+            this.mapList = mapList;
+        }
+		
+		public function getMap(map:String) {
+		    trace('mapsearch: '+map.toString().search('Level'));
+			//if(map.toString().search('Level')>-1){
+				//load level
+				//trace(String('engine.levels.'+map));
+				//var ClassReference:Class = getDefinitionByName(String('engine.levels.'+map)) as Class;
+				//var peep = new ClassReference();
+				//currentMap = map;
+				//level.addChild(peep);
+				//trace('leveled');
+			//}else{
+				var ClassReference:Class = getDefinitionByName(map) as Class;
+				var peep = new ClassReference();
+				currentMap = map;
+				level.addChild(peep);
+		}
 		
 		// simple combo
-		static public function setMap(map:String):void{
+		public function setMap(map:String):void{
 			clearMap();
 			for(var i in mapList){
 				if(mapList[i] == map){
@@ -26,7 +43,7 @@
 			}
 		}
 		// allows itteration
-		static public function nextMap():void{
+		public function nextMap():void{
 			clearMap();
 			var place:int = 0;
 			for(var i in mapList){
@@ -37,7 +54,7 @@
 			MapManager.loadMap(mapList[place+1]);
 		}
 		//load a new map or level
-		static public function loadMap(map:String):void{
+		public function loadMap(map:String):void{
 			
 			trace('mapsearch: '+map.toString().search('Level'));
 			//if(map.toString().search('Level')>-1){
@@ -56,8 +73,9 @@
 			//}
 
 		}
-		//removes everything but the MapManager
-		static public function clearMap():void{
+		
+		//removes everything but the LevelManager
+		public function clearMap():void{
 			for(var i:int=0;i<level.numChildren; i++){
 				var gc:* = level.getChildAt(i);
 				if(!(gc is Engine) && !(gc is KeyMap)){
@@ -68,7 +86,7 @@
 		}
 		// returns a list of maps,
 		//a specific map, or an empty array
-		static public function getMaps(map:int = -1):Array {
+		public function getMaps(map:int = -1):Array {
 			var tempArr:Array = new Array();
 			if (map < 0){
 				tempArr = mapList;
@@ -78,7 +96,7 @@
 			return tempArr;
 		}
 		
-		static public function setLevel(l:Level):void{
+		public function setLevel(l:Level):void{
 			level = l;
 		}
 		

@@ -2,6 +2,7 @@
 	
 	//import flash.display.MovieClip;
 	import engine.Level;
+	import engine.screens.*;
 	import managers.LevelManager;
 	import managers.TimerManager;
 	
@@ -9,7 +10,8 @@
 	    
 		public function Level1():void{
 		    mapList = new Array('Level1_Map1', 'Level1_Map2', 'Level1_Map3'); // use this later for dylan-style level loading by converting strings to classes
-			currentScreen = startScreen; // we're just starting, so our current
+			currentScreen = new LevelStart(); // we're just starting, so our current
+			addChild(currentScreen);
 		}
 		
 		public override function update():Boolean {
@@ -18,7 +20,9 @@
 		            case 'COMPLETE': // if our map returned COMPLETE
 		                currentMapIndex++; // increment the current map index
 		                if(currentMapIndex < mapList.length) { // and if we haven't finished the last map
+		                    removeChild(currentScreen); // remove the current map
 		                    currentScreen = getMap(currentMapIndex);  // get the next one
+                            addChild(currentScreen); // add the new child
 		                    return true; // and return true
 		                } else { // otherwise, we've completed the final map so
 		                    setStatus('COMPLETE');  // set the level exit status to COMPLETE

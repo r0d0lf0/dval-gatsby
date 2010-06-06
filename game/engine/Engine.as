@@ -43,7 +43,7 @@
                     case 'COMPLETE': // our screen completed successfully
                         removeChild(currentScreen) // remove the current screen from the stage
                         currentScreenIndex++; // increment our index
-                        if(currentScreenIndex == screenList.length) {  // if we're out of screens
+                        if(currentScreenIndex >= screenList.length) {  // if we're out of screens
                             //restart(); // game's over.  restart
                         } else { // otherwise
                             currentScreen = screenManager.getScreen(screenList[currentScreenIndex]); // load the next screen into our current screen, so the next onEnterFrame will be the first onEnterFrame for currentLevel 

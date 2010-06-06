@@ -4,35 +4,35 @@
             <project_file path="./game/controls/HeroControl.as" filetype="as" />
             <project_file path="./game/controls/KeyMap.as" filetype="as" />
         </project_folder>
-        <project_folder name="engine" expanded="false">
-            <project_folder name="actors" expanded="true">
-                <project_folder name="behavior" expanded="true">
+        <project_folder name="engine" expanded="true">
+            <project_folder name="actors" expanded="false">
+                <project_folder name="behavior" expanded="false">
                     <project_file path="./game/engine/actors/behavior/Behaviour.as" filetype="as" />
                     <project_file path="./game/engine/actors/behavior/IBehaviour.as" filetype="as" />
                 </project_folder>
-                <project_folder name="bosses" expanded="true">
+                <project_folder name="bosses" expanded="false">
                     <project_file path="./game/engine/actors/bosses/Boss.as" filetype="as" />
                     <project_file path="./game/engine/actors/bosses/IBoss.as" filetype="as" />
                 </project_folder>
-                <project_folder name="enemies" expanded="true">
+                <project_folder name="enemies" expanded="false">
                     <project_file path="./game/engine/actors/enemies/Enemy.as" filetype="as" />
                     <project_file path="./game/engine/actors/enemies/EnemyWalker.as" filetype="as" />
                     <project_file path="./game/engine/actors/enemies/IEnemy.as" filetype="as" />
                 </project_folder>
-                <project_folder name="geoms" expanded="true">
+                <project_folder name="geoms" expanded="false">
                     <project_file path="./game/engine/actors/geoms/Block.as" filetype="as" />
                     <project_file path="./game/engine/actors/geoms/Cloud.as" filetype="as" />
                     <project_file path="./game/engine/actors/geoms/Geom.as" filetype="as" />
                     <project_file path="./game/engine/actors/geoms/IGeom.as" filetype="as" />
                 </project_folder>
-                <project_folder name="player" expanded="true">
+                <project_folder name="player" expanded="false">
                     <project_file path="./game/engine/actors/player/Hero.as" filetype="as" />
                 </project_folder>
-                <project_folder name="specials" expanded="true">
+                <project_folder name="specials" expanded="false">
                     <project_file path="./game/engine/actors/specials/Door.as" filetype="as" />
                     <project_file path="./game/engine/actors/specials/PowerItem.as" filetype="as" />
                 </project_folder>
-                <project_folder name="weapons" expanded="true">
+                <project_folder name="weapons" expanded="false">
                     <project_file path="./game/engine/actors/weapons/IWeapon.as" filetype="as" />
                     <project_file path="./game/engine/actors/weapons/Weapon.as" filetype="as" />
                 </project_folder>
@@ -58,7 +58,6 @@
         </project_folder>
         <project_folder name="managers" expanded="true">
             <project_file path="./game/managers/LevelManager.as" filetype="as" />
-            <project_file path="./game/managers/SplashManager.as" filetype="as" />
             <project_file path="./game/managers/ScreenManager.as" filetype="as" />
         </project_folder>
         <project_file path="./game/Game.as" filetype="as" />

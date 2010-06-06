@@ -57,9 +57,8 @@
 		}
 		//called each frame
 		public function update():void{
-			//if spacebar
+			//if spacebar has been released
 			if(KeyMap.getLastKey() == 32 && !KeyMap.chkeys()){
-				cancelSubscription(this);
 				ScreenManager.nextScreen();
 			}
 		}

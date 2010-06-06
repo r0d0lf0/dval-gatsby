@@ -1,17 +1,19 @@
 ﻿package engine.actors.player {
 	import flash.display.MovieClip;
-	import flash.display.Sprite;
+	//import flash.display.Sprite;
 	import flash.geom.Rectangle;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.utils.ByteArray;
 	import flash.geom.Point;
 	import flash.events.Event;
+	import engine.actors.Actor;
 	import controls.KeyMap;
 	import engine.actors.weapons.Weapon;
-	import engine.actors.IObserver;
+	import engine.ISubscriber;
+	import engine.Subscriber;
 
-	public class Hero extends MovieClip {
+	dynamic public class Hero extends Actor implements ISubscriber{
 	    
 	    // Here's where the observer pattern stuff goes
 	    private var observers:Array;
@@ -20,7 +22,11 @@
 		public var jumpHeight:uint = 24; //exponential. 20 jumps 3x higher than 10
 		public var Yspeed:Number = 2;  //how much the velocity changes on each frameEvent
 		public var Xspeed:Number = 1.4;
-		public var fric:Number = 1;  //frictional coefficient of go
+		
+		//
+		//public var fric:Number = 1;  //frictional coefficient of go
+		
+		
 		public var hat:Weapon = new Weapon(1);
 		//public var airFric:Number = 1; // not sure yet 
 		// MAX_VEL_Y has to be less than the height of most shallow platform.
@@ -58,7 +64,7 @@
 		
 		// constructor, geesh
 		public function Hero():void {
-		    observers = new Array(); // initialize our observers array
+		    //observers = new Array(); // initialize our observers array
 			//trace("game loaded");
 			if (stage != null) {
 				buildHero();
@@ -95,13 +101,13 @@
 		}
 		//updates the copy rectangle
 		// based on hero state and player actions
-		private function animate(act:String = null):void{
+		/*private function animate(act:String = null):void{
 			/*****************************************************/
 			//TODO: have actions also check for aMax;
 			//it gets set, but never used
 			/****************************************************/
 			//if the player is dormant
-			if(act == null){
+			/*if(act == null){
 				aPos++;
 			}else
 			if(act == 'duck'){
@@ -194,9 +200,9 @@
 			heroBytes = animData.getPixels(heroCopy);
 			heroBytes.position = 0;
 			displayData.setPixels(heroPaste,heroBytes);
-		}
+		}*/
 		//move avatar
-		
+		/*
 		private function applyPhysics():void {
 		    // velocitize y (gravity)
 			if (this.vely < MAX_VEL_Y) {
@@ -210,10 +216,10 @@
 				this.velx += fric;
 			}
 		}
-		
+		*/
 		public function moveMe():void {
 		    
-			applyPhysics(); // apply our enviromental variables
+			//vapplyPhysics(); // apply our enviromental variables
 			
 			/**************************************************/
 			//State 1. -- Falling
@@ -238,7 +244,7 @@
 						this.ldir = false;
 					}
 					hat.useWeapon(this.ldir);
-					animate('throw');
+					//animate('throw');
 				}else
 				// D or RIGHT_ARROW move right
 				if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {
@@ -246,7 +252,7 @@
 						this.velx += this.Xspeed;
 					}
 					this.ldir = true;
-					animate('fall');
+					//animate('fall');
 				}else
 				// A or LEFT_ARROW move left
 				if (KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
@@ -254,10 +260,10 @@
 						this.velx -= this.Xspeed;
 					}
 					this.ldir = false;
-					animate('fall');
+					//animate('fall');
 				}else
 				if (!KeyMap.chkeys()){
-					animate('fall');
+					//animate('fall');
 				}
 			}else
 			
@@ -268,7 +274,7 @@
 				// CTRL key 
 				if (KeyMap.keyMap[17]) {
 					hat.useWeapon(this.ldir);
-					animate('throw');
+					//animate('throw');
 				}else
 				// SPACEBAR or UP_ARROW jump 
 				if (KeyMap.keyMap[32] || KeyMap.keyMap[38]) {
@@ -291,7 +297,7 @@
 					if (KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
 						this.ldir = false;
 					}
-					animate('duck');
+					//animate('duck');
 				/**************************************************/
 				}else
 				// D or RIGHT_ARROW move right
@@ -300,7 +306,7 @@
 						this.velx += this.Xspeed;
 					}
 					this.ldir = true;
-					animate('walk');
+					//animate('walk');
 				}else
 				// A or LEFT_ARROW move left
 				if (KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
@@ -308,51 +314,29 @@
 						this.velx -= this.Xspeed;
 					}
 					this.ldir = false;
-					animate('walk');
+					//animate('walk');
 				}else
 				if (!KeyMap.chkeys()){
 					if (aFlag){
 						//trace('animatine');
-					 	animate();
+					 	//animate();
 					}else if(velx == 0){
-						animate('stand');
+						//animate('stand');
 					}else if (velx != 0){
-						animate('walk');
+						//animate('walk');
 						}
 				}
 				//the cure for NAS (Nerve Attenuation Syndrom)  if you don't believe me, comment it out.
 				// (the black shakes!)
-				if(Math.abs(velx) <= (0.1+Xspeed-fric)){velx = 0;}
+				//if(Math.abs(velx) <= (0.1+Xspeed-fric)){velx = 0;}
 				//assume we are no longer on something, in case 
 				//we fell off a moving plat or something
 				ihit = false;
 				imon = false;
 			}
 			
-			notifyObservers();
 		}
 		
-		
-		
-		// OBSERVER PATTERN METHODS BELOW
-		public function subscribeObserver(new_observer:IObserver):void {
-		    observers.push(new_observer);
-		}
-		
-		public function unsubscribeObserver(new_observer:IObserver):void {
-		    for(var ob:int=0; ob<observers.length; ob++) {
-		        if(observers[ob]==new_observer) {
-		            observers.splice(ob, 1);
-		            break;
-		        }
-		    }
-		}
-		
-		public function notifyObservers():void {
-		    for(var my_observer in observers) {
-		        observers[my_observer].notify(this);
-		    }
-		}
 		
 	}
 }

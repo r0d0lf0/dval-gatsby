@@ -4,7 +4,7 @@
             <project_file path="./game/controls/HeroControl.as" filetype="as" />
             <project_file path="./game/controls/KeyMap.as" filetype="as" />
         </project_folder>
-        <project_folder name="engine" expanded="false">
+        <project_folder name="engine" expanded="true">
             <project_folder name="actors" expanded="false">
                 <project_folder name="behavior" expanded="false">
                     <project_file path="./game/engine/actors/behavior/Behaviour.as" filetype="as" />
@@ -19,13 +19,13 @@
                     <project_file path="./game/engine/actors/enemies/EnemyWalker.as" filetype="as" />
                     <project_file path="./game/engine/actors/enemies/IEnemy.as" filetype="as" />
                 </project_folder>
-                <project_folder name="geoms" expanded="false">
+                <project_folder name="geoms" expanded="true">
                     <project_file path="./game/engine/actors/geoms/Block.as" filetype="as" />
                     <project_file path="./game/engine/actors/geoms/Cloud.as" filetype="as" />
                     <project_file path="./game/engine/actors/geoms/Geom.as" filetype="as" />
                     <project_file path="./game/engine/actors/geoms/IGeom.as" filetype="as" />
                 </project_folder>
-                <project_folder name="player" expanded="false">
+                <project_folder name="player" expanded="true">
                     <project_file path="./game/engine/actors/player/Hero.as" filetype="as" />
                 </project_folder>
                 <project_folder name="specials" expanded="false">
@@ -48,7 +48,7 @@
             <project_folder name="levels" expanded="false">
                 <project_file path="./game/engine/levels/Level1.as" filetype="as" />
             </project_folder>
-            <project_folder name="physics" expanded="false">
+            <project_folder name="physics" expanded="true">
                 <project_file path="./game/engine/physics/IPhysics.as" filetype="as" />
                 <project_file path="./game/engine/physics/Physics.as" filetype="as" />
             </project_folder>
@@ -67,11 +67,12 @@
             <project_file path="./game/engine/ISubscriber.as" filetype="as" />
             <project_file path="./game/engine/Subscriber.as" filetype="as" />
             <project_file path="./game/engine/ILevel.as" filetype="as" />
+            <project_file path="./game/engine/ISubject.as" filetype="as" />
         </project_folder>
-        <project_folder name="managers" expanded="false">
-            <project_file path="./game/managers/LevelManager.as" filetype="as" />
+        <project_folder name="managers" expanded="true">
             <project_file path="./game/managers/ScreenManager.as" filetype="as" />
             <project_file path="./game/managers/TimerManager.as" filetype="as" />
+            <project_file path="./game/managers/MapManager.as" filetype="as" />
         </project_folder>
         <project_file path="./game/Game.as" filetype="as" />
         <project_file path="./game/Gatsby.fla" filetype="fla" profile="" />

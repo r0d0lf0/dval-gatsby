@@ -8,13 +8,11 @@
 	dynamic public class Map extends MovieClip {
 		
 		public var objectArray:Array = new Array();
-		public var game:MovieClip;
-		private var hero:Hero;
+		//public var game:MovieClip;
+		//private var hero:Hero;
 		
-		public function Map(game:*=null, hero:*=null):void {
+		public function Map():void {
 			//trace("game loaded");
-			this.game = game;
-			this.hero = hero;
 			if (stage != null) {
 				buildMap();
 			} else {
@@ -33,15 +31,10 @@
 			for(var n=0; n<this.numChildren; n++){
 				//trace(this.getChildAt(n));
 				objectArray.push(this.getChildAt(n));
-				
-				var myChild = this.getChildAt(n);
-				if(myChild is IObserver) {
-				   // hero.subscribeObserver(myChild);
-				}
 			}
 			//move to bottom screen of map
 			//this.y = 0-(this.height - (game.screenHeight*2));
-			trace("objects constructed.");
+			trace("objects referenced.");
 		}
 	}
 }

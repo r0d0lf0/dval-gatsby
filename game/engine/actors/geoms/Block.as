@@ -1,14 +1,14 @@
-﻿package engine.actors{
+﻿package engine.actors.geoms{
 	
 	import flash.display.DisplayObject;
-	import engine.actors.MapObject;
+	import engine.actors.Actor;
 
-	dynamic public class Block extends MapObject{
+	dynamic public class Block extends Actor{
 		
-		public function Block(w=1,h=1,tex = null):void{
-			super(w,h,tex);
+		public function Block():void{
+			super();
 		}
-		public override function behave(smackData:Object,characterObject:*):void{
+		public function onHit(smackData:Object,characterObject:*):void{
 			
 			var dx = smackData.dx;
 			var ox = smackData.ox;

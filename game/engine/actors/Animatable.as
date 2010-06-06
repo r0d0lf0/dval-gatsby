@@ -1,4 +1,4 @@
-package engine.actors {
+﻿package engine.actors {
     import flash.display.MovieClip;
     
     // Generic class for a MapObject that is able to be animatable.  MapObject should be the first class, this second, then different
@@ -29,5 +29,104 @@ package engine.actors {
 		private var heroBytes:ByteArray = animData.getPixels(heroCopy); // the pixels in the heroDisplay
         
     }
-    
+    private function animate(act:String = null):void{
+			/*****************************************************/
+			//TODO: have actions also check for aMax;
+			//it gets set, but never used
+			/****************************************************/
+			//if the player is dormant
+			if(act == null){
+				aPos++;
+			}else
+			if(act == 'duck'){
+				aMax = 2;
+				if(ldir){
+					//trace('ducking right');
+					aStat = 4;
+				}else{
+					//trace('ducking left');
+					aStat = 5;
+				}
+				//slow anim
+				if(!(frame % 2)){
+					aPos++;
+				}
+				//if not animating, start animating
+				if(!(frame % 4)){
+					frame = 0;
+					aPos = 2;
+				}
+			}else
+			if(act == 'throw'){
+				aMax = 2;
+				aFlag = true;
+				if(ldir){
+					//trace('throwing right');
+					aStat = 6;
+				}else{
+					//trace('throwing left');
+					aStat = 7;
+				}
+				//slow anim
+				if(!(frame % 2)){
+					aPos++;
+				}
+				//if not animating, start animating
+				if(!(frame % 4)){
+				//useWeapon();
+					frame = 0;
+					aPos = 1;
+				}
+			}else
+			if(act == 'fall'){
+				aMax = 3
+				frame = 0;
+				if(ldir){
+					//trace('falling right');
+					aStat = 2;
+					aPos = 2;
+				}else{
+					//trace('falling left');
+					aStat = 3;
+					aPos = 2;
+				}
+			}else
+			if(act == 'walk'){
+				aMax = 6;
+				if(ldir){
+					//trace('walking right');
+					aStat = 0;
+				}else{
+					//trace('walking left');
+					aStat = 1;
+				}
+				//if not animating, start animating
+				if(!(frame % 16)){
+					frame = 1;
+					aPos = 1;
+					//aFlag = false;
+				}
+				//slow anim
+				if(!(frame % 4)){
+					//trace('step');
+					aPos++;
+				}
+			}else
+			if(act == 'stand'){
+				frame = 0;
+				aPos = 0;
+			}
+			if(aPos >= aMax){
+				aPos = aMax;
+				aFlag = false;
+			}
+			
+			//advance the 'copy' rectangle
+			//and update bitmap with new data
+			frame++;
+			heroCopy = new Rectangle(aPos*tile,aStat*tile,tile,tile);
+			heroBytes = animData.getPixels(heroCopy);
+			heroBytes.position = 0;
+			displayData.setPixels(heroPaste,heroBytes);
+		}
 }

@@ -2,7 +2,7 @@
     
     public interface IObserver {
         
-        function notify(subject:*);
+        function notify(subject:*):void;
         
     }
     

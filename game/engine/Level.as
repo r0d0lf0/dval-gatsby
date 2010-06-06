@@ -2,7 +2,7 @@
 	
 	import flash.display.MovieClip;
 	import flash.events.Event;
-	import managers.LevelManager;
+	import managers.MapManager;
 	
 	dynamic public class Level extends MovieClip {
 	

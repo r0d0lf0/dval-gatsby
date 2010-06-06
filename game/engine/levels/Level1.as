@@ -3,7 +3,7 @@
 	//import flash.display.MovieClip;
 	import engine.Level;
 	import engine.ILevel;
-	import managers.LevelManager;
+	import managers.MapManager;
 	import managers.TimerManager;
 	
 	dynamic public class Level1 extends Level implements ILevel{
@@ -17,14 +17,14 @@
 		override public function buildLevel():void{
 			trace(mapList[0]);
 			//tell levelMangaer who we are
-			LevelManager.setLevel(this);
+			MapManager.setLevel(this);
 			//see if they were listening
-			LevelManager.loadMap(mapList[0]);
+			MapManager.loadMap(mapList[0]);
 			TimerManager.wait(2,gotoLevel);
 		}
 		public function gotoLevel(evt:*){
 			
-			LevelManager.loadMap(mapList[1]);
+			MapManager.loadMap(mapList[1]);
 		}
 		
 	}//end class

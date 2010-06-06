@@ -2,14 +2,16 @@
 // this is the old start statement
 package {
 
-	import engine.Game;
-	import engine.maps.scrnStart;
-
-	public class gatsby extends Game {
+	import flash.display.MovieClip;
+    import flash.events.Event;
+	
+	dynamic public class Gatsby extends MovieClip {
+	
+		public var game:Game = new Game();
 		
-		public function gatsby() {
-			//start!
-			newLevel(new scrnStart(this));
+		public function Gatsby() {
+			//
+			this.addChild(game);
 		}
 	}//end class
 }//end package

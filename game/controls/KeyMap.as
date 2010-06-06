@@ -5,12 +5,12 @@ package controls{
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	
-	public class KeyMap extends Sprite {
+	dynamic public class KeyMap extends Sprite {
 		
-		private static var _keyMap:Array=new Array();
+		static public var _keyMap:Array=new Array();
 		public static const KEY_DOWN:String = KeyboardEvent.KEY_DOWN;
 		public static const KEY_UP:String = KeyboardEvent.KEY_UP;
-		private static var last_key_pressed:int;
+		private static var last_key_pressed:int = 0;
 		
 		public function KeyMap():void {
 			// map control keys
@@ -68,8 +68,17 @@ package controls{
 			return _keyMap;
 		}
 		
-		public function getLastKey():int {
+		static public function getLastKey():int {
+			//trace(last_key_pressed);
 		    return last_key_pressed;
+		}
+		//check if any keys are pressed. (helper function)
+		static public function chkeys():Boolean {
+			var tmp:Boolean = false;
+			for(var i:String in KeyMap.keyMap){
+				if(KeyMap.keyMap[i]){tmp = true;}
+			}
+			return tmp;
 		}
 	}
 }

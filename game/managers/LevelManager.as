@@ -52,9 +52,7 @@
 				var ClassReference:Class = getDefinitionByName(map) as Class;
 				var peep = new ClassReference();
 				currentMap = map;
-				trace('current: '+map);
-				var t = new LevelStart();
-				level.addChild(t);
+				level.addChild(peep);
 			//}
 
 		}

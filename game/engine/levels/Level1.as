@@ -2,29 +2,48 @@
 	
 	//import flash.display.MovieClip;
 	import engine.Level;
-	import engine.ILevel;
 	import managers.LevelManager;
 	import managers.TimerManager;
 	
-	dynamic public class Level1 extends Level implements ILevel{
-		
+	public class Level1 extends Level {
+	    
 		public function Level1():void{
-			
-			this.mapList = new Array("LevelStart","level1_map1","level1_map2");
+		    mapList = new Array('Level1_Map1', 'Level1_Map2', 'Level1_Map3'); // use this later for dylan-style level loading by converting strings to classes
+			currentScreen = startScreen; // we're just starting, so our current
 		}
-		//This override is a bit slopy, but I don't have to
-		//add ADDED_TO_STAGE eventListeners to everything this way.
-		override public function buildLevel():void{
-			trace(mapList[0]);
-			//tell levelMangaer who we are
-			LevelManager.setLevel(this);
-			//see if they were listening
-			LevelManager.loadMap(mapList[0]);
-			TimerManager.wait(2,gotoLevel);
+		
+		public override function update():Boolean {
+		    if(!currentScreen.update()) { // update the current screen to see if it's finished
+		        switch(currentScreen.getStatus()) {
+		            case 'COMPLETE': // if our map returned COMPLETE
+		                currentMapIndex++; // increment the current map index
+		                if(currentMapIndex < mapList.length) { // and if we haven't finished the last map
+		                    currentScreen = getMap(currentMapIndex);  // get the next one
+		                    return true; // and return true
+		                } else { // otherwise, we've completed the final map so
+		                    setStatus('COMPLETE');  // set the level exit status to COMPLETE
+		                    return false; // and return false to the Engine
+		                }
+		                break;
+		            case 'HERO DEAD': // if the map returns HERO DEAD
+		                setStatus('HERO DEAD');  // set the level exit status to HERO DEAD
+		                return false; // and return false to the Engine
+		                break;
+		        }
+		    }
+		    return currentScreen.update();
 		}
-		public function gotoLevel(evt:*){
-			
-			LevelManager.loadMap(mapList[1]);
+		
+		private function getMap(mapIndex) {
+		    switch(mapIndex) {
+		        case 1:
+		            return new level1_map1();
+		        case 2:
+		            return new level1_map1();
+		        case 3:
+		            return new level1_map1();
+		    }
+		    return false;
 		}
 		
 	}//end class

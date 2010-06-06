@@ -1,4 +1,4 @@
-﻿package engine.maps{
+﻿package engine.screens{
 
 	import engine.Map;
 	import flash.events.Event;

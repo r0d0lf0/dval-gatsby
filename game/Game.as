@@ -9,7 +9,7 @@
 	dynamic public class Game extends MovieClip {
 	
 		//public var scrnManager:ScreenManager = new ScreenManager();
-		private var engine:Engine = new Engine();
+		private var engine:Engine;
 		private var keymap:KeyMap = new KeyMap();
 		public function Game():void{
 			
@@ -24,16 +24,9 @@
 			buildEnviron()
 		}
 		private function buildEnviron():void{
-			
+			engine = new Engine();  // create an engine, it will start automatically when it's added to stage
 			addChild(keymap);
-			//method check
-			ScreenManager.getScreens();
-			//this gets done only once, here.
-			ScreenManager.setGame(this);
-			//load game open
-			ScreenManager.setScreen('gameOpen');
-			//
-			engine.start();
+			addChild(engine);
 		}
 		
 	}//end class

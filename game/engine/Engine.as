@@ -55,8 +55,8 @@
                         }
                         break;
                     case 'HERO DEAD': // if our hero died
-                        scoreboard.killHero(); // decrement his lives by one
-                        if(scoreboard.getHeroLives() <= 0) { // if we're out of lives
+                        playerLives--; // decrement his lives by one
+                        if(playerLives <= 0) { // if we're out of lives
                             // game over
                         } else { // if he still has at least one life
                             currentScreen.restart(); // restart our level

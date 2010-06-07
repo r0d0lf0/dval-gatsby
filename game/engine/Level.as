@@ -33,7 +33,7 @@
 	        scoreboard = new Scoreboard();
 	        addChild(scoreboard);
 	        scoreboard.setLives(3);
-	        scoreboard.setScore(1000);
+	        scoreboard.setScore(0);
 		}
 		
 		public function getStatus():String {

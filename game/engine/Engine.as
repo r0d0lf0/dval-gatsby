@@ -9,7 +9,7 @@
 	dynamic public class Engine extends MovieClip{
 	    
 	    private var screenManager:ScreenManager;
-	    private var scoreboard:Scoreboard = new Scoreboard();
+	    private var scoreboard:Scoreboard;
 	    private var currentScreen;
 	    private var currentScreenIndex:Number = 0;
 	    

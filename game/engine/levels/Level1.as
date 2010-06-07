@@ -5,14 +5,21 @@
 	import engine.screens.*;
 	import managers.MapManager;
 	import managers.TimerManager;
+	import flash.text.TextField;
 	
 	public class Level1 extends Level {
 	    
+	    private var levelNumber:String = "LEVEL 1";
+	    private var levelName:String = "GATSBY'S PARTY";
+	    
 		public function Level1():void{
 		    mapList = new Array('Level1_Map1', 'Level1_Map2', 'Level1_Map3'); // use this later for dylan-style level loading by converting strings to classes
-			currentScreen = new LevelStart(); // we're just starting, so our current
-			addChild(currentScreen);
-			currentScreen.y += 32;
+
+			currentScreen = new LevelStart(); // we're just starting, so create a LevelStart screen
+			currentScreen.setLevelName(levelName);
+			currentScreen.setLevelNumber(levelNumber);
+			addChild(currentScreen); // attach it to the stage
+		    
 		}
 		
 		public override function update():Boolean {
@@ -23,6 +30,7 @@
 		                if(currentMapIndex < mapList.length) { // and if we haven't finished the last map
 		                    removeChild(currentScreen); // remove the current map
 		                    currentScreen = getMap(currentMapIndex);  // get the next one
+		                    addChild(scoreboard); // add the scoreboard
                             addChild(currentScreen); // add the new child
                             currentScreen.y += 32; // move the screen down so that it doesn't cover the scoreboard
 		                    return true; // and return true

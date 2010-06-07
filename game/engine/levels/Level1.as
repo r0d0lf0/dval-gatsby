@@ -9,7 +9,6 @@
 	public class Level1 extends Level {
 	    
 		public function Level1():void{
-		    super();
 		    mapList = new Array('Level1_Map1', 'Level1_Map2', 'Level1_Map3'); // use this later for dylan-style level loading by converting strings to classes
 			currentScreen = new LevelStart(); // we're just starting, so our current
 			addChild(currentScreen);
@@ -38,9 +37,7 @@
 		                break;
 		        }
 		    }
-		    scoreboard.setLives(5);
 		    return currentScreen.update();
-
 		}
 
 		private function getMap(mapIndex) {

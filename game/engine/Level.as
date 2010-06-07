@@ -23,13 +23,17 @@
 				addEventListener(Event.ADDED_TO_STAGE, initBuild);
 			}
 		}
+		
 		private function initBuild(evt:Event):void{
 		    removeEventListener(Event.ADDED_TO_STAGE, initBuild);
 			buildLevel();
 		}
+		
 		public function buildLevel():void{
 	        scoreboard = new Scoreboard();
 	        addChild(scoreboard);
+	        scoreboard.setLives(3);
+	        scoreboard.setScore(1000);
 		}
 		
 		public function getStatus():String {

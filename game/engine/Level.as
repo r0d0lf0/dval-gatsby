@@ -31,7 +31,6 @@
 		
 		public function buildLevel():void{
 	        scoreboard = new Scoreboard();
-	        addChild(scoreboard);
 	        scoreboard.setLives(3);
 	        scoreboard.setScore(0);
 		}

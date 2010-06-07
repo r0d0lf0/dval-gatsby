@@ -1,7 +1,7 @@
 package engine{
 
     import flash.display.MovieClip;
-    import flash.text.*;
+    import flash.text.TextField;
     
     // Scoreboard, not sure what this is gonna do yet
     public class Scoreboard extends MovieClip {

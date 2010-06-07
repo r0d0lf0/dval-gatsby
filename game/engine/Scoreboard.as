@@ -13,21 +13,9 @@ package engine{
             trace("Scoreboard created.");
             
         }
-        
-        public function getScore():Number {
-            return my_score;
-        }
-        
-        public function getHeroLives():Number {
-            return hero_lives;
-        }
-        
-        public function killHero():void {
-            hero_lives--;
-        }
-        
-        public function addToScore(points:Number):void {
-            my_score += points;
+
+        public function setScore(score:Number):void {
+            my_score = score;
             var score_text = my_score.toString();
             while(score_text.length < 8) {
                 score_text = '0' + score_text;

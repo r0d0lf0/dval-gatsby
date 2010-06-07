@@ -12,6 +12,10 @@
 	    private var scoreboard:Scoreboard = new Scoreboard();
 	    private var currentScreen;
 	    private var currentScreenIndex:Number = 0;
+	    
+	    private var playerScore:Number = 0;
+	    private var playerLives:Number = 3;
+	    
 	    static private var screenList:Array = new Array('gameOpen','Level1');
 		
 		public function Engine():void {
@@ -32,9 +36,9 @@
 		public function start():void {
 		    screenManager = new ScreenManager(); // create our ScreenManager, basically a factory class
 		    currentScreen = screenManager.getScreen(screenList[0]); // create an instance of our first screen
-			addChild(currentScreen);
+			addChild(currentScreen); // add it to the stage
 			this.addEventListener(Event.ENTER_FRAME, update); // attach onEnterFrame to onFrame
-			trace('Engine Started.');
+			trace('Engine Started.'); 
 		}
 			
 		private function update(evt:Event):void{

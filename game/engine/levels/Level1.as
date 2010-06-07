@@ -19,12 +19,10 @@
 	    
 		public function Level1():void{
 		    mapList = new Array('Level1_Map1', 'Level1_Map2', 'Level1_Map3'); // use this later for dylan-style level loading by converting strings to classes
-
 			currentScreen = new LevelStart(); // we're just starting, so create a LevelStart screen
 			currentScreen.setLevelName(levelName);  // give it our level name
 			currentScreen.setLevelNumber(levelNumber); // and our level number
-			addChild(currentScreen); // and attach it to the stage
-		    
+			addChild(currentScreen); // and attach it to the stage  
 		}
 		
 		public override function update():Boolean {
@@ -49,9 +47,9 @@
 		                return false; // and return false to the Engine
 		                break;
 		        }
-		    } else {  // otherwise, if the map returned true
-		        return true;  // then so will the level
 		    }
+		    // otherwise, if the map returned true
+		    return true;  // then so will the level
 		}
 		
 		private function startMusic() {

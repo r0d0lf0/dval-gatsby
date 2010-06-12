@@ -1,4 +1,6 @@
-package engine.actors {
+package engine.actors.enemies {
+    
+   
     
     public class EnemyWalker extends Enemy {
         

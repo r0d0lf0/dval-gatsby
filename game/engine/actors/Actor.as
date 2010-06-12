@@ -112,6 +112,7 @@
 			var tmp:Bitmap = new Bitmap(tmpData);
 			this.addChild(tmp);
 		}
+		
 		public function update():void {
 			//this is overwritten by each unique subclass
 		}

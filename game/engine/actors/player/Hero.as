@@ -63,10 +63,10 @@
 		//when we animate, we only have to update our copy rectangle.
 		private var heroCopy:Rectangle = new Rectangle(aPos*tile,aStat*tile,tile,tile); //copy
 		private var heroBytes:ByteArray = animData.getPixels(heroCopy); // the pixels in the heroDisplay
+		private var colliders:Array = new Array();  // temporary storage for all our colliders
 		
 		// constructor, geesh
-		public function Hero():void {
-		    
+		public function Hero():void {    
 		    //observers = new Array(); // initialize our observers array
 			//trace("game loaded");
 			if (stage != null) {
@@ -87,6 +87,9 @@
 		
 		public override function update():void {
 		    moveMe();
+		    if(colliders.length > 0) {
+		        handleCollisions();
+		    }
 		}
 		
 		// keeps anim going if it needs to
@@ -246,11 +249,17 @@
 		}
 		
 		public function collide(observer) {
-		    // different behaviors for collision
-		    if(observer is Cloud) {
-		        this.y = observer.y;
-		    }
+		    colliders.push(observer); // add this to our temporary colliders list
 		}
+		
+	    private function handleCollisions():void {
+	        for(var i=0; i<colliders.length; i++) {
+	            if(colliders[i] is Cloud) {
+	                this.y = colliders[i].y;
+	            }
+	        }
+	        colliders = new Array(); // clear this list for our next time round
+	    }
 		
 		public function moveMe():void {
 		    

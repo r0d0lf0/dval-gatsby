@@ -25,7 +25,7 @@ package engine.actors.enemies {
         }
         
         public function notify(subject):void {
-            
+
         }
         
     }

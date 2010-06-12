@@ -64,38 +64,12 @@
 			
 		}*/
 		
-		public function checkCollision(actor) {
-		    
-		    //actor x axis
-			var hhw = actor.width/4; // Hero Half-Width
-			
-			//mapObject x axis
-			this.me = localToGlobal(new Point(0,0));
-			var mhw = this.width/2; // MapObject Half-Width
-			
-			//distance and overlap between them
-			var dx = (me.x+mhw) - (actor.x+hhw+actor.velx+actor.Xspeed);  //distance x
-			var ox = (hhw+mhw) - Math.abs(dx);  //overlap x
-			
-			/*************** Check for collision ********************/
-			//if there is a collision on the X axis:
-			if(ox > 0){
-				//then spend resources checking for Y axis collision
-				//actor Y axis
-				var hhh = actor.height/2;
-				//mapObject Y axis
-				var mhh = this.height/2;
-				//distance and overlap between them
-				var dy = (me.y+mhh) - (actor.y-hhh+actor.vely+actor.Yspeed);
-				var oy = (hhh+mhh) - Math.abs(dy);
-				//if there is collision on Y:
-				if(oy > 0){
-					//we have a hit! mapObject should 'behave' accordingly
-					//onHit({dx:dx,ox:ox,dy:dy,oy:oy},actor);
-					//tell the actor he hit something (this effects animation)
-					//actor.ihit = true;
-				}
-			}
+		public function checkCollision(subject) {
+		    if(subject.y >= this.y && subject.y <= (this.y+this.height)) {
+		        if(subject.x >= this.x && subject.x <= (this.x+this.width)) {
+		            return true;
+		        }
+		    }
 		}
 		
 		//show the background image

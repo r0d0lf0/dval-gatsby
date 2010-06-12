@@ -1,61 +1,91 @@
-package engine{
-
-    import flash.display.MovieClip;
-    import flash.text.TextField;
+package engine {
     
-    // Scoreboard, not sure what this is gonna do yet
-    public class Scoreboard extends MovieClip {
+    public class Scoreboard implements ISubject {
         
-        private var my_score = 0;
-        private var hero_lives = 3;
-
-        public function Scoreboard() {
-            trace("Scoreboard created.");
+        private static var _instance:Scoreboard;
+        public static var score:int = 0;
+        public static var lives:int = 3;
+        public static var HP:int = 3;
+        private static var observers:Array = new Array();
+        
+        public function Scoreboard(pvt:PrivateClass) {
             
         }
+        
+        public static function getInstance():Scoreboard {
+            if(Scoreboard._instance == null) {
+                Scoreboard._instance = new Scoreboard(new PrivateClass());
+                trace("Scoreboard instantiated.");
+            }
+            return Scoreboard._instance;
+        }
+        
+        public function setHP(HP) {
+            Scoreboard.HP = HP;
+            notifyObservers();
+        }        
+        
+        public function getHP():Number {
+            return Scoreboard.HP;
+        }
+        
+        public function addToScore(amount:Number) {
+            Scoreboard.score += amount;
+            notifyObservers();
+        }
+        
+        public function setScore(newScore:Number) {
+            Scoreboard.score = newScore;
+            notifyObservers();
+        }
+        
+        public function getScore() {
+            return Scoreboard.score;
+        }
+        
+        public function removeLife() {
+            Scoreboard.lives--;
+            notifyObservers();
+        }
+        
+        public function addLife() {
+            Scoreboard.lives++;
+            notifyObservers();
+        }
+        
+        public function getLives() {
+            return Scoreboard.lives;
+        }
+        
+        public function setLives(newLives) {
+            Scoreboard.lives = newLives;
+        }
+        
+        public function addObserver(observer):void {
+		    observers.push(observer);
+		}
+		
+		public function removeObserver(observer):void {
+		    for (var ob:int=0; ob<observers.length; ob++) {
+                if(observers[ob] == observer) {
+                    observers.splice (ob,1); break;
+                    break;
+                }
+            }
+		}
+		
+		public function notifyObservers():void {
+		    for(var ob=0; ob<observers.length; ob++) {
+		        observers[ob].notify(this);
+		    }
+		}
+        
+    }
+    
+}
 
-        public function setScore(score:Number):void {
-            my_score = score;
-            var score_text = my_score.toString();
-            while(score_text.length < 8) {
-                score_text = '0' + score_text;
-            }
-            display_score.text = 'SCORE: ' + score_text;
-        }
-        
-        public function setHealth(health:Number):void {
-            switch(health) {
-                case 0:
-                    health1.alpha = 0;
-                    health2.alpha = 0;
-                    health3.alpha = 0;
-                    break;
-                case 1:
-                    health1.alpha = 100;
-                    health2.alpha = 0;
-                    health3.alpha = 0;
-                    break;
-                case 2:
-                    health1.alpha = 100;
-                    health2.alpha = 100;
-                    health3.alpha = 0; 
-                    break;
-                case 3:
-                    health1.alpha = 100;
-                    health2.alpha = 100;
-                    health3.alpha = 100;
-                    break;
-            }
-        }
-        
-        public function setLives(lives:Number) {
-            for(var i=0;i<lives;i++) {
-                var lifeIcon = new LifeIcon();
-                addChild(lifeIcon);
-                lifeIcon.y = 16;
-                lifeIcon.x = 250 - (10 * i);
-            }
-        }
-        
+class PrivateClass {
+    public function PrivateClass() {
+        trace("Private class is up.");
     }
 }

@@ -8,6 +8,7 @@
 	import flash.geom.Point;
 	import flash.events.Event;
 	import engine.actors.Actor;
+	import engine.actors.Animatable;
 	import engine.actors.geoms.*;
 	import controls.KeyMap;
 	import engine.actors.weapons.Weapon;
@@ -15,7 +16,7 @@
 	import engine.Subscriber;
 	import engine.ISubject;
 
-	dynamic public class Hero extends Actor implements ISubject {
+	dynamic public class Hero extends Animatable implements ISubject {
 	    
 	    // Here's where the observer pattern stuff goes
 	    private var observers:Array = new Array();
@@ -62,7 +63,7 @@
 		// 3.
 		//copy the selected area of the spriteSheet to our display bitmap
 		private var tile:uint = 32; // select size
-		private var aPos:int = 0;	// postion or frame of current anim
+		//private var aPos:int = 0;	// postion or frame of current anim
 		private var aFlag:Boolean = false;	// postion or frame of throwing anim
 		private var aStat:int = 0;  // State of hero, chooses which anim to play
 		private var aMax:int = 2;   // maximum anim frames in that state. (for loop terminator)

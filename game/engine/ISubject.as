@@ -4,6 +4,9 @@
 	
 	public interface ISubject{
 		
+		function addObserver(subscriber):void;
+		function removeObserver(subscriber):void;
+		function notifyObservers():void;
 		
 	}//end interface
 	

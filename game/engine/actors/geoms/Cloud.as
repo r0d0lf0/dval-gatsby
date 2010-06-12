@@ -1,16 +1,17 @@
-﻿package engine.actors{
+﻿package engine.actors.geoms {
 	
 	import flash.display.DisplayObject;
 	import engine.actors.MapObject;
+	import engine.actors.Actor;
 	import engine.IObserver;
 
-	dynamic public class Cloud extends MapObject implements IObserver {
+	public class Cloud extends Actor implements IObserver {
 		
-		public function Cloud(w=1,h=1,tex = null):void{
-			super(w,h,tex);
+		public function Cloud():void{
+			super();
 		}
-		public override function behave(smackData:Object,characterObject:*):void{
-			
+		
+		public function behave(smackData:Object,characterObject:*):void{	
 			var dy = smackData.dy;
 			//only stop downward movement
 			if(characterObject.y < me.y+(this.height/2)){
@@ -20,6 +21,12 @@
 					characterObject.imon = true;
 				}
 			}
+		}
+		
+		public function notify(subject:*):void {
+		    if(subject.y > me.y) {
+		        subject.collide(this);
+		    }
 		}
 	}
 }

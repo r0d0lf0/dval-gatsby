@@ -1,4 +1,4 @@
-﻿package engine.actors {
+﻿package engine {
     
     public interface IObserver {
         

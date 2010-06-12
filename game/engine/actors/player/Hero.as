@@ -8,15 +8,17 @@
 	import flash.geom.Point;
 	import flash.events.Event;
 	import engine.actors.Actor;
+	import engine.actors.geoms.*;
 	import controls.KeyMap;
 	import engine.actors.weapons.Weapon;
 	import engine.ISubscriber;
 	import engine.Subscriber;
+	import engine.ISubject;
 
-	dynamic public class Hero extends Actor implements ISubscriber{
+	dynamic public class Hero extends Actor implements ISubject {
 	    
 	    // Here's where the observer pattern stuff goes
-	    private var observers:Array;
+	    private var observers:Array = new Array();
 	    
 		//CHANGE THESE
 		public var jumpHeight:uint = 24; //exponential. 20 jumps 3x higher than 10
@@ -24,7 +26,7 @@
 		public var Xspeed:Number = 1.4;
 		
 		//
-		//public var fric:Number = 1;  //frictional coefficient of go
+		public var fric:Number = 1;  //frictional coefficient of go
 		
 		
 		public var hat:Weapon = new Weapon(1);
@@ -64,6 +66,7 @@
 		
 		// constructor, geesh
 		public function Hero():void {
+		    
 		    //observers = new Array(); // initialize our observers array
 			//trace("game loaded");
 			if (stage != null) {
@@ -81,6 +84,11 @@
 			//addChild(hat);
 			skinHero();
 		}
+		
+		public override function update():void {
+		    moveMe();
+		}
+		
 		// keeps anim going if it needs to
 		private function onKeyRelease(evt:Event):void{
 			aFlag = true;
@@ -202,7 +210,7 @@
 			displayData.setPixels(heroPaste,heroBytes);
 		}*/
 		//move avatar
-		/*
+		
 		private function applyPhysics():void {
 		    // velocitize y (gravity)
 			if (this.vely < MAX_VEL_Y) {
@@ -216,10 +224,37 @@
 				this.velx += fric;
 			}
 		}
-		*/
+		
+		
+		public function addObserver(observer):void {
+		    observers.push(observer);
+		}
+		
+		public function removeObserver(observer):void {
+		    for (var ob:int=0; ob<observers.length; ob++) {
+                if(observers[ob] == observer) {
+                    observers.splice (ob,1); break;
+                    break;
+                }
+            }
+		}
+		
+		public function notifyObservers():void {
+		    for(var ob=0; ob<observers.length; ob++) {
+		        observers[ob].notify(this);
+		    }
+		}
+		
+		public function collide(observer) {
+		    // different behaviors for collision
+		    if(observer is Cloud) {
+		        this.y = observer.y;
+		    }
+		}
+		
 		public function moveMe():void {
 		    
-			//vapplyPhysics(); // apply our enviromental variables
+			applyPhysics(); // apply our enviromental variables
 			
 			/**************************************************/
 			//State 1. -- Falling
@@ -335,6 +370,9 @@
 				imon = false;
 			}
 			
+			this.y += vely;
+			this.x += velx;
+			notifyObservers();
 		}
 		
 		

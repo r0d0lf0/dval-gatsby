@@ -2,12 +2,18 @@
 	
 	import flash.display.DisplayObject;
 	import engine.actors.Actor;
+	import engine.IObserver;
 
-	dynamic public class Block extends Actor{
+	dynamic public class Block extends Actor implements IObserver {
 		
 		public function Block():void{
 			super();
 		}
+		
+		public function notify(subject:*):void {
+		    trace("I've been notified!");
+		}
+		
 		public function onHit(smackData:Object,characterObject:*):void{
 			
 			var dx = smackData.dx;

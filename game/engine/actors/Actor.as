@@ -10,7 +10,7 @@
 	//import engine.ISubject;
 	
 
-	dynamic public class Actor extends MovieClip implements ISubscriber, ISubject{
+	dynamic public class Actor extends MovieClip {
 
         public var object_type = "interactive";
 		public var unit:uint = 16;

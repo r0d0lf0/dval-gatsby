@@ -75,7 +75,6 @@
             <project_file path="./game/managers/MapManager.as" filetype="as" />
         </project_folder>
         <project_file path="./game/Game.as" filetype="as" />
-        <project_file path="./game/Gatsby.fla" filetype="fla" profile="" />
         <project_file path="./game/Gatsby.as" filetype="as" />
         <project_file path="./game/GameOld.as" filetype="as" />
     </project_folder>

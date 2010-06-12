@@ -2,6 +2,7 @@ package engine.actors.enemies {
     
     import engine.IObserver;
     import engine.ISubject;
+    import engine.actors.player.Hero;
     
     public class EnemyWaiter extends EnemyWalker implements ISubject, IObserver {
         
@@ -35,7 +36,11 @@ package engine.actors.enemies {
 		}
 		
 		override public function notify(subject):void {
-		    
+		    if(subject is Hero) {
+		        if(checkCollision(subject)) {
+		            subject.receiveDamage(1);
+		        }
+		    }
 		}
 		
 		override public function update():void {

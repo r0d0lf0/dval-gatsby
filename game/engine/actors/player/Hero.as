@@ -17,6 +17,7 @@
 	import engine.ISubject;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
+	import engine.Scoreboard;
 
 	dynamic public class Hero extends Animatable implements ISubject {
 	    
@@ -29,7 +30,7 @@
 	    private var shootEnabled = true;
 	    
 		//CHANGE THESE
-		public var jumpVelocity:uint = 11; //exponential. 20 jumps 3x higher than 10
+		public var jumpVelocity:uint = 10; //exponential. 20 jumps 3x higher than 10
 		
 		public var Xspeed:Number = 2;
 		
@@ -42,11 +43,11 @@
 		
 		
 		public var hat:Weapon = new Weapon(1);
-		//public var airFric:Number = 1; // not sure yet 
+		// public var airFric:Number = 1; // not sure yet 
 		// MAX_VEL_Y has to be less than the height of most shallow platform.
 		// otherwise you will fall through the ground
 		const MAX_VEL_Y:Number = 6; // so min platform height should be 22.
-		const MAX_VEL_X:Number = 4;
+		const MAX_VEL_X:Number = 3;
 		//DON'T CHANGE THESE
 		public var vely:Number = 0;
 		public var velx:Number = 0;
@@ -85,8 +86,15 @@
 		private var jumpPressed:Boolean = false;
 		
 		private var jumpSound = new hero_jump();
+		private var hurtSound = new hero_hurt();
 		private var effectsChannel;
 		
+		private var damageFlag = false; // flag for if the hero has been damaged
+		private var damageCounter = 0; // counter variable to see how long we've been damaged
+		private var damageDuration = 120; // number of frames to be invincible after damage
+		private var HP = 3; // number of health points
+		
+		private var scoreboard = Scoreboard.getInstance();
 		
 		// constructor, geesh
 		public function Hero():void {    
@@ -109,6 +117,15 @@
 		}
 		
 		public override function update():void {
+		    if(damageFlag) {
+		        if(damageCounter < damageDuration) {
+		            this.alpha = damageCounter % 2;
+		            damageCounter++;
+		        } else {
+		            damageCounter = 0;
+		            damageFlag = false;
+		        }
+		    }
 		    moveMe();
 		}
 		
@@ -234,6 +251,16 @@
 		}*/
 		//move avatar		
 		
+		public function receiveDamage(damageAmount):void {
+		    if(!damageFlag) {
+		        HP -= damageAmount;
+		        scoreboard.addToScore(10);
+		        scoreboard.setHP(HP);
+    		    damageFlag = true;
+    		    effectsChannel = hurtSound.play(0);  // play it, looping 100 times
+		    }
+		}
+		
 		public function addObserver(observer):void {
 		    observers.push(observer);
 		}
@@ -262,6 +289,10 @@
 		        }
 		        
 		    }
+		}
+		
+		public function getHP():Number {
+		    return HP;
 		}
 		
 	    private function handleCollisions():void {

@@ -15,7 +15,7 @@ package engine.screens {
         public function update():Boolean {
             counter++;
             if(counter > 120) {
-                status = 'COMPLETE';
+                status = 'GAME OVER';
                 return false;
             } else {
                 return true;

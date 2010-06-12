@@ -15,12 +15,15 @@
 		
 		static public function wait(t:int, m:Function){
 			
-            var myTimer:Timer = new Timer(1000, t);
+            var myTimer:Timer = new Timer(1000*t, 0);
             myTimer.addEventListener("timer", m);
             myTimer.start();
 		}
 		static public function loop(t:int, c:int, m:Function){
 			
+            var myTimer:Timer = new Timer(1000*t, c);
+            myTimer.addEventListener("timer", m);
+            myTimer.start();
 		}
 		
         public function timerHandler(event:TimerEvent):void {

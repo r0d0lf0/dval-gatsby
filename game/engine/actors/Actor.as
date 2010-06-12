@@ -5,16 +5,13 @@
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.events.Event;
+	import flash.utils.getDefinitionByName;
 	import engine.ISubscriber;
 	import engine.ISubject;
-	//import engine.ISubject;
 	
 
 	dynamic public class Actor extends MovieClip {
 
-        public var object_type = "interactive";
-		public var unit:uint = 16;
-		public var tex:String = '';
 		protected var me:Point = localToGlobal(new Point(0,0));
 		private var actor:*;
 		private var ldr;
@@ -25,10 +22,6 @@
 		// if its 'safe' to add listeners.
 		//public function Actor(w,h,tex = null):void {
 		public function Actor():void {
-			//trace("map object loaded");
-			//this.w = w;
-			//this.h = h;
-			//this.tex = tex;
 			//Check we exist in Flash spacetime
 			if (stage != null) {
 				buildObject();
@@ -51,8 +44,12 @@
 			//this.removeEventListener(Event.ENTER_FRAME, onFrame);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, onRemove);
 		}
-		//handles texture and texture not found
-		public function doTexture(tex):void {
+		//handles loading textures in the library
+		public function skin(tex):Bitmap {
+			var ClassReference:Class = getDefinitionByName(tex) as Class;
+			var newScreen = new ClassReference();
+			return newScreen;
+		
 			//written this way for levelEDitor compatibility
 			//if tex is null, load a Charlie (It's white square! hahahaha)
 			/*if (tex != null && tex != undefined && tex!= '') {
@@ -67,7 +64,7 @@
 			
 		}*/
 		
-		private function checkCollision(actor) {
+		public function checkCollision(actor) {
 		    
 		    //actor x axis
 			var hhw = actor.width/4; // Hero Half-Width
@@ -105,8 +102,8 @@
 		public function textureLoadSuccess(evt:*):void {
 			var tmpData:BitmapData = evt.target.content.bitmapData;
 			var tmp:Bitmap = new Bitmap(tmpData);
-			tmp.scaleX = 2;
-			tmp.scaleY = 2;
+			//tmp.scaleX = 2;
+			//tmp.scaleY = 2;
 			this.addChild(tmp);
 		}
 		//show blank

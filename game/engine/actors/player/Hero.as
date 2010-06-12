@@ -20,8 +20,13 @@
 	    // Here's where the observer pattern stuff goes
 	    private var observers:Array = new Array();
 	    
+	    // these hold what things we can currently do
+	    private var walkEnabled = true;
+	    private var jumpEnabled = true;
+	    private var shootEnabled = true;
+	    
 		//CHANGE THESE
-		public var jumpHeight:uint = 24; //exponential. 20 jumps 3x higher than 10
+		public var jumpHeight:uint = 16; //exponential. 20 jumps 3x higher than 10
 		public var Yspeed:Number = 2;  //how much the velocity changes on each frameEvent
 		public var Xspeed:Number = 1.4;
 		
@@ -44,6 +49,8 @@
 		private var keys:KeyMap = new KeyMap();
 		private var action:uint = 0;
 		private var frame:uint = 1;
+		private var myStatus:String = 'STANDING';
+		private var previousStatus:String = 'STANDING';
 		// 1.
 		//HeroSkin is subclass of bitmapData. this loads the SpriteSheet into memory
 		private var animData:HeroSkin = new HeroSkin(0,0);
@@ -64,6 +71,8 @@
 		private var heroCopy:Rectangle = new Rectangle(aPos*tile,aStat*tile,tile,tile); //copy
 		private var heroBytes:ByteArray = animData.getPixels(heroCopy); // the pixels in the heroDisplay
 		private var colliders:Array = new Array();  // temporary storage for all our colliders
+		
+		private var keyboardStatus:Array = new Array();
 		
 		// constructor, geesh
 		public function Hero():void {    
@@ -87,9 +96,6 @@
 		
 		public override function update():void {
 		    moveMe();
-		    if(colliders.length > 0) {
-		        handleCollisions();
-		    }
 		}
 		
 		// keeps anim going if it needs to
@@ -212,22 +218,7 @@
 			heroBytes.position = 0;
 			displayData.setPixels(heroPaste,heroBytes);
 		}*/
-		//move avatar
-		
-		private function applyPhysics():void {
-		    // velocitize y (gravity)
-			if (this.vely < MAX_VEL_Y) {
-				this.vely += this.Yspeed;
-			}
-			
-			// de-velocitize x (friction)
-			if (this.velx > 0) {
-				this.velx -= fric;
-			} else if (this.velx < 0) {
-				this.velx += fric;
-			}
-		}
-		
+		//move avatar		
 		
 		public function addObserver(observer):void {
 		    observers.push(observer);
@@ -248,8 +239,12 @@
 		    }
 		}
 		
-		public function collide(observer) {
-		    colliders.push(observer); // add this to our temporary colliders list
+		public function collide(observer, ...args) {
+		    if(observer is Cloud) {
+		        this.vely = 0;
+		        this.y = observer.y;
+		        myStatus = 'STANDING';
+		    }
 		}
 		
 	    private function handleCollisions():void {
@@ -260,128 +255,90 @@
 	        }
 	        colliders = new Array(); // clear this list for our next time round
 	    }
+	    
+	    private function readInput():void {
+	        
+	        if(walkEnabled) {  // if we're allowed to walk, input our walk info
+	            if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {
+					if(this.velx < MAX_VEL_X){
+						this.velx += this.Xspeed;
+					}
+				} else if(KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
+					if(this.velx > (MAX_VEL_X*-1)){
+						this.velx -= this.Xspeed;
+					}
+				}
+	        }
+	        
+	        if(jumpEnabled == true) { // if we're allowed to jump
+	            if (KeyMap.keyMap[32] || KeyMap.keyMap[38]) {
+					// -speed breaks the moving platform buffer s well as still platforms.
+					this.y -= Yspeed;
+					this.vely = -jumpHeight;
+				}
+	        }
+	        
+	    }
+	    
+	    private function updateStatus():void {
+	        if(myStatus != previousStatus) { // if our status has changed
+	            trace(myStatus);
+			    switch(myStatus) { // enable/disable abilities
+
+    			    case 'STANDING':
+                        walkEnabled = true;
+                        jumpEnabled = true;
+                        shootEnabled = true;
+    			        break;
+    			    case 'FALLING':
+    			        walkEnabled = true;
+    			        jumpEnabled = false;
+    			        shootEnabled = false;
+    			        break;
+    			    default:
+    			        walkEnabled = true;
+    			        jumpEnabled = true;
+    			        shootEnabled = true;
+    			        break;
+
+    			}
+			}
+			previousStatus = myStatus; // record our previous status
+	    }
+	    
+	    private function applyPhysics():void {
+		    
+		    // set our status
+			if(vely != 0) {
+			    myStatus = 'FALLING';
+			}
+
+		    // velocitize y (gravity)
+			if (this.vely < MAX_VEL_Y) {
+				this.vely += this.Yspeed;
+			}
+			
+			// de-velocitize x (friction)
+			if(Math.abs(this.velx) < 1) {
+			    this.velx = 0;
+			}
+			if (this.velx > 0) {
+				this.velx -= fric;
+			} else if (this.velx < 0) {
+				this.velx += fric;
+			}
+			
+		}
 		
 		public function moveMe():void {
 		    
 			applyPhysics(); // apply our enviromental variables
-			
-			/**************************************************/
-			//State 1. -- Falling
-			/**************************************************/
-			if(!imon){
-				// CTRL key 
-				if (KeyMap.keyMap[17]) {
-					//allow throw while falling
-					// A or LEFT_ARROW move left
-					// D or RIGHT_ARROW move right
-					if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {
-						if(this.velx < MAX_VEL_X){
-							this.velx += this.Xspeed;
-						}
-						this.ldir = true;
-					}else
-					// A or LEFT_ARROW move left
-					if (KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
-						if(this.velx > (MAX_VEL_X*-1)){
-							this.velx -= this.Xspeed;
-						}
-						this.ldir = false;
-					}
-					hat.useWeapon(this.ldir);
-					//animate('throw');
-				}else
-				// D or RIGHT_ARROW move right
-				if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {
-					if(this.velx < MAX_VEL_X){
-						this.velx += this.Xspeed;
-					}
-					this.ldir = true;
-					//animate('fall');
-				}else
-				// A or LEFT_ARROW move left
-				if (KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
-					if(this.velx > (MAX_VEL_X*-1)){
-						this.velx -= this.Xspeed;
-					}
-					this.ldir = false;
-					//animate('fall');
-				}else
-				if (!KeyMap.chkeys()){
-					//animate('fall');
-				}
-			}else
-			
-			/**************************************************/
-			//State 2. -- Standing
-			/**************************************************/
-			{
-				// CTRL key 
-				if (KeyMap.keyMap[17]) {
-					hat.useWeapon(this.ldir);
-					//animate('throw');
-				}else
-				// SPACEBAR or UP_ARROW jump 
-				if (KeyMap.keyMap[32] || KeyMap.keyMap[38]) {
-					// -speed breaks the moving platform buffer s well as still platforms.
-					this.y -= Yspeed;
-					this.vely = -jumpHeight;
-					imon = false;
-				}else
-				/**************************************************/
-				//Sub-State 2.1. -- Ducking
-				/**************************************************/
-				// S key or DOWN_ARROW duck 
-				if (KeyMap.keyMap[83] || KeyMap.keyMap[40]) {
-					//allow turnaround while ducking
-					// A or LEFT_ARROW move left
-					if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {
-					this.ldir = true;
-					}else
-					// A or LEFT_ARROW move left
-					if (KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
-						this.ldir = false;
-					}
-					//animate('duck');
-				/**************************************************/
-				}else
-				// D or RIGHT_ARROW move right
-				if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {
-					if(this.velx < MAX_VEL_X){
-						this.velx += this.Xspeed;
-					}
-					this.ldir = true;
-					//animate('walk');
-				}else
-				// A or LEFT_ARROW move left
-				if (KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
-					if(this.velx > (MAX_VEL_X*-1)){
-						this.velx -= this.Xspeed;
-					}
-					this.ldir = false;
-					//animate('walk');
-				}else
-				if (!KeyMap.chkeys()){
-					if (aFlag){
-						//trace('animatine');
-					 	//animate();
-					}else if(velx == 0){
-						//animate('stand');
-					}else if (velx != 0){
-						//animate('walk');
-						}
-				}
-				//the cure for NAS (Nerve Attenuation Syndrom)  if you don't believe me, comment it out.
-				// (the black shakes!)
-				//if(Math.abs(velx) <= (0.1+Xspeed-fric)){velx = 0;}
-				//assume we are no longer on something, in case 
-				//we fell off a moving plat or something
-				ihit = false;
-				imon = false;
-			}
-			
-			this.y += vely;
-			this.x += velx;
-			notifyObservers();
+			updateStatus(); // update our status variable since physics update
+			readInput(); // read our keyboard input and apply what is valid
+		
+			this.y += vely; // update our y variable
+			this.x += velx; // update our x variable
+			notifyObservers(); // tell everybody where we are now
 		}
 		
 		

@@ -5,11 +5,15 @@
     import engine.actors.player.Hero;
     import engine.IObserver;
     
-	dynamic public class Map extends MovieClip {
+	dynamic public class Map extends MovieClip implements IObserver {
 		
 		public var observerArray:Array = new Array();
 		public var subjectArray:Array = new Array();
 		public var objectArray:Array = new Array();
+		
+		private var screenPadding:Number = 20;
+		private var screenWidth:Number = 256;
+		private var screenHeight:Number = 208;
 		//public var game:MovieClip;
 		//private var hero:Hero;
 		
@@ -42,11 +46,14 @@
 				objectArray.push(this.getChildAt(n));
 			}
 			
-			for(var i=0; i<observerArray.length; i++) {
+			
 			    for(var s=0; s<subjectArray.length; s++) {
-			        subjectArray[s].addObserver(observerArray[i]);
+			        for(var i=0; i<observerArray.length; i++) {
+			            subjectArray[s].addObserver(observerArray[i]);
+			        }
+			        subjectArray[s].addObserver(this);
 			    }
-			}
+			
 			
 			//move to bottom screen of map
 			//this.y = 0-(this.height - (game.screenHeight*2));
@@ -57,6 +64,18 @@
 		    for(var i=0; i<subjectArray.length; i++) {
 		        subjectArray[i].update();
 		    }
+		}
+		
+		private function moveMap(subject):void {
+		    var stageLeft = -this.x + screenPadding;
+		    var stageRight = -this.x + (screenWidth - screenPadding);
+		    if(subject.x < stageLeft || subject.x > stageRight) {
+		       this.x = -subject.x;
+		    }
+		}
+		
+		public function notify(subject:*):void {
+		    moveMap(subject);
 		}
 		
 		public function update():Boolean {

@@ -24,8 +24,10 @@
 		}
 		
 		public function notify(subject:*):void {
-		    if(subject.y > me.y) {
-		        subject.collide(this);
+		    if(subject.y >= this.y && subject.y <= (this.y+this.height)) {
+		        if(subject.x >= this.x && subject.x <= (this.x+this.width)) {
+		            subject.collide(this);
+		        }
 		    }
 		}
 	}

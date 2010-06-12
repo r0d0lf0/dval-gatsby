@@ -23,6 +23,7 @@
 			currentScreen.setLevelName(levelName);  // give it our level name
 			currentScreen.setLevelNumber(levelNumber); // and our level number
 			addChild(currentScreen); // and attach it to the stage  
+			//startMusic();
 		}
 		
 		public override function update():Boolean {

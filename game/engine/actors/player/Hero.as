@@ -15,6 +15,8 @@
 	import engine.ISubscriber;
 	import engine.Subscriber;
 	import engine.ISubject;
+	import flash.media.Sound;
+	import flash.media.SoundChannel;
 
 	dynamic public class Hero extends Animatable implements ISubject {
 	    
@@ -27,19 +29,23 @@
 	    private var shootEnabled = true;
 	    
 		//CHANGE THESE
-		public var jumpHeight:uint = 16; //exponential. 20 jumps 3x higher than 10
-		public var Yspeed:Number = 2;  //how much the velocity changes on each frameEvent
-		public var Xspeed:Number = 1.4;
+		public var jumpVelocity:uint = 11; //exponential. 20 jumps 3x higher than 10
+		
+		public var Xspeed:Number = 2;
+		
+		private var frameDelay:Number = 1; // number of frames 
+		private var frameCount:Number = 0; // current frame count
 		
 		//
 		public var fric:Number = 1;  //frictional coefficient of go
+		public var gravity:Number = 1;  //how much the velocity changes on each frameEvent
 		
 		
 		public var hat:Weapon = new Weapon(1);
 		//public var airFric:Number = 1; // not sure yet 
 		// MAX_VEL_Y has to be less than the height of most shallow platform.
 		// otherwise you will fall through the ground
-		const MAX_VEL_Y:Number = 8; // so min platform height should be 22.
+		const MAX_VEL_Y:Number = 6; // so min platform height should be 22.
 		const MAX_VEL_X:Number = 4;
 		//DON'T CHANGE THESE
 		public var vely:Number = 0;
@@ -74,6 +80,13 @@
 		private var colliders:Array = new Array();  // temporary storage for all our colliders
 		
 		private var keyboardStatus:Array = new Array();
+		
+		private var jumpCount:Number = 0;
+		private var jumpPressed:Boolean = false;
+		
+		private var jumpSound = new hero_jump();
+		private var effectsChannel;
+		
 		
 		// constructor, geesh
 		public function Hero():void {    
@@ -242,9 +255,12 @@
 		
 		public function collide(observer, ...args) {
 		    if(observer is Cloud) {
-		        this.vely = 0;
-		        this.y = observer.y;
-		        myStatus = 'STANDING';
+		        if(myStatus == 'FALLING') {
+		            this.vely = 0;
+    		        this.y = observer.y;
+    		        myStatus = 'STANDING';
+		        }
+		        
 		    }
 		}
 		
@@ -260,30 +276,39 @@
 	    private function readInput():void {
 	        
 	        if(walkEnabled) {  // if we're allowed to walk, input our walk info
-	            if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {
-					if(this.velx < MAX_VEL_X){
+	            if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {					
 						this.velx += this.Xspeed;
-					}
+                        if(this.velx > MAX_VEL_X) {
+                            this.velx = MAX_VEL_X;
+                        }
 				} else if(KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
-					if(this.velx > (MAX_VEL_X*-1)){
-						this.velx -= this.Xspeed;
+					this.velx -= this.Xspeed;
+					if(this.velx < -MAX_VEL_X) {
+					    this.velx = -MAX_VEL_X;
 					}
 				}
 	        }
 	        
-	        if(jumpEnabled == true) { // if we're allowed to jump
+	        if(jumpEnabled == true && jumpCount == 0) { // if we're allowed to jump
 	            if (KeyMap.keyMap[32] || KeyMap.keyMap[38]) {
 					// -speed breaks the moving platform buffer s well as still platforms.
-					this.y -= Yspeed;
-					this.vely = -jumpHeight;
+					effectsChannel = jumpSound.play(0);  // play it, looping 100 times
+					this.y -= gravity;
+					this.vely = -jumpVelocity;
+					jumpCount++;
 				}
+	        }
+	        
+	        
+	        if (!KeyMap.keyMap[32] && !KeyMap.keyMap[38]) {
+                jumpCount = 0;
 	        }
 	        
 	    }
 	    
 	    private function updateStatus():void {
 	        if(myStatus != previousStatus) { // if our status has changed
-	            trace(myStatus);
+
 			    switch(myStatus) { // enable/disable abilities
 
     			    case 'STANDING':
@@ -292,6 +317,11 @@
                         shootEnabled = true;
     			        break;
     			    case 'FALLING':
+    			        walkEnabled = true;
+    			        jumpEnabled = false;
+    			        shootEnabled = false;
+    			        break;
+    			    case 'JUMPING':
     			        walkEnabled = true;
     			        jumpEnabled = false;
     			        shootEnabled = false;
@@ -310,36 +340,48 @@
 	    private function applyPhysics():void {
 		    
 		    // set our status
-			if(vely != 0) {
+			if(vely < 0) {
+			    myStatus = 'JUMPING';
+			} else if(vely > 0) {
 			    myStatus = 'FALLING';
 			}
 
 		    // velocitize y (gravity)
 			if (this.vely < MAX_VEL_Y) {
-				this.vely += this.Yspeed;
+				this.vely += this.gravity;
 			}
 			
-			// de-velocitize x (friction)
-			if(Math.abs(this.velx) < 1) {
-			    this.velx = 0;
-			}
+			// apply friction
 			if (this.velx > 0) {
 				this.velx -= fric;
 			} else if (this.velx < 0) {
 				this.velx += fric;
 			}
 			
+			// check map bounds
+			if(this.x < 0) {
+			    this.x = 0;
+			}
+			
+			
 		}
 		
 		public function moveMe():void {
 		    
-			applyPhysics(); // apply our enviromental variables
-			updateStatus(); // update our status variable since physics update
-			readInput(); // read our keyboard input and apply what is valid
-		
-			this.y += vely; // update our y variable
-			this.x += velx; // update our x variable
-			notifyObservers(); // tell everybody where we are now
+		    if(frameCount >= frameDelay) { 
+		        this.y += vely; // update our y variable
+    			this.x += velx; // update our x variable
+
+    		    applyPhysics(); // apply our enviromental variables
+    		    updateStatus(); // update our status variable since physics update
+    		    readInput(); // read our keyboard input and apply what is valid
+
+    			notifyObservers(); // tell everybody where we are now
+    			frameCount = 0;
+		    } else {
+		        frameCount++;
+		    }
+		    
 		}
 		
 		

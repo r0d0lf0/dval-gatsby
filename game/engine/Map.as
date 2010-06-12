@@ -11,7 +11,7 @@
 		public var subjectArray:Array = new Array();
 		public var objectArray:Array = new Array();
 		
-		private var screenPadding:Number = 20;
+		private var screenPadding:Number = 90;
 		private var screenWidth:Number = 256;
 		private var screenHeight:Number = 208;
 		//public var game:MovieClip;
@@ -42,6 +42,9 @@
 				}
 				if(myChild is IObserver) {
 				    observerArray.push(myChild);
+				    if(myChild is Cloud) {
+				        myChild.alpha = 0;
+				    }
 				}
 				objectArray.push(this.getChildAt(n));
 			}
@@ -69,8 +72,16 @@
 		private function moveMap(subject):void {
 		    var stageLeft = -this.x + screenPadding;
 		    var stageRight = -this.x + (screenWidth - screenPadding);
-		    if(subject.x < stageLeft || subject.x > stageRight) {
-		       this.x = -subject.x;
+		    if(subject.x < stageLeft) {
+		       this.x = -subject.x + screenPadding;
+		    } else if(subject.x > stageRight) {
+		        this.x = -subject.x + (screenWidth - screenPadding);
+		    }
+		    
+		    if(this.x < -this.width + screenWidth) {
+		        this.x = -this.width + screenWidth;
+		    } else if(this.x > 0) {
+		        this.x = 0;
 		    }
 		}
 		

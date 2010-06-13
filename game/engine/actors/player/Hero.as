@@ -10,6 +10,7 @@
 	import engine.actors.Actor;
 	import engine.actors.Animatable;
 	import engine.actors.geoms.*;
+	import engine.actors.specials.*;
 	import controls.KeyMap;
 	import engine.actors.weapons.Weapon;
 	import engine.ISubscriber;
@@ -94,13 +95,13 @@
 		}
 		
 		public override function update():void {
-		    if(damageFlag) {
-		        if(damageCounter < damageDuration) {
-		            this.alpha = damageCounter % 2;
-		            damageCounter++;
-		        } else {
-		            damageCounter = 0;
-		            damageFlag = false;
+		    if(damageFlag) {  // if we're being damaged
+		        if(damageCounter < damageDuration) { // flicker our alpha
+		            this.alpha = damageCounter % 2; // every other frame
+		            damageCounter++; // and count how long we've been damaged
+		        } else { // if there's a damage flag, and duration is up
+		            damageCounter = 0; // reset the damage counter
+		            damageFlag = false; // and remove damage flag
 		        }
 		    }
 		    moveMe();
@@ -152,33 +153,27 @@
     		        this.y = observer.y;
     		        myStatus = 'STANDING';
 		        }
-		        
+		    } else if(observer is Door) {
+		        trace("Door collision!");
 		    }
 		}
 		
 		public function getHP():Number {
 		    return HP;
 		}
-		
-	    private function handleCollisions():void {
-	        for(var i=0; i<colliders.length; i++) {
-	            if(colliders[i] is Cloud) {
-	                this.y = colliders[i].y;
-	            }
-	        }
-	        colliders = new Array(); // clear this list for our next time round
-	    }
 	    
 	    private function readInput():void {
 	        
 	        if(walkEnabled) {  // if we're allowed to walk, input our walk info
 	            if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {					
-						this.velx += this.Xspeed;
-                        if(this.velx > MAX_VEL_X) {
-                            this.velx = MAX_VEL_X;
-                        }
+					this.velx += this.Xspeed;
+					goingLeft = 0;
+                    if(this.velx > MAX_VEL_X) {
+                        this.velx = MAX_VEL_X;
+                    }
 				} else if(KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
 					this.velx -= this.Xspeed;
+					goingLeft = 1;
 					if(this.velx < -MAX_VEL_X) {
 					    this.velx = -MAX_VEL_X;
 					}
@@ -204,34 +199,58 @@
 	    
 	    private function updateStatus():void {
 	        if(myStatus != previousStatus) { // if our status has changed
-
 			    switch(myStatus) { // enable/disable abilities
 
     			    case 'STANDING':
                         walkEnabled = true;
                         jumpEnabled = true;
                         shootEnabled = true;
+                        setAction(WALK);
     			        break;
     			    case 'FALLING':
     			        walkEnabled = true;
     			        jumpEnabled = false;
     			        shootEnabled = false;
+    			        setAction(JUMP);
     			        break;
     			    case 'JUMPING':
     			        walkEnabled = true;
     			        jumpEnabled = false;
     			        shootEnabled = false;
+    			        setAction(JUMP);
     			        break;
     			    default:
     			        walkEnabled = true;
     			        jumpEnabled = true;
     			        shootEnabled = true;
     			        break;
-
     			}
 			}
 			previousStatus = myStatus; // record our previous status
+			//trace("status change");
 	    }
+	    
+	    public function setAction(action) {
+		    switch(action) {
+		        case WALK:
+		            loopRow = WALK;
+		            startFrame = 1;
+		            endFrame = 4;
+		            loopFrame = 1;
+		            loopType = 1;
+		            nowFrame = startFrame;
+		            break;
+		        case JUMP:
+		            loopRow = JUMP;
+		            startFrame = 1;
+		            endFrame = 2;
+		            loopFrame = 1;
+		            loopType = 1;
+		            nowFrame = startFrame;
+		            break;
+		    }
+		    frameCounter = speed;
+		}
 	    
 	    private function applyPhysics():void {
 		    
@@ -265,14 +284,16 @@
 		public function moveMe():void {
 		    
 		    if(frameCount >= frameDelay) { 
+		        readInput(); // read our keyboard input and apply what is valid
 		        this.y += vely; // update our y variable
     			this.x += velx; // update our x variable
 
     		    applyPhysics(); // apply our enviromental variables
+    		    notifyObservers(); // tell everybody where we are now
     		    updateStatus(); // update our status variable since physics update
-    		    readInput(); // read our keyboard input and apply what is valid
+    		    
                 animate();
-    			notifyObservers(); // tell everybody where we are now
+    			
     			frameCount = 0;
 		    } else {
 		        frameCount++;

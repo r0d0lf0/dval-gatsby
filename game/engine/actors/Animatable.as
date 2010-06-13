@@ -6,34 +6,39 @@
 	import flash.utils.ByteArray;
 	import flash.geom.Point;
 	import flash.events.Event;
+	import flash.utils.getDefinitionByName;
     
     // Generic class for a MapObject that is able to be animatable.  MapObject should be the first class, this second, then different
-    // moving blocks/heroes/baddies should extend this.
+    // moving blocks/aes/baddies should extend this.
     //
     // this will give animation methods to actors, so with basic commands like animate(start, end, loop/bounce/plannstop)
     
     public class Animatable extends Actor {
         
-        private var action:uint = 0;
-		private var frame:uint = 1;
-		// 1.
-		//HeroSkin is subclass of bitmapData. this loads the SpriteSheet into memory
-		//private var animData:HeroSkin = new HeroSkin(0,0);
-		//private var weaponData:WeaponSkins = new WeaponSkins(0,0);
-		// 2.
-		//create bitmap with transparent canvas. This is what we see.
-		private var displayData:BitmapData = new BitmapData(32,32,true,0x00000000);
-		private var display:Bitmap = new Bitmap(displayData);
-		// 3.
-		//copy the selected area of the spriteSheet to our display bitmap
-		private var tile:uint = 32; // select size
-		public var aPos:int = 0;	// postion or frame of current anim
-		private var aStat:int = 0;  // State of hero, chooses which anim to play
-		private var aMax:int = 2;   // maximum anim frames in that state. (for loop terminator)private var heroPaste:Rectangle = new Rectangle(0,0,tile,tile); //paste
+        protected var action:uint = 0;
+		protected var frame:uint = 0;
+		public var count:int = 0; //the every nth frame
+		public var tile:uint = 16; // select size
+		public var tilesWide = 2;
+		public var tilesTall = 2;
+		public var horzT:int = 1;
+		public var vertT:int = 1;
+		public var aMax:int = 6;   // maximum anim frames in that state. (for loop terminator)public var aPaste:Rectangle = new Rectangle(0,0,tile,tile); //paste
 		//when we animate, we only have to update our copy rectangle.
-		private var animCopy:Rectangle = new Rectangle(aPos*tile,aStat*tile,tile,tile); //copy
+		public var aBytes:ByteArray; // the pixels in the heroDisplay
+		public var animData:BitmapData;
+		public var display:Bitmap;
+		public var displayData:BitmapData;
+		public var aCopy:Rectangle;
+		public var aPaste:Rectangle;
 		//
-		//private var animBytes:ByteArray = animData.getPixels(animCopy); // the pixels in the heroDisplay
+		//public var aBytes:ByteArray = animData.getPixels(animCopy); // the pixels in the aDisplay
+        
+        private var startFrame:uint = 0;
+        private var endFrame:uint = 0;
+        private var nowFrame:uint = 0;
+        private var loopType = 0; // 0 loops, 1 bounces
+        private var speed = 1;
         
     
 		public function Animatable():void{
@@ -45,119 +50,74 @@
 			//if our playhead is greater than the anim cycle:
 			//set to beginnign of loop
 			if(len>=0){
-				if(this.aPos>= len){
-					this.aPos = rep;
+				if(this.frame>= len){
+					this.frame = rep;
 				}
 			}
 		}//end animate
 		
+		//handles loading textures in the library
+		public function setSkin(tex:String,w:int,h:int):void {
+			
+			horzT = w;
+			vertT = h;
+			
+			var ClassReference:Class = getDefinitionByName(tex) as Class;
+			animData = new ClassReference(0,0);
+			displayData = new BitmapData(tile*w,tile*h,true,0x00000000);
+			aCopy = new Rectangle(frame*tile*w,action*tile*h,tile*w,tile*h); //copy
+			aPaste = new Rectangle(0,0,tile*w,tile*h); //paste
+			
+			
+			aBytes = animData.getPixels(aCopy);
+			//reset array pointer (necessary so we can read array from beginning)
+			aBytes.position = 0;
+			displayData.setPixels(aPaste,aBytes);
+			//adjust bitmap positio in sprite
+			display = new Bitmap(displayData);
+			display.y = -32;
+			display.x = -8;
+			//plop it on stage for all to see
+			this.addChild(display);
+			//return wClass;
+		}
+		
 		//status is which anim we are playing
 		public function setStatus(status:int):void{
-			this.aStat = status;
+			this.action = status;
 		}
+		
 		//number of pixels to advance each tile
 		public function setTile(size:int=16):void{
 			this.tile = size;
 		}
+		
 		public function animate(act:String = null):void{
-				/*****************************************************/
-				//TODO: have actions also check for aMax;
-				//it gets set, but never used
-				/****************************************************/
-				//if the player is dormant
-				/*if(act == null){
-					aPos++;
-				}else
-				if(act == 'duck'){
-					aMax = 2;
-					if(ldir){
-						//trace('ducking right');
-						aStat = 4;
-					}else{
-						//trace('ducking left');
-						aStat = 5;
-					}
-					//slow anim
-					if(!(frame % 2)){
-						aPos++;
-					}
-					//if not animating, start animating
-					if(!(frame % 4)){
-						frame = 0;
-						aPos = 2;
-					}
-				}else
-				if(act == 'throw'){
-					aMax = 2;
-					aFlag = true;
-					if(ldir){
-						//trace('throwing right');
-						aStat = 6;
-					}else{
-						//trace('throwing left');
-						aStat = 7;
-					}
-					//slow anim
-					if(!(frame % 2)){
-						aPos++;
-					}
-					//if not animating, start animating
-					if(!(frame % 4)){
-					//useWeapon();
-						frame = 0;
-						aPos = 1;
-					}
-				}else
-				if(act == 'fall'){
-					aMax = 3
-					frame = 0;
-					if(ldir){
-						//trace('falling right');
-						aStat = 2;
-						aPos = 2;
-					}else{
-						//trace('falling left');
-						aStat = 3;
-						aPos = 2;
-					}
-				}else
-				if(act == 'walk'){
-					aMax = 6;
-					if(ldir){
-						//trace('walking right');
-						aStat = 0;
-					}else{
-						//trace('walking left');
-						aStat = 1;
-					}
-					//if not animating, start animating
-					if(!(frame % 16)){
-						frame = 1;
-						aPos = 1;
-						//aFlag = false;
-					}
-					//slow anim
-					if(!(frame % 4)){
-						//trace('step');
-						aPos++;
-					}
-				}else
-				if(act == 'stand'){
-					frame = 0;
-					aPos = 0;
-				}
-				if(aPos >= aMax){
-					aPos = aMax;
-					aFlag = false;
-				}
-				
-				//advance the 'copy' rectangle
-				//and update bitmap with new data
-				frame++;
-				heroCopy = new Rectangle(aPos*tile,aStat*tile,tile,tile);
-				heroBytes = animData.getPixels(heroCopy);
-				heroBytes.position = 0;
-				displayData.setPixels(heroPaste,heroBytes);*/
+			//trace(frame);
+			if(frame*tile >= aMax*tile){
+				frame = 1;
 			}
+			aCopy = new Rectangle(frame*tile*horzT,action*tile*vertT,tile*horzT,tile*vertT); //copy
+			//trace('copy:  '+aCopy);
+			aBytes = animData.getPixels(aCopy);
+			//reset array pointer (necessary so we can read array from beginning)
+			aBytes.position = 0;
+			displayData.setPixels(aPaste,aBytes);
+			frame++;
+		}
+		
+		public function updateAnimation():void {
+		    
+		}
+		
+		public function getRectangle(x, y) {
+		    var xPos = x * tile;
+		    var yPos = y * tile;
+		    return new Rectangle(xPos, xPos + (tile * tilesWide), yPos, yPos + (tile * tilesTall));
+		}
+		/*
+		public function setLoop(startFrame, endFrame, speed, type) {
+		    
+		}*/
 	}//end class
 }//end package

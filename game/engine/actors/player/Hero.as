@@ -34,7 +34,7 @@
 		
 		public var Xspeed:Number = 2;
 		
-		private var frameDelay:Number = 1; // number of frames 
+		private var frameDelay:Number = 0; // number of frames 
 		private var frameCount:Number = 0; // current frame count
 		
 		//

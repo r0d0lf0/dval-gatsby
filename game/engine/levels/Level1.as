@@ -25,12 +25,11 @@
 	    private var myTransform:SoundTransform;
 	    
 		public function Level1():void{
-		    mapList = new Array('Level1_Map1', 'Level1_Map2', 'Level1_Map3'); // use this later for dylan-style level loading by converting strings to classes
+		    mapList = new Array('level1_map1', 'level1_map2', 'level1_map3'); // use this later for dylan-style level loading by converting strings to classes
 			currentScreen = new LevelStart(); // we're just starting, so create a LevelStart screen
 			currentScreen.setLevelName(levelName);  // give it our level name
 			currentScreen.setLevelNumber(levelNumber); // and our level number
 			addChild(currentScreen); // and attach it to the stage
-			//startMusic();
 		}
 		
 		public override function update():Boolean {
@@ -38,10 +37,12 @@
 		        switch(currentScreen.getStatus()) {
 		            case 'COMPLETE': // if our map returned COMPLETE
 		                currentMapIndex++; // increment the current map index
-		                if(currentMapIndex < mapList.length) { // and if we haven't finished the last map
+		                if(currentMapIndex == 1) {
+		                    startMusic();
+		                }
+		                if(currentMapIndex < (mapList.length + 1)) { // and if we haven't finished the last map
 		                    removeChild(currentScreen); // remove the current map
 		                    currentScreen = getMap(currentMapIndex);  // get the next one
-		                    
 		                    addChild(scoreboardDisplay); // add the scoreboard
                             addChild(currentScreen); // add the new child
                             currentScreen.y += scoreboardDisplay.height; // move the screen down so that it doesn't cover the scoreboard
@@ -53,7 +54,8 @@
 		                break;
 		            case 'HERO DEAD': // if the map returns HERO DEAD
 		                setStatus('HERO DEAD');  // set the level exit status to HERO DEAD
-		                trace("Hero dead.");
+		                trace("Hero dead."); // debug that the hero died
+		                stopMusic(); // stop our music
 		                return false; // and return false to the Engine
 		                break;
 		        }
@@ -78,9 +80,9 @@
 		        case 1:
 		            return new level1_map1();
 		        case 2:
-		            return new level1_map1();
+		            return new level1_map2();
 		        case 3:
-		            return new level1_map1();
+		            return new level1_map3();
 		    }
 		    return false;
 		}

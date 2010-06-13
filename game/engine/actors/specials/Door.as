@@ -1,17 +1,24 @@
-﻿package engine.actors{
+﻿package engine.actors.specials {
 	
 	import engine.actors.MapObject;
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
 	import flash.utils.getDefinitionByName; //sometime, the things we learn...
 	import controls.KeyMap;
+	import engine.IObserver;
+	import engine.ISubject;
+	import engine.actors.Actor;
+	import engine.actors.player.Hero;
 
-	dynamic public class Door extends MapObject{
+	dynamic public class Door extends Actor implements IObserver, ISubject {
 		
-		public function Door(w=1,h=1,tex = null):void{
-			super(w,h,tex);
+		private var observers:Array = new Array();
+		
+		public function Door():void{
+			super();
 		}
-		public override function behave(smackData:Object,characterObject:*):void{
+		
+		public function behave(smackData:Object,characterObject:*):void{
 			
 			var dx = smackData.dx;
 			var ox = smackData.ox;
@@ -29,6 +36,35 @@
 					parent['game'].newLevel(DisplayObject(levelToLoad),new Point(16,100),new Point(0,0));
 				}
 			}
+		}
+		
+		public function notify(subject:*):void {
+		    if(subject is Hero) {
+		        if(subject.y >= this.y && subject.y <= (this.y+this.height)) {
+    		        if(subject.x >= this.x && subject.x <= (this.x+this.width)) {
+    		            notifyObservers();
+    		        }
+    		    }
+		    }
+		}
+		
+		public function addObserver(observer):void {
+		    observers.push(observer);
+		}
+		
+		public function removeObserver(observer):void {
+		    for (var ob:int=0; ob<observers.length; ob++) {
+                if(observers[ob] == observer) {
+                    observers.splice (ob,1); break;
+                    break;
+                }
+            }
+		}
+		
+		public function notifyObservers():void {
+		    for(var ob=0; ob<observers.length; ob++) {
+		        observers[ob].notify(this);
+		    }
 		}
 	}
 }

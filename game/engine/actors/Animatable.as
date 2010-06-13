@@ -15,6 +15,14 @@
     
     public class Animatable extends Actor {
         
+        // Define some constants for rows on our sprite sheets, rows come in pairs
+        // so that sprites can be reversed to walk left
+        public static const WALK = 0;  // walk row is always 0, walk left is 
+        public static const JUMP = 2;
+        public static const DUCK = 4;
+        public static const THROW =6;
+        public static const DIE = 8;
+        
         protected var action:uint = 0;
 		protected var frame:uint = 0;
 		public var count:int = 0; //the every nth frame
@@ -34,11 +42,16 @@
 		//
 		//public var aBytes:ByteArray = animData.getPixels(animCopy); // the pixels in the aDisplay
         
-        private var startFrame:uint = 0;
-        private var endFrame:uint = 0;
-        private var nowFrame:uint = 0;
-        private var loopType = 0; // 0 loops, 1 bounces
-        private var speed = 1;
+        protected var startFrame:uint = 1; // the first frame to loop on
+        protected var endFrame:uint = 4; // the final frame in the row
+        protected var nowFrame:uint = 0; // current frame in row
+        protected var loopFrame = 2; // frame at which to loop
+        protected var loopType = 1; // 0 loops, 1 bounces
+        protected var loopRow = 0; // which row are we on
+        protected var loopDir = 1; // loop forward (to the right) by default
+        protected var speed = 5; // how many frames should go by before we advance
+        protected var frameCounter = 0;
+        protected var goingLeft = 0;
         
     
 		public function Animatable():void{
@@ -46,7 +59,7 @@
 		}
 		//Animatable assumes that there is a sprite sheet to be animated
 		//length of teh animatio, frame to loop at 
-		public function setLoop(len:int=-1,rep:int = 0):void{
+		/*public function setLoop(len:int=-1,rep:int = 0):void{
 			//if our playhead is greater than the anim cycle:
 			//set to beginnign of loop
 			if(len>=0){
@@ -54,7 +67,7 @@
 					this.frame = rep;
 				}
 			}
-		}//end animate
+		}//end animate*/
 		
 		//handles loading textures in the library
 		public function setSkin(tex:String,w:int,h:int):void {
@@ -93,31 +106,54 @@
 		}
 		
 		public function animate(act:String = null):void{
-			//trace(frame);
-			if(frame*tile >= aMax*tile){
-				frame = 1;
-			}
-			aCopy = new Rectangle(frame*tile*horzT,action*tile*vertT,tile*horzT,tile*vertT); //copy
-			//trace('copy:  '+aCopy);
-			aBytes = animData.getPixels(aCopy);
-			//reset array pointer (necessary so we can read array from beginning)
-			aBytes.position = 0;
-			displayData.setPixels(aPaste,aBytes);
-			frame++;
+			if(frameCounter < speed) {
+			    frameCounter++;
+			} else {
+			    frameCounter = 0;
+			    aCopy = getNextFrame();
+			    aBytes = animData.getPixels(aCopy);
+    			//reset array pointer (necessary so we can read array from beginning)
+    			aBytes.position = 0;
+    			displayData.setPixels(aPaste,aBytes);
+			}            
 		}
 		
-		public function updateAnimation():void {
-		    
+		private function getNextFrame() {
+		    if(loopType == 0) { // if were looping in a circle
+		        nowFrame++; // increment our frame
+		        if(nowFrame > endFrame) { // if we're past the end frame
+		            nowFrame = loopFrame; // nowFrame = the frame to loop back to
+		        }
+		    } else if(loopType == 1) { // if we're bouncing
+		        if(loopDir) { // and we're going to the right
+		            nowFrame++; // increment our frame
+		            if(nowFrame > endFrame) { // and we're at the last frame
+		               nowFrame = endFrame - 1; // go one frame backwards 
+		               loopDir = 0; // and set our loop direction to reverse
+		            }
+		        } else { // if we're going in reverse
+		            nowFrame--; // decrement our current frame
+		            if(nowFrame < loopFrame) { // if we're past the loop frame
+		                nowFrame = loopFrame + 1; // put us in the right spot
+		                loopDir = 1; // and change our loop direction
+		            }
+		        }
+		    }
+		    return getRectangle(loopRow + goingLeft, nowFrame);
 		}
 		
-		public function getRectangle(x, y) {
-		    var xPos = x * tile;
-		    var yPos = y * tile;
-		    return new Rectangle(xPos, xPos + (tile * tilesWide), yPos, yPos + (tile * tilesTall));
+		public function getRectangle(row, frame) {
+		    var xPos = frame * tile * tilesWide;  // calculate our tile's x position
+		    var yPos = row * tile * tilesTall; // and its y position
+		    return new Rectangle(xPos, yPos, tile * tilesWide, tile * tilesTall);  // and get a rectangle the right size and position
 		}
-		/*
-		public function setLoop(startFrame, endFrame, speed, type) {
-		    
-		}*/
+		
+		public function setLoop(startFrame, endFrame, loopFrame, speed, loopType) {
+		    this.startFrame = startFrame;
+		    this.endFrame = endFrame;
+		    this.loopFrame = loopFrame;
+		    this.speed = speed;
+		    this.loopType = loopType;
+		}
 	}//end class
 }//end package

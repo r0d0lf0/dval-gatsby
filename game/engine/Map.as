@@ -6,6 +6,8 @@
     import engine.actors.enemies.Enemy;
     import engine.IObserver;
     import engine.Scoreboard;
+    import engine.actors.geoms.*;
+    import engine.actors.specials.*;
     
 	dynamic public class Map extends MovieClip implements IObserver, ISubject {
 		
@@ -60,6 +62,8 @@
 				    observerArray.push(myChild);
 				    if(myChild is Cloud) {
 				        myChild.alpha = 0;
+				    } if(myChild is Door) {
+				        myChild.alpha = 0;
 				    }
 				}
 				objectArray.push(this.getChildAt(n));
@@ -70,7 +74,9 @@
 			        for(var i=0; i<observerArray.length; i++) {
 			            subjectArray[s].addObserver(observerArray[i]);
 			        }
-			        subjectArray[s].addObserver(this);
+			        if(subjectArray[s] is Hero) {
+			            subjectArray[s].addObserver(this);
+			        }
 			    }
 			
 			
@@ -100,6 +106,8 @@
 		    } else if(this.x > 0) {
 		        this.x = 0;
 		    }
+		    this.x += 1;
+		    this.x -= 1;
 		}
 		
 		public function getHeroHP():Number {
@@ -113,8 +121,8 @@
 		            heroHP = subject.getHP(); // reset our holder for HP
 		            notifyObservers(); // and tell the level about it
 		        }
-		    } else if(subject is Enemy) {
-		        
+		    } else if(subject is Door) {
+		        status = 'COMPLETE';
 		    }
 		}
 		
@@ -144,7 +152,11 @@
 		public function update():Boolean {
 		    updateSubjects();
 		    if(heroHP) {
-		        return true;
+		        if(status == 'COMPLETE') {
+		            return false;
+		        } else {
+		            return true;
+		        }
 		    } else {
 		        status = 'HERO DEAD';
 		        return false;

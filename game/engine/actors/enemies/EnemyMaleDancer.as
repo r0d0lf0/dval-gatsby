@@ -6,17 +6,17 @@ package engine.actors.enemies {
     import engine.actors.geoms.*;
     import flash.events.Event;
     
-    public class EnemyWaiter extends EnemyWalker implements ISubject, IObserver {
+    public class EnemyMaleDancer extends EnemyWalker implements ISubject, IObserver {
         
         private var observers:Array = new Array();
-        private var walkSpeed:Number = 1;
+        private var walkSpeed:Number = 2;
         
         private var frameCount:int = 0;
         private var frameDelay:int = 0;
         
         private var groundCollide:Boolean;
         
-        public function EnemyWaiter() {
+        public function EnemyMaleDancer() {
 			if (stage != null) {
 				setup();
 			} else {
@@ -30,9 +30,9 @@ package engine.actors.enemies {
 		}
 		
 		private function setup() {
-		    setSkin('WaiterSkin',2,2);
-		    setLoop(0, 1, 0, 5, 0);
-		    trace("Waiter setup.");
+		    setSkin('MaleDancerSkin',2,2);
+		    setLoop(1, 3, 1, 5, 1);
+		    trace("Dancer setup.");
 		}
         
         public function addObserver(observer):void {
@@ -74,17 +74,13 @@ package engine.actors.enemies {
 		    if(frameCount >= frameDelay) {
 		        this.x += walkSpeed;
 		        frameCount = 0;
-		        notifyObservers();
-    		    if(!groundCollide) {
-    		        walkSpeed *= -1;
-    		        if(walkSpeed > 0) {
-    		            goingLeft = 0;
-    		        } else {
-    		            goingLeft = 1;
-    		        }
-    		    }
 		    } else {
 		        frameCount++;
+		    }
+		    
+		    notifyObservers();
+		    if(!groundCollide) {
+		        walkSpeed *= -1;
 		    }
 		}
         

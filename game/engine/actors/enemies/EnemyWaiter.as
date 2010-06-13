@@ -3,14 +3,17 @@ package engine.actors.enemies {
     import engine.IObserver;
     import engine.ISubject;
     import engine.actors.player.Hero;
+    import engine.actors.geoms.*;
     
     public class EnemyWaiter extends EnemyWalker implements ISubject, IObserver {
         
         private var observers:Array = new Array();
-        private var speed:Number = -1;
+        private var speed:Number = 1;
         
         private var frameCount:int = 0;
-        private var frameDelay:int = 2;
+        private var frameDelay:int = 0;
+        
+        private var groundCollide:Boolean;
         
         public function EnemyWaiter() {
             super();
@@ -36,14 +39,21 @@ package engine.actors.enemies {
 		}
 		
 		override public function notify(subject):void {
-		    if(subject is Hero) {
-		        if(checkCollision(subject)) {
-		            subject.receiveDamage(1);
-		        }
+		    if(checkCollision(subject)) {
+                subject.receiveDamage(1);
+            }
+		}
+		
+		public function collide(subject) {
+		    if(subject is Cloud) {
+		        if(!groundCollide) {
+    		        groundCollide = true;
+    		    }
 		    }
 		}
 		
 		override public function update():void {
+		    groundCollide = false;
 		    if(frameCount >= frameDelay) {
 		        this.x += speed;
 		        frameCount = 0;
@@ -51,10 +61,10 @@ package engine.actors.enemies {
 		        frameCount++;
 		    }
 		    
-		    if(x < 0) {
-		        speed = 1;
+		    notifyObservers();
+		    if(!groundCollide) {
+		        speed *= -1;
 		    }
-		    
 		}
         
     }

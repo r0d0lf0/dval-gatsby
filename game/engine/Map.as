@@ -74,9 +74,7 @@
 			        for(var i=0; i<observerArray.length; i++) {
 			            subjectArray[s].addObserver(observerArray[i]);
 			        }
-			        if(subjectArray[s] is Hero) {
 			            subjectArray[s].addObserver(this);
-			        }
 			    }
 			
 			

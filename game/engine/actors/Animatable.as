@@ -15,13 +15,14 @@
     
     public class Animatable extends Actor {
         
-        // Define some constants for rows on our sprite sheets, rows come in pairs
-        // so that sprites can be reversed to walk left
-        public static const WALK = 0;  // walk row is always 0, walk left is 
-        public static const JUMP = 2;
-        public static const DUCK = 4;
-        public static const THROW =6;
-        public static const DIE = 8;
+        // Define some constants for our sprite sheets
+        public static const STAND:uint = 0;
+        public static const WALK:uint = 1;
+        public static const JUMP:uint = 2;
+        public static const FALL:uint = 3;
+        public static const DUCK:uint = 4;
+        public static const THROW:uint = 5;
+        public static const DIE:uint = 6;
         
         protected var action:uint = 0;
 		protected var frame:uint = 0;
@@ -42,10 +43,10 @@
 		//
 		//public var aBytes:ByteArray = animData.getPixels(animCopy); // the pixels in the aDisplay
         
-        protected var startFrame:uint = 1; // the first frame to loop on
-        protected var endFrame:uint = 4; // the final frame in the row
+        protected var startFrame:uint = 0; // the first frame to loop on
+        protected var endFrame:uint = 0; // the final frame in the row
         protected var nowFrame:uint = 0; // current frame in row
-        protected var loopFrame = 2; // frame at which to loop
+        protected var loopFrame = 0; // frame at which to loop
         protected var loopType = 1; // 0 loops, 1 bounces
         protected var loopRow = 0; // which row are we on
         protected var loopDir = 1; // loop forward (to the right) by default
@@ -98,6 +99,7 @@
 		//status is which anim we are playing
 		public function setStatus(status:int):void{
 			this.action = status;
+			//nowFrame = 0;
 		}
 		
 		//number of pixels to advance each tile
@@ -110,15 +112,20 @@
 			    frameCounter++;
 			} else {
 			    frameCounter = 0;
-			    aCopy = getNextFrame();
+			    aCopy = getCurrentFrame();
 			    aBytes = animData.getPixels(aCopy);
     			//reset array pointer (necessary so we can read array from beginning)
     			aBytes.position = 0;
     			displayData.setPixels(aPaste,aBytes);
+                incrementFrame();
 			}            
 		}
 		
-		private function getNextFrame() {
+		private function getCurrentFrame() {
+		    return getRectangle(loopRow + goingLeft, nowFrame);
+		}
+		
+		private function incrementFrame() {
 		    if(loopType == 0) { // if were looping in a circle
 		        nowFrame++; // increment our frame
 		        if(nowFrame > endFrame) { // if we're past the end frame
@@ -139,7 +146,12 @@
 		            }
 		        }
 		    }
-		    return getRectangle(loopRow + goingLeft, nowFrame);
+		    if(nowFrame < 0) {
+		        nowFrame = 0;
+		    }
+		    if(nowFrame > 5) {
+		        nowFrame = 5;
+		    }
 		}
 		
 		public function getRectangle(row, frame) {
@@ -148,12 +160,14 @@
 		    return new Rectangle(xPos, yPos, tile * tilesWide, tile * tilesTall);  // and get a rectangle the right size and position
 		}
 		
-		public function setLoop(startFrame, endFrame, loopFrame, speed, loopType) {
+		public function setLoop(loopRow, startFrame, endFrame, loopFrame, loopType, speed = 5) {
+		    this.loopRow = loopRow;
 		    this.startFrame = startFrame;
 		    this.endFrame = endFrame;
 		    this.loopFrame = loopFrame;
 		    this.speed = speed;
 		    this.loopType = loopType;
 		}
+		
 	}//end class
 }//end package

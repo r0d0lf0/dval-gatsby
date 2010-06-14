@@ -56,8 +56,8 @@
 		public var ihit:Boolean = false; // On|Off any object = true|false (smack a wall, hit by baddy)
 		public var ldir:Boolean = true;  // Right|Left = true|false (last direction player went)
 		private var keys:KeyMap = new KeyMap();
-		private var myStatus:String = 'STANDING';
-		private var previousStatus:String = 'STANDING';
+		private var myAction:uint = 0;
+		private var previousAction;
 		private var colliders:Array = new Array();  // temporary storage for all our colliders
 		
 		private var keyboardStatus:Array = new Array();
@@ -148,10 +148,9 @@
 		
 		public function collide(observer, ...args) {
 		    if(observer is Cloud) {
-		        if(myStatus == 'FALLING') {
+		        if(myAction == FALL) {
 		            this.vely = 0;
     		        this.y = observer.y;
-    		        myStatus = 'STANDING';
 		        }
 		    } else if(observer is Door) {
 		        trace("Door collision!");
@@ -198,68 +197,49 @@
 	    }
 	    
 	    private function updateStatus():void {
-	        if(myStatus != previousStatus) { // if our status has changed
-			    switch(myStatus) { // enable/disable abilities
-
-    			    case 'STANDING':
-                        walkEnabled = true;
-                        jumpEnabled = true;
-                        shootEnabled = true;
-                        setAction(WALK);
-    			        break;
-    			    case 'FALLING':
-    			        walkEnabled = true;
-    			        jumpEnabled = false;
-    			        shootEnabled = false;
-    			        setAction(JUMP);
-    			        break;
-    			    case 'JUMPING':
-    			        walkEnabled = true;
-    			        jumpEnabled = false;
-    			        shootEnabled = false;
-    			        setAction(JUMP);
-    			        break;
-    			    default:
-    			        walkEnabled = true;
-    			        jumpEnabled = true;
-    			        shootEnabled = true;
-    			        break;
-    			}
-			}
-			previousStatus = myStatus; // record our previous status
-			//trace("status change");
+	        // set our status
+			if(vely < 0) {
+			    setAction(JUMP);
+			} else if(vely > 0) {
+			    setAction(FALL);
+			} else if(velx == 0) {
+		        setAction(STAND);
+		    } else {
+		        setAction(WALK);
+		    }
 	    }
 	    
-	    public function setAction(action) {
-		    switch(action) {
-		        case WALK:
-		            loopRow = WALK;
-		            startFrame = 1;
-		            endFrame = 4;
-		            loopFrame = 1;
-		            loopType = 1;
-		            nowFrame = startFrame;
-		            break;
-		        case JUMP:
-		            loopRow = JUMP;
-		            startFrame = 1;
-		            endFrame = 2;
-		            loopFrame = 1;
-		            loopType = 1;
-		            nowFrame = startFrame;
-		            break;
-		    }
-		    frameCounter = speed;
+	    public function setAction(myAction) {
+	        if(this.myAction != myAction) {
+	            trace("Action changed from " + this.myAction + " to " + myAction);
+	            this.myAction = myAction;
+    		    switch(myAction) {
+    		        case WALK:
+    		            setLoop(0, 0, 3, 1, 1);
+    		            break;
+    		        case JUMP:
+    		            setLoop(2, 0, 1, 1, 1);
+    		            break;
+    		        case STAND:
+    		            setLoop(0, 5, 5, 5, 1);
+    		            break;
+    		        case FALL:
+    		            setLoop(2, 1, 1, 1, 1);
+    		            break;
+    		        case DUCK:
+    		            setLoop(4, 0, 1, 1, 1);
+    		            break;
+    		        case THROW:
+    		            setLoop(6, 0, 1, 1, 1);
+    		            break;
+    		        case DIE:
+    		            setLoop(8, 0, 1, 0, 0);
+    		            break;
+    		    }
+	        }
 		}
 	    
 	    private function applyPhysics():void {
-		    
-		    // set our status
-			if(vely < 0) {
-			    myStatus = 'JUMPING';
-			} else if(vely > 0) {
-			    myStatus = 'FALLING';
-			}
 
 		    // velocitize y (gravity)
 			if (this.vely < MAX_VEL_Y) {
@@ -284,15 +264,17 @@
 		public function moveMe():void {
 		    
 		    if(frameCount >= frameDelay) { 
+		        
 		        readInput(); // read our keyboard input and apply what is valid
 		        this.y += vely; // update our y variable
     			this.x += velx; // update our x variable
-
+    			
+    			updateStatus(); // update our status variable since physics update
     		    applyPhysics(); // apply our enviromental variables
     		    notifyObservers(); // tell everybody where we are now
-    		    updateStatus(); // update our status variable since physics update
-    		    
-                animate();
+
+                animate(); // animate, now that we know what we're doing
+                
     			
     			frameCount = 0;
 		    } else {

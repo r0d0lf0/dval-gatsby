@@ -118,6 +118,7 @@
 		        if(heroHP != subject.getHP()) { // if our hero's HP has changed
 		            heroHP = subject.getHP(); // reset our holder for HP
 		            notifyObservers(); // and tell the level about it
+		            trace("LIFE LOST");
 		        }
 		    } else if(subject is Door) {
 		        status = 'COMPLETE';

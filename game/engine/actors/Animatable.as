@@ -167,6 +167,9 @@
 		    this.loopFrame = loopFrame;
 		    this.speed = speed;
 		    this.loopType = loopType;
+		    nowFrame = startFrame;
+		    frameCounter = speed;
+		    animate();
 		}
 		
 	}//end class

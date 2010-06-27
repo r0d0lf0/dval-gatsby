@@ -31,7 +31,7 @@ package engine.actors.enemies {
 		
 		private function setup() {
 		    setSkin('WaiterSkin',2,2);
-		    setLoop(0, 0, 1, 0, 5, 0);
+		    setLoop(0, 0, 1, 0, 0);
 		    trace("Waiter setup.");
 		}
         

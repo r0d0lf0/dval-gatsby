@@ -27,7 +27,7 @@
 	    
 	    // these hold what things we can currently do
 	    private var walkEnabled = true;
-	    private var jumpEnabled = true;
+	    private var jumpEnabled = false;
 	    private var shootEnabled = true;
 	    
 		//CHANGE THESE
@@ -56,7 +56,7 @@
 		public var ihit:Boolean = false; // On|Off any object = true|false (smack a wall, hit by baddy)
 		public var ldir:Boolean = true;  // Right|Left = true|false (last direction player went)
 		private var keys:KeyMap = new KeyMap();
-		private var myAction:uint = 0;
+		private var myAction:uint = 3;
 		private var previousAction;
 		private var colliders:Array = new Array();  // temporary storage for all our colliders
 		
@@ -64,6 +64,9 @@
 		
 		private var jumpCount:Number = 0;
 		private var jumpPressed:Boolean = false;
+		private var attackFlag:Boolean = false;
+		private var duckFlag:Boolean = false;
+		private var standFlag:Boolean = false;
 		
 		private var jumpSound = new hero_jump();
 		private var hurtSound = new hero_hurt();
@@ -73,6 +76,12 @@
 		private var damageCounter = 0; // counter variable to see how long we've been damaged
 		private var damageDuration = 120; // number of frames to be invincible after damage
 		private var HP = 3; // number of health points
+		
+		private var frameStarted:Boolean = false;
+		private var statusSet:Boolean = false;
+		
+		private var newAction;
+		private var prevAction;
 		
 		private var scoreboard = Scoreboard.getInstance();
 		
@@ -148,9 +157,11 @@
 		
 		public function collide(observer, ...args) {
 		    if(observer is Cloud) {
-		        if(myAction == FALL) {
+		        if(myAction != JUMP && vely >= 0) {
 		            this.vely = 0;
     		        this.y = observer.y;
+    		        jumpCount = 0;
+    		        standFlag = true;
 		        }
 		    } else if(observer is Door) {
 		        trace("Door collision!");
@@ -177,74 +188,112 @@
 					    this.velx = -MAX_VEL_X;
 					}
 				}
+				if(myAction != FALL) {
+				    
+				}
 	        }
 	        
-	        if(jumpEnabled == true && jumpCount == 0) { // if we're allowed to jump
+	        if(jumpEnabled == true && jumpCount == 0 && jumpPressed == false) { // if we're allowed to jump
 	            if (KeyMap.keyMap[32] || KeyMap.keyMap[38]) {
 					// -speed breaks the moving platform buffer s well as still platforms.
 					effectsChannel = jumpSound.play(0);  // play it, looping 100 times
 					this.y -= gravity;
 					this.vely = -jumpVelocity;
 					jumpCount++;
+					jumpPressed = true;
 				}
 	        }
 	        
-	        
-	        if (!KeyMap.keyMap[32] && !KeyMap.keyMap[38]) {
-                jumpCount = 0;
+	        if(KeyMap.keyMap[32] || KeyMap.keyMap[38]) {
+	            jumpPressed = true;
+	        } else {
+	            jumpPressed = false;
 	        }
 	        
 	    }
 	    
 	    private function updateStatus():void {
-	        // set our status
-			if(vely < 0) {
-			    setAction(JUMP);
-			} else if(vely > 0) {
-			    setAction(FALL);
-			} else if(velx == 0) {
-		        setAction(STAND);
-		    } else {
-		        setAction(WALK);
-		    }
+            newAction = STAND;
+            if(vely < 0) {
+                newAction = JUMP; // if we're moving up, we can only be jumping, stop checking everything else
+            } else if(vely > 0) {
+                newAction = FALL;
+            } else if(vely == 0 && prevAction == JUMP) {
+                newAction = FALL;
+            } else { // if we aren't falling or jumping
+                if(Math.abs(velx) > 0) { // if we aren't jumping or falling, but we're moving horizontally
+                    newAction = WALK; // we're walking
+                } else { // if we're not walking, we could be doing other things
+                    if(attackFlag) { // if we've been told to attack
+                        // attack or something
+                    } else if(duckFlag) {
+                        // duck or something
+                    } else if(standFlag) {
+                        newAction = STAND;
+                    }
+                }
+            }
+            
+            
+            if(newAction != prevAction) {
+                trace("New Action = " + newAction);
+                setAction(newAction);
+                setAnimation(newAction);
+            }
+            prevAction = newAction;
 	    }
 	    
 	    public function setAction(myAction) {
-	        if(this.myAction != myAction) {
-	            trace("Action changed from " + this.myAction + " to " + myAction);
+	        if(this.myAction != myAction) { // if we're defining a new action
 	            this.myAction = myAction;
-    		    switch(myAction) {
-    		        case WALK:
-    		            setLoop(0, 0, 3, 1, 1);
-    		            break;
-    		        case JUMP:
-    		            setLoop(2, 0, 1, 1, 1);
-    		            break;
-    		        case STAND:
-    		            setLoop(0, 5, 5, 5, 1);
-    		            break;
-    		        case FALL:
-    		            setLoop(2, 1, 1, 1, 1);
-    		            break;
-    		        case DUCK:
-    		            setLoop(4, 0, 1, 1, 1);
-    		            break;
-    		        case THROW:
-    		            setLoop(6, 0, 1, 1, 1);
-    		            break;
-    		        case DIE:
-    		            setLoop(8, 0, 1, 0, 0);
-    		            break;
-    		    }
+	            if(myAction == JUMP || myAction == FALL) {
+	                walkEnabled = true;
+	                jumpEnabled = false;
+	                shootEnabled = true;
+	            } else if(myAction == STAND || myAction == WALK) {
+	                walkEnabled = true;
+	                jumpEnabled = true;
+	                shootEnabled = true;
+	            }
 	        }
+		}
+		
+		public function setAnimation(status) {
+			switch(myAction) {
+		        case WALK:
+		            setLoop(0, 1, 4, 2, 1);
+		            break;
+		        case JUMP:
+		            setLoop(2, 2, 2, 2, 0);
+		            break;
+		        case STAND:
+		            setLoop(0, 0, 0, 0, 0);
+		            break;
+		        case FALL:
+		            setLoop(2, 2, 2, 2, 0);
+		            break;
+		        case DUCK:
+		            setLoop(4, 0, 1, 1, 1);
+		            break;
+		        case THROW:
+		            setLoop(6, 0, 1, 1, 1);
+		            break;
+		        case DIE:
+		            setLoop(8, 0, 1, 0, 0);
+		            break;
+		    }
 		}
 	    
 	    private function applyPhysics():void {
 
 		    // velocitize y (gravity)
 			if (this.vely < MAX_VEL_Y) {
-				this.vely += this.gravity;
-			}
+			    if(standFlag) {
+			        standFlag = false;
+			    } else {
+			        this.vely += this.gravity;
+			    }
+            }
 			
 			// apply friction
 			if (this.velx > 0) {
@@ -258,25 +307,29 @@
 			    this.x = 0;
 			}
 			
-			
 		}
 		
 		public function moveMe():void {
 		    
 		    if(frameCount >= frameDelay) { 
-		        
+    			frameStarted = true;
+				statusSet = false;
+				
 		        readInput(); // read our keyboard input and apply what is valid
+
 		        this.y += vely; // update our y variable
     			this.x += velx; // update our x variable
     			
-    			updateStatus(); // update our status variable since physics update
-    		    applyPhysics(); // apply our enviromental variables
-    		    notifyObservers(); // tell everybody where we are now
-
-                animate(); // animate, now that we know what we're doing
-                
+    			notifyObservers(); // tell everybody where we are now
     			
+    			applyPhysics(); // apply our enviromental variables
+    			
+    			updateStatus(); // update our status
+
+				animate(); // animate, now that we know what we're doing
+				
     			frameCount = 0;
+				frameStarted = false;
 		    } else {
 		        frameCount++;
 		    }

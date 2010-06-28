@@ -56,6 +56,7 @@
 				    subjectArray.push(myChild);
 				    if(myChild is Hero) {
 				        myHero = myChild;
+				        myHero.setMap(this);
 				    }
 				}
 				if(myChild is IObserver) {
@@ -70,12 +71,12 @@
 			}
 			
 			
-			    for(var s=0; s<subjectArray.length; s++) {
-			        for(var i=0; i<observerArray.length; i++) {
-			            subjectArray[s].addObserver(observerArray[i]);
-			        }
-			            subjectArray[s].addObserver(this);
-			    }
+		    for(var s=0; s<subjectArray.length; s++) {
+		        for(var i=0; i<observerArray.length; i++) {
+		            subjectArray[s].addObserver(observerArray[i]); // subscribe all observers to our subject
+		        }
+		            subjectArray[s].addObserver(this); // and then subscribe the map itself
+		    }
 			
 			
 			//move to bottom screen of map
@@ -104,8 +105,8 @@
 		    } else if(this.x > 0) {
 		        this.x = 0;
 		    }
-		    this.x += 1;
-		    this.x -= 1;
+		    this.x += 1; // bizarre framerate fix
+		    this.x -= 1; // keeps things moving quickly on mac
 		}
 		
 		public function getHeroHP():Number {
@@ -123,6 +124,10 @@
 		    } else if(subject is Door) {
 		        status = 'COMPLETE';
 		    }
+		}
+		
+		public function removeFromMap(actor) {
+		    this.removeChild(actor);
 		}
 		
 		public function addObserver(observer):void {

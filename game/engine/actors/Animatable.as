@@ -89,11 +89,12 @@
 			displayData.setPixels(aPaste,aBytes);
 			//adjust bitmap positio in sprite
 			display = new Bitmap(displayData);
-			display.y = -32;
-			display.x = -8;
+			//display.y = -32;
+			//display.x = -8;
 			//plop it on stage for all to see
 			this.addChild(display);
-			//return wClass;
+		    this.y -= this.height;
+    		//return wClass;
 		}
 		
 		//status is which anim we are playing

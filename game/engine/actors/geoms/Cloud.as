@@ -4,6 +4,7 @@
 	import engine.actors.MapObject;
 	import engine.actors.Actor;
 	import engine.IObserver;
+	import engine.actors.specials.Door;
 
 	public class Cloud extends Actor implements IObserver {
 		
@@ -24,10 +25,14 @@
 		}
 		
 		public function notify(subject:*):void {
-		    if(subject.y >= this.y && subject.y <= (this.y+this.height)) {
-		        if(subject.x >= this.x && subject.x <= (this.x+this.width)) {
-		            subject.collide(this);
-		        }
+		    if(subject is Door) {
+		        
+		    } else {
+		        if((subject.y + subject.height) >= this.y && subject.y <= (this.y+this.height)) {
+    		        if((subject.x + (subject.width * .5)) >= this.x && (subject.x + (subject.width * .5)) <= (this.x+this.width)) {
+    		            subject.collide(this);
+    		        }
+    		    }
 		    }
 		}
 	}

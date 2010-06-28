@@ -65,8 +65,8 @@
 		}*/
 		
 		public function checkCollision(subject) {
-		    if(subject.y >= this.y && subject.y <= (this.y+this.height)) {
-		        if(subject.x >= this.x && subject.x <= (this.x+this.width)) {
+		    if((this.y + this.height) >= subject.y && this.y <= (subject.y + subject.height)) {
+		        if((this.x + this.width) >= subject.x && this.x <= (subject.x + subject.width)) {
 		            return true;
 		        }
 		    }

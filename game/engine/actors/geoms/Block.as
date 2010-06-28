@@ -11,7 +11,17 @@
 		}
 		
 		public function notify(subject:*):void {
-		    trace("I've been notified!");
+		    if(checkCollision(subject)) {
+		        subject.collide(this);
+		    }
+		}
+		
+		override public function checkCollision(subject) {
+		    if(subject.x + (subject.width * .75) > this.x && subject.x < this.x + this.width) {
+		        if((subject.y + subject.height) > this.y && subject.y < (this.y + this.height)) {
+		            return true;
+		        }
+		    }
 		}
 		
 		public function onHit(smackData:Object,characterObject:*):void{

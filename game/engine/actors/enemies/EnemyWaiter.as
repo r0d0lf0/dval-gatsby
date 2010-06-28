@@ -70,7 +70,7 @@ package engine.actors.enemies {
 		
 		override public function update():void {
 		    animate();
-		    groundCollide = false;
+		    
 		    if(frameCount >= frameDelay) {
 		        this.x += walkSpeed;
 		        frameCount = 0;
@@ -86,6 +86,7 @@ package engine.actors.enemies {
 		    } else {
 		        frameCount++;
 		    }
+		    groundCollide = false;
 		}
         
     }

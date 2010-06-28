@@ -70,15 +70,19 @@
 		
 		private var jumpSound = new hero_jump();
 		private var hurtSound = new hero_hurt();
+		private var powerupSound = new powerup_sound();
 		private var effectsChannel;
 		
 		private var damageFlag = false; // flag for if the hero has been damaged
 		private var damageCounter = 0; // counter variable to see how long we've been damaged
 		private var damageDuration = 120; // number of frames to be invincible after damage
-		private var HP = 3; // number of health points
+		
+		private var maxHP = 3; // max number of health points
+		private var HP = maxHP; // starting HP
 		
 		private var frameStarted:Boolean = false;
 		private var statusSet:Boolean = false;
+		private var map;
 		
 		private var newAction;
 		private var prevAction;
@@ -129,11 +133,25 @@
 		public function receiveDamage(damageAmount):void {
 		    if(!damageFlag) {
 		        HP -= damageAmount;
-		        scoreboard.addToScore(10);
 		        scoreboard.setHP(HP);
     		    damageFlag = true;
     		    effectsChannel = hurtSound.play(0);  // play it, looping 100 times
 		    }
+		}
+		
+		public function receivePowerup(powerup):void {
+		    if(powerup is HealthPowerup) {
+		        HP += powerup.health;
+		        if(HP > maxHP) {
+		            HP = maxHP;
+		        }
+    		    scoreboard.setHP(HP);
+		    } else if(powerup is ScorePowerup) {
+		        scoreboard.addToScore(powerup.points);
+		    }
+
+		    effectsChannel = powerupSound.play(0);
+		    map.removeFromMap(powerup);
 		}
 		
 		public function addObserver(observer):void {
@@ -159,17 +177,26 @@
 		    if(observer is Cloud) {
 		        if(myAction != JUMP && vely >= 0) {
 		            this.vely = 0;
-    		        this.y = observer.y;
+    		        this.y = observer.y - this.height;
     		        jumpCount = 0;
     		        standFlag = true;
 		        }
 		    } else if(observer is Door) {
 		        trace("Door collision!");
+		    } else if(observer is Block) {
+		        if(this.x + (this.width * .75) < observer.x + 3) { // if we're colliding from the right
+		            this.x = observer.x - (this.width * .75); // then stop us from moving
+		            velx = 0;
+		        }
 		    }
 		}
 		
 		public function getHP():Number {
 		    return HP;
+		}
+		
+		public function setMap(map) {
+		    this.map = map;
 		}
 	    
 	    private function readInput():void {

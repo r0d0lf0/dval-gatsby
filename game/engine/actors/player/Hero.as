@@ -68,10 +68,15 @@
 		private var duckFlag:Boolean = false;
 		private var standFlag:Boolean = false;
 		
+		public var collide_left:int = 10; // what pixel do we collide on on the left
+		public var collide_right:int = 22; // what pixel do we collide on on the right
+		
 		private var jumpSound = new hero_jump();
 		private var hurtSound = new hero_hurt();
 		private var powerupSound = new powerup_sound();
 		private var effectsChannel;
+		
+		private var stuckTo; // what surface are we currently stuck to
 		
 		private var damageFlag = false; // flag for if the hero has been damaged
 		private var damageCounter = 0; // counter variable to see how long we've been damaged
@@ -130,6 +135,10 @@
 			setSkin('HeroSkin',2,2);
 		}
 		
+		private function flipCollide(collide) {
+		    return this.width - collide;
+		}
+		
 		public function receiveDamage(damageAmount):void {
 		    if(!damageFlag) {
 		        HP -= damageAmount;
@@ -173,21 +182,66 @@
 		    }
 		}
 		
+		private function land(observer):void {
+		    this.vely = 0;
+	        this.y = observer.y - this.height;
+	        jumpCount = 0;
+	        standFlag = true;
+	        if(stuckTo != observer) {
+	            stuckTo = observer;
+    	        trace("landed!");
+	        }
+		}
+		
+		private function depart(observer):void {
+		    standFlag = false;
+		    stuckTo = false;
+		}
+		
+		private function checkRight(observer):Boolean {
+		    if((this.x + this.collide_left) < observer.x + observer.width) { // if we're collided with the square's right side currently
+		        if((this.x + this.collide_left) - this.velx >= observer.x + observer.width) { // and we hadn't collided in the previous frame
+		            return true;
+		        }
+		    }
+		    return false;
+		}
+		
+		private function checkLeft(observer):Boolean {
+		    if((this.x + this.collide_right) > observer.x) { // if we're collided with the block's left side currently
+		        if((this.x + this.collide_right) - this.velx <= observer.x) { // and we hadn't collided in the previous frame
+		            return true;
+		        }
+		    }
+		    return false;
+		}
+		
+		private function checkTop(observer):Boolean {
+		    if((this.y + this.height) > observer.y) { // if we're collided with the top currently
+		        if((this.y + this.height) - this.vely <= observer.y) { // and we hadn't collided in the previous frame
+		            return true;
+		        }
+		    }
+		    return false;
+		}
+		
 		public function collide(observer, ...args) {
 		    if(observer is Cloud) {
 		        if(myAction != JUMP && vely >= 0) {
-		            this.vely = 0;
-    		        this.y = observer.y - this.height;
-    		        jumpCount = 0;
-    		        standFlag = true;
+		            land(observer);
 		        }
 		    } else if(observer is Door) {
 		        trace("Door collision!");
 		    } else if(observer is Block) {
-		        if(this.x + (this.width * .75) < observer.x + 3) { // if we're colliding from the right
-		            this.x = observer.x - (this.width * .75); // then stop us from moving
-		            velx = 0;
-		        }
+                if(checkRight(observer)) {  // if we hit the right edge of the block
+	                this.x = (observer.x + observer.width) - collide_left; // set us to there
+	            } else if(checkLeft(observer)) { // if we hit the left edge of the block
+	                this.x = observer.x - collide_right; // stop us there
+	            } else if(myAction == FALL) { // if we just fell and collided
+    	             land(observer); // land us on the top
+	            } else if(observer == stuckTo) { // otherwise, if we're colliding with the thing we're stuck to
+	                land(observer); // continue to follow it
+	            }
 		    }
 		}
 		
@@ -240,28 +294,30 @@
 	    }
 	    
 	    private function updateStatus():void {
-            newAction = STAND;
-            if(vely < 0) {
-                newAction = JUMP; // if we're moving up, we can only be jumping, stop checking everything else
-            } else if(vely > 0) {
-                newAction = FALL;
-            } else if(vely == 0 && prevAction == JUMP) {
-                newAction = FALL;
-            } else { // if we aren't falling or jumping
-                if(Math.abs(velx) > 0) { // if we aren't jumping or falling, but we're moving horizontally
-                    newAction = WALK; // we're walking
-                } else { // if we're not walking, we could be doing other things
-                    if(attackFlag) { // if we've been told to attack
-                        // attack or something
-                    } else if(duckFlag) {
-                        // duck or something
-                    } else if(standFlag) {
-                        newAction = STAND;
-                    }
-                }
-            }
-            
-            
+	        newAction = STAND; // by default, we're standing
+	        
+	        if(standFlag) { // if we're standing on something
+	            if(!stuckTo.checkCollision(this)) { // and we're not standing there anymore
+	                if(vely < 0) { // and we're going up
+	                    newAction = JUMP; // we're jumping
+	                    depart(stuckTo); // depart from that platform	                    
+	                } else {
+	                    trace("something's wrong");
+	                }
+	            } else if(velx == 0) { // otherwise, if we're not moving
+	                newAction = STAND; // we're standing
+	                
+	            } else { // otherwise, we're walking
+	                newAction = WALK;
+	            }
+	        } else if(vely < 0) { // if we're going up
+	            newAction = JUMP; // we're jumping
+	        } else if(vely > 0) { // if we're going down
+	            newAction = FALL; // we're falling
+	        } else if(myAction == JUMP) { // otherwise, we just peaked in a jump
+	            newAction = FALL; // now we're falling
+	        }
+	        
             if(newAction != prevAction) {
                 trace("New Action = " + newAction);
                 setAction(newAction);
@@ -315,11 +371,7 @@
 
 		    // velocitize y (gravity)
 			if (this.vely < MAX_VEL_Y) {
-			    if(standFlag) {
-			        standFlag = false;
-			    } else {
-			        this.vely += this.gravity;
-			    }
+			    this.vely += this.gravity;
             }
 			
 			// apply friction

@@ -226,8 +226,8 @@
 		}
 		
 		public function collide(observer, ...args) {
-		    if(observer is Cloud) {
-		        if(myAction != JUMP && vely >= 0) {
+		    if(observer is Cloud || observer is Fountain) {
+		        if(checkTop(observer) || observer == stuckTo) {
 		            land(observer);
 		        }
 		    } else if(observer is Door) {
@@ -299,11 +299,12 @@
 	        if(standFlag) { // if we're standing on something
 	            if(!stuckTo.checkCollision(this)) { // and we're not standing there anymore
 	                if(vely < 0) { // and we're going up
-	                    newAction = JUMP; // we're jumping
-	                    depart(stuckTo); // depart from that platform	                    
+	                    newAction = JUMP; // we're jumping                
 	                } else {
-	                    trace("something's wrong");
-	                }
+	                    newAction = FALL; // otherwise we're falling
+	                    
+	                } 
+	                depart(stuckTo); // depart whatever platform we were on
 	            } else if(velx == 0) { // otherwise, if we're not moving
 	                newAction = STAND; // we're standing
 	                

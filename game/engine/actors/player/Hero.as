@@ -189,13 +189,13 @@
 	        standFlag = true;
 	        if(stuckTo != observer) {
 	            stuckTo = observer;
-    	        trace("landed!");
 	        }
 		}
 		
 		private function depart(observer):void {
 		    standFlag = false;
 		    stuckTo = false;
+		    trace("departed!");
 		}
 		
 		private function checkRight(observer):Boolean {
@@ -297,17 +297,10 @@
 	        newAction = STAND; // by default, we're standing
 	        
 	        if(standFlag) { // if we're standing on something
-	            if(!stuckTo.checkCollision(this)) { // and we're not standing there anymore
-	                if(vely < 0) { // and we're going up
-	                    newAction = JUMP; // we're jumping                
-	                } else {
-	                    newAction = FALL; // otherwise we're falling
-	                    
-	                } 
+	            if(!stuckTo.checkCollision(this)) { // and we're colliding with it anymore
 	                depart(stuckTo); // depart whatever platform we were on
 	            } else if(velx == 0) { // otherwise, if we're not moving
 	                newAction = STAND; // we're standing
-	                
 	            } else { // otherwise, we're walking
 	                newAction = WALK;
 	            }
@@ -315,7 +308,7 @@
 	            newAction = JUMP; // we're jumping
 	        } else if(vely > 0) { // if we're going down
 	            newAction = FALL; // we're falling
-	        } else if(myAction == JUMP) { // otherwise, we just peaked in a jump
+	        } else { // otherwise, we just peaked in a jump
 	            newAction = FALL; // now we're falling
 	        }
 	        
@@ -407,7 +400,7 @@
     			updateStatus(); // update our status
 
 				animate(); // animate, now that we know what we're doing
-				
+
     			frameCount = 0;
 				frameStarted = false;
 		    } else {

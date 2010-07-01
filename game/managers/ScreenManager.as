@@ -27,6 +27,8 @@
 				        return new gameOpen();
 				    case 'Level1':
 				        return new Level1();
+				    case 'Level2':
+				        return new Level2();
 				}
 				return false;
 		}

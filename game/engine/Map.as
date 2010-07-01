@@ -153,7 +153,14 @@
 		    return status;
 		}
 		
+		private function customUpdate():void {
+		    // this will be replaced later
+            // by children of this class, should they
+            // require it
+		}
+		
 		public function update():Boolean {
+		    customUpdate();
 		    updateSubjects();
 		    if(heroHP) {
 		        if(status == 'COMPLETE') {
@@ -165,7 +172,6 @@
 		        status = 'HERO DEAD';
 		        return false;
 		    }
-		    
 		}
 	}
 }

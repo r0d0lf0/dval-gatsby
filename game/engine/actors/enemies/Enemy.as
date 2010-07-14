@@ -4,7 +4,7 @@ package engine.actors.enemies {
     
     public class Enemy extends Animatable {
         
-        protected var HP:Number = 10;
+        protected var HP:Number = 1;
         protected var attack_strength:Number = 1;
         
         public function Enemy() {
@@ -29,6 +29,7 @@ package engine.actors.enemies {
             HP -= damage;
             if(HP <= 0) {
                 HP = 0;
+                trace("I'm dead!");
             }
         }
         

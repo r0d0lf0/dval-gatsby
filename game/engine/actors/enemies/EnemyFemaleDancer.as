@@ -6,7 +6,7 @@ package engine.actors.enemies {
     import engine.actors.geoms.*;
     import flash.events.Event;
     
-    public class EnemyMaleDancer extends EnemyWalker implements ISubject, IObserver {
+    public class EnemyFemaleDancer extends EnemyWalker implements ISubject, IObserver {
         
         private var observers:Array = new Array();
         private var walkSpeed:Number = 1;
@@ -18,7 +18,7 @@ package engine.actors.enemies {
         
         private var groundCollide:Boolean;
         
-        public function EnemyMaleDancer() {
+        public function EnemyFemaleDancer() {
 			if (stage != null) {
 				setup();
 			} else {
@@ -32,7 +32,7 @@ package engine.actors.enemies {
 		}
 		
 		private function setup() {
-		    setSkin('MaleDancerSkin',2,2);
+		    setSkin('FemaleDancerSkin',2,2);
 		    setLoop(0, 0, 2, 0, 1);
 		    trace("Dancer setup.");
 		}

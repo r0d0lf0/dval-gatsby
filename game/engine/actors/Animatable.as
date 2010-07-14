@@ -43,9 +43,9 @@
 		//
 		//public var aBytes:ByteArray = animData.getPixels(animCopy); // the pixels in the aDisplay
         
-        protected var startFrame:uint = 0; // the first frame to loop on
-        protected var endFrame:uint = 0; // the final frame in the row
-        protected var nowFrame:uint = 0; // current frame in row
+        protected var startFrame = 0; // the first frame to loop on
+        protected var endFrame = 0; // the final frame in the row
+        protected var nowFrame = 0; // current frame in row
         protected var loopFrame = 0; // frame at which to loop
         protected var loopType = 1; // 0 loops, 1 bounces
         protected var loopRow = 0; // which row are we on
@@ -171,6 +171,7 @@
 		    nowFrame = startFrame;
 		    frameCounter = speed;
 		    animate();
+		    frameCounter = 3;
 		}
 		
 	}//end class

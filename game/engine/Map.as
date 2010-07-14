@@ -61,9 +61,7 @@
 				}
 				if(myChild is IObserver) {
 				    observerArray.push(myChild);
-				    if(myChild is Cloud) {
-				        myChild.alpha = 0;
-				    } if(myChild is Door) {
+				    if(myChild is Cloud || myChild is Door || myChild is Block) {
 				        myChild.alpha = 0;
 				    }
 				}

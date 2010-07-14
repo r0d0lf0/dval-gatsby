@@ -13,8 +13,7 @@ package engine.actors.enemies {
         
         private var frameCount:int = 0;
         private var frameDelay:int = 0;
-        public var collide_left:int = 10; // what pixel do we collide on on the left
-		public var collide_right:int = 22; // what pixel do we collide on on the right
+
         private var groundCollide:Boolean;
         
         public function EnemyWaiter() {
@@ -31,6 +30,8 @@ package engine.actors.enemies {
 		}
 		
 		private function setup() {
+		    collide_left = 10; // what pixel do we collide on on the left
+    		collide_right = 22; // what pixel do we collide on on the right
 		    setSkin('WaiterSkin',2,2);
 		    setLoop(0, 0, 1, 0, 0);
 		    trace("Waiter setup.");

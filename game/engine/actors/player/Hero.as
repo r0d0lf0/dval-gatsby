@@ -68,9 +68,6 @@
 		private var duckFlag:Boolean = false;
 		private var standFlag:Boolean = false;
 		
-		public var collide_left:int = 10; // what pixel do we collide on on the left
-		public var collide_right:int = 22; // what pixel do we collide on on the right
-		
 		private var jumpSound = new hero_jump();
 		private var hurtSound = new hero_hurt();
 		private var powerupSound = new powerup_sound();
@@ -108,6 +105,8 @@
 			buildHero();
 		}
 		private function buildHero():void{
+		    collide_left = 10; // what pixel do we collide on on the left
+    		collide_right = 22; // what pixel do we collide on on the right
 			keys.addEventListener(KeyMap.KEY_UP, onKeyRelease);
 			skinHero();
 		}

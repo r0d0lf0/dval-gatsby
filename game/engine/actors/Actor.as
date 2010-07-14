@@ -15,6 +15,10 @@
 		protected var me:Point = localToGlobal(new Point(0,0));
 		private var actor:*;
 		private var ldr;
+		
+		public var collide_left:int = 10; // what pixel do we collide on on the left
+		public var collide_right:int = 22; // what pixel do we collide on on the right
+		
 		//so nice
 		//public var imgLdr = new ImageLoader(textureLoadSuccess,textureLoadFail);
 		//The constructor 
@@ -65,8 +69,8 @@
 		}*/
 		
 		public function checkCollision(subject) {
-		    if((this.y + this.height) >= subject.y && this.y <= (subject.y + subject.height)) {
-		        if((this.x + this.width) >= subject.x && this.x <= (subject.x + subject.width)) {
+		    if((subject.x + subject.collide_right) >= this.x && (subject.x + subject.collide_left) <= this.x + this.width) {
+		        if((this.y + this.height) >= subject.y && this.y <= (subject.y + subject.height)) {
 		            return true;
 		        }
 		    }

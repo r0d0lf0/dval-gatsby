@@ -16,6 +16,7 @@
 	import engine.ISubscriber;
 	import engine.Subscriber;
 	import engine.ISubject;
+	import engine.actors.weapons.HatWeapon;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
 	import engine.Scoreboard;
@@ -29,6 +30,7 @@
 	    private var walkEnabled = true;
 	    private var jumpEnabled = false;
 	    private var shootEnabled = true;
+	    private var hatAvailable = true;
 	    
 		//CHANGE THESE
 		public var jumpVelocity:uint = 10; //exponential. 20 jumps 3x higher than 10
@@ -43,7 +45,7 @@
 		public var gravity:Number = 1;  //how much the velocity changes on each frameEvent
 		
 		
-		public var hat:Weapon = new Weapon(1);
+		public var hat;
 		// public var airFric:Number = 1; // not sure yet 
 		// MAX_VEL_Y has to be less than the height of most shallow platform.
 		// otherwise you will fall through the ground
@@ -109,6 +111,7 @@
     		collide_right = 22; // what pixel do we collide on on the right
 			keys.addEventListener(KeyMap.KEY_UP, onKeyRelease);
 			skinHero();
+			hat = new HatWeapon(this);
 		}
 		
 		public override function update():void {
@@ -284,12 +287,34 @@
 				}
 	        }
 	        
+	        if(shootEnabled && hatAvailable) {
+	            if(KeyMap.keyMap[88] || KeyMap.keyMap[17]) {
+	                if(hatAvailable) {
+	                   throwHat(); 
+	                }
+	            }
+	        }
+	        
 	        if(KeyMap.keyMap[32] || KeyMap.keyMap[38]) {
 	            jumpPressed = true;
 	        } else {
 	            jumpPressed = false;
 	        }
 	        
+	    }
+	    
+	    private function throwHat() {
+	        hat.throwHat(goingLeft);
+	        map.spawnActor(hat);
+            trace("Shoot!");
+            hatAvailable = false;
+	    }
+	    
+	    public function catchMe(object) {
+	        if(!hatAvailable) {
+	            map.removeFromMap(object);
+    	        hatAvailable = true;
+	        }
 	    }
 	    
 	    private function updateStatus():void {

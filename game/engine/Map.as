@@ -2,7 +2,9 @@
 
 	import flash.events.Event;
 	import flash.display.MovieClip;
+	import engine.actors.Actor;
     import engine.actors.player.Hero;
+    import engine.actors.weapons.HatWeapon;
     import engine.actors.enemies.Enemy;
     import engine.IObserver;
     import engine.Scoreboard;
@@ -50,31 +52,37 @@
 		    // loop through all the child objects attached to this library item, and put
 		    // references to them into a local array
 			for(var n=0; n<this.numChildren; n++){
-				//trace(this.getChildAt(n));
-				var myChild = this.getChildAt(n);
-				if(myChild is ISubject) {
-				    subjectArray.push(myChild);
-				    if(myChild is Hero) {
-				        myHero = myChild;
-				        myHero.setMap(this);
-				    }
-				}
-				if(myChild is IObserver) {
-				    observerArray.push(myChild);
-				    if(myChild is Cloud || myChild is Door || myChild is Block) {
-				        myChild.alpha = 0;
-				    }
-				}
-				objectArray.push(this.getChildAt(n));
+    			for(var n=0; n<this.numChildren; n++){
+    				//trace(this.getChildAt(n));
+    				var myChild = this.getChildAt(n);
+    				if(myChild is ISubject) {
+    				    subjectArray.push(myChild);
+    				    if(myChild is Hero) {
+    				        myHero = myChild;
+    				        myHero.setMap(this);
+    				    }
+    				}
+    				if(myChild is IObserver) {
+    				    observerArray.push(myChild);
+    				    if(myChild is Cloud || myChild is Door || myChild is Block) {
+    				        myChild.alpha = 0;
+    				    }
+    				}
+    				objectArray.push(this.getChildAt(n));
+    			}
+    			
+    			for(var s=0; s<subjectArray.length; s++) {
+    		        for(var i=0; i<observerArray.length; i++) {
+    		            subjectArray[s].addObserver(observerArray[i]); // subscribe all observers to our subject
+    		        }
+    		            subjectArray[s].addObserver(this); // and then subscribe the map itself
+    		    }
+    		    
+
 			}
 			
 			
-		    for(var s=0; s<subjectArray.length; s++) {
-		        for(var i=0; i<observerArray.length; i++) {
-		            subjectArray[s].addObserver(observerArray[i]); // subscribe all observers to our subject
-		        }
-		            subjectArray[s].addObserver(this); // and then subscribe the map itself
-		    }
+
 			
 			
 			//move to bottom screen of map
@@ -83,10 +91,47 @@
 			notifyObservers(); // tell our observers that we've completed our load out
 		}
 		
+		private function applySubscriptions(object) {
+		    if(object is ISubject) {
+			    subjectArray.push(object);
+                for(var i=0; i<observerArray.length; i++) {
+		            object.addObserver(observerArray[i]); // subscribe all observers to our subject
+		        }
+		        object.addObserver(this); // and then subscribe the map itself
+			    if(object is Hero) {
+			        myHero = object;
+			        myHero.setMap(this);
+			    }
+			}
+			if(object is IObserver) {
+			    observerArray.push(object);
+			    myHero.addObserver(object);
+			    if(object is Cloud || object is Door || object is Block) {
+			        object.alpha = 0;
+			    }
+			}
+		}
+		
+		public function spawnActor(actor:Actor) {
+		    this.addChild(actor);
+		    applySubscriptions(actor);
+		    actor.x = myHero.x;
+		    actor.y = myHero.y + 5;
+		}
+		
 		private function updateSubjects():void {
 		    for(var i=0; i<subjectArray.length; i++) {
 		        subjectArray[i].update();
 		    }
+		}
+		
+		private function removeSubject(subject):void {
+		    for (var sb:int=0; sb<subjectArray.length; sb++) {
+                if(subjectArray[sb] == subject) {
+                    subjectArray.splice (sb,1); break;
+                    break;
+                }
+            }
 		}
 		
 		private function moveMap(subject):void {
@@ -125,8 +170,14 @@
 		}
 		
 		public function removeFromMap(actor) {
-		    this.removeChild(actor);
-		}
+            if(actor is IObserver) {
+                removeObserver(actor);
+            }
+		    if(actor is ISubject) {
+		        removeSubject(actor);
+		    }
+    	    this.removeChild(actor);
+    	}
 		
 		public function addObserver(observer):void {
 		    observers.push(observer);

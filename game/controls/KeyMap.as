@@ -29,6 +29,7 @@ package controls{
 			_keyMap[90]=false; //z
 			_keyMap[67]=false; //c
 			_keyMap[88]=false; //x
+			_keyMap[90]=false; //z
 			
 			_keyMap[17]=false; //CTRL
 			//keyMap[Keyboard]=false; //ALT

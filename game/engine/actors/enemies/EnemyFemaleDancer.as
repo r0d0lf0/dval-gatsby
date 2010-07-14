@@ -58,7 +58,9 @@ package engine.actors.enemies {
 		
 		override public function notify(subject):void {
 		    if(checkCollision(subject)) {
-                subject.receiveDamage(1);
+		        if(subject is Hero) {
+		            subject.receiveDamage(1);
+		        }
             }
 		}
 		

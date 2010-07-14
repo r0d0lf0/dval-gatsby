@@ -52,7 +52,7 @@
         protected var loopDir = 1; // loop forward (to the right) by default
         protected var speed = 5; // how many frames should go by before we advance
         protected var frameCounter = 0;
-        protected var goingLeft = 0;
+        public var goingLeft = 0;
         
     
 		public function Animatable():void{

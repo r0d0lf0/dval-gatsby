@@ -3,7 +3,10 @@ package engine.actors.enemies {
     import engine.IObserver;
     import engine.ISubject;
     import engine.actors.player.Hero;
+    import engine.actors.weapons.HatWeapon;
     import engine.actors.geoms.*;
+    import flash.media.Sound;
+	import flash.media.SoundChannel;
     import flash.events.Event;
     
     public class EnemyWaiter extends EnemyWalker implements ISubject, IObserver {
@@ -13,6 +16,10 @@ package engine.actors.enemies {
         
         private var frameCount:int = 0;
         private var frameDelay:int = 0;
+        
+        private var dieSound = new enemy_die();
+        private var hitDirection = 0;
+        
 
         private var groundCollide:Boolean;
         
@@ -60,6 +67,11 @@ package engine.actors.enemies {
 		    if(checkCollision(subject)) {
 		        if(subject is Hero) {
 		            subject.receiveDamage(1);
+		            
+		        }
+		        if(subject is HatWeapon) {
+		            receiveDamage(1);
+		            hitDirection = subject.goingLeft;
 		        }
             }
 		}
@@ -72,14 +84,35 @@ package engine.actors.enemies {
 		    }
 		}
 		
+		private function die() {
+		    
+		}
+		
 		override public function update():void {
 		    animate();
+		    if(HP <= 0 && !deadFlag) {
+		        dieSound.play(0);
+		        deadFlag = true;
+		        if(hitDirection) {
+		            walkSpeed = -1;
+		        } else {
+		            walkSpeed = 1;
+		        }
+		    }
 		    
+		    if(deadFlag) {
+		       if(this.y > 240) {
+		           die();
+		       } else {
+		           setLoop(0, 2, 2, 2, 0);
+    		       this.y += 2;
+		       }
+		    }
 		    if(frameCount >= frameDelay) {
 		        this.x += walkSpeed;
 		        frameCount = 0;
 		        notifyObservers();
-    		    if(!groundCollide) {
+    		    if(!groundCollide && !deadFlag) {
     		        walkSpeed *= -1;
     		        if(walkSpeed > 0) {
     		            goingLeft = 0;

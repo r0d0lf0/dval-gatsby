@@ -12,12 +12,12 @@ package engine.actors.weapons {
     public class HatWeapon extends Animatable implements ISubject, IObserver {
         
         private var observers:Array = new Array();
-        private var flySpeed:Number = 4;
+        private var flySpeed:Number = 7;
         private var owner:Actor;
         private var returning:Boolean = false;
         private var throwDistance:int = 15;
         
-        private var inertia:Number = 4; // amount of inertia to change velocity
+        private var inertia:Number = 7; // amount of inertia to change velocity
         private var velX:Number = 0;
         private var velY:Number = 0;
         
@@ -74,10 +74,10 @@ package engine.actors.weapons {
 		public function notify(subject):void {
 		    if(checkCollision(subject)) {
 		        if(subject is Enemy) {
+		            trace("Hit!");
 		            subject.receiveDamage(1);
 		            returning = true;
 		        } else if(subject is Hero && returning) {
-		            
 		            subject.catchMe(this);
 		        }
             }

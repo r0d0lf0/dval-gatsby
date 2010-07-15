@@ -89,7 +89,7 @@ package engine.actors.enemies {
 		    }
 		    
 		    notifyObservers();
-		    if(!groundCollide) {
+		    if(!groundCollide && !deadFlag) {
 		        walkDir = walkDir * -1;
 		    }
 		}

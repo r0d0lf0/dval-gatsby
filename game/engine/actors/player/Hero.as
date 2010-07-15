@@ -73,6 +73,7 @@
 		private var jumpSound = new hero_jump();
 		private var hurtSound = new hero_hurt();
 		private var powerupSound = new powerup_sound();
+		private var throwSound = new hero_throw();
 		private var effectsChannel;
 		
 		private var stuckTo; // what surface are we currently stuck to
@@ -304,6 +305,7 @@
 	    }
 	    
 	    private function throwHat() {
+	        throwSound.play(0);
 	        hat.throwHat(goingLeft);
 	        map.spawnActor(hat);
             trace("Shoot!");

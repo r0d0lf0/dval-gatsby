@@ -3,6 +3,7 @@ package engine.actors.enemies {
     import engine.IObserver;
     import engine.ISubject;
     import engine.actors.player.Hero;
+    import engine.actors.weapons.HatWeapon;
     import engine.actors.geoms.*;
     import flash.events.Event;
     
@@ -61,6 +62,9 @@ package engine.actors.enemies {
 		        if(subject is Hero) {
 		            subject.receiveDamage(1);
 		        }
+		        if(subject is HatWeapon) {
+		            receiveDamage(1);
+		        }
             }
 		}
 		
@@ -72,9 +76,25 @@ package engine.actors.enemies {
 		    }
 		}
 		
+		private function die() {
+		    
+		}
+		
 		override public function update():void {
 		    animate();
-		    groundCollide = false;
+		    if(HP <= 0 && !deadFlag) {
+		        deadFlag = true;
+		    }
+		    
+		    if(deadFlag) {
+		       if(this.y > 240) {
+		           die();
+		       } else {
+		           setLoop(0, 0, 0, 0, 0);
+    		       this.y += 2;
+		       }
+		    }
+
 		    if(frameCount >= frameDelay) {
 		        this.x += walkSpeed * walkDir;
 		        frameCount = 0;
@@ -89,7 +109,7 @@ package engine.actors.enemies {
 		    }
 		    
 		    notifyObservers();
-		    if(!groundCollide) {
+		    if(!groundCollide && !deadFlag) {
 		        walkDir = walkDir * -1;
 		    }
 		}

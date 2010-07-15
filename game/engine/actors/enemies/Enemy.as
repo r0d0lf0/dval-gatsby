@@ -2,10 +2,13 @@ package engine.actors.enemies {
     
     import engine.actors.Animatable;
     
+    
     public class Enemy extends Animatable {
         
         protected var HP:Number = 1;
         protected var attack_strength:Number = 1;
+        
+        protected var deadFlag:Boolean = false;
         
         public function Enemy() {
             trace("Enemy created.");

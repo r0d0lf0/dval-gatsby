@@ -6,7 +6,6 @@
 	import flash.geom.Point;
 	import flash.events.Event;
 	import flash.utils.getDefinitionByName;
-	import engine.ISubscriber;
 	import engine.ISubject;
 	
 

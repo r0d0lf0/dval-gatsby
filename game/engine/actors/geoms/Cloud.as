@@ -1,7 +1,6 @@
 ﻿package engine.actors.geoms {
 	
 	import flash.display.DisplayObject;
-	import engine.actors.MapObject;
 	import engine.actors.Actor;
 	import engine.IObserver;
 	import engine.actors.specials.Door;

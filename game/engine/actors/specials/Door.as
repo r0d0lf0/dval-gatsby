@@ -1,6 +1,6 @@
 ﻿package engine.actors.specials {
 	
-	import engine.actors.MapObject;
+	
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
 	import flash.utils.getDefinitionByName; //sometime, the things we learn...

@@ -5,7 +5,7 @@ package engine{
     import engine.IObserver;
     import engine.Scoreboard;
     
-    // ScoreboardDisplay, not sure what this is gonna do yet
+    // ScoreboardDisplay is the visual representation of the scoreboard, vs Scoreboard, which actually holds the data
     public class ScoreboardDisplay extends MovieClip implements IObserver {
         
         public var my_score = 0;

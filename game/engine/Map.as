@@ -14,18 +14,17 @@
 	dynamic public class Map extends MovieClip implements IObserver, ISubject {
 		
 		public var observerArray:Array = new Array(); // this is the array of observers on the map
-		public var subjectArray:Array = new Array();
-		public var objectArray:Array = new Array();
+		public var subjectArray:Array = new Array(); // this is the array of subjects on the map
 		
 		private var observers:Array = new Array(); // this is the array of objects subscribed to this
 		
-		private var screenPadding:Number = 90;
-		private var screenWidth:Number = 256;
-		private var screenHeight:Number = 208;
+		private var screenPadding:Number = 90; // the number of pixels near the edge before the screen begins panning
+		private var screenWidth:Number = 256; // how wide is our viewport
+		private var screenHeight:Number = 208; // how high is our viewport
 		
-		private var myHero:Hero;
+		private var myHero:Hero; // local variable for our player
 		
-		private var heroHP:Number = 3; // current HP of the hero
+		private var heroHP:Number = 3; // current HP of the hero, this is sorta convoluted
 		
 		private var status:String = 'ACTIVE';
 	    private var scoreboard:Scoreboard;
@@ -68,7 +67,6 @@
     				        myChild.alpha = 0;
     				    }
     				}
-    				objectArray.push(this.getChildAt(n));
     			}
     			
     			for(var s=0; s<subjectArray.length; s++) {

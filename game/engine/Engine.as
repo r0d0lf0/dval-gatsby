@@ -4,7 +4,6 @@
 	import flash.events.Event;
 	import engine.ScoreboardDisplay;
 	import engine.Scoreboard;
-	import engine.Subscriber;
 	import managers.ScreenManager;
 	import engine.IObserver;
 	import engine.screens.*;

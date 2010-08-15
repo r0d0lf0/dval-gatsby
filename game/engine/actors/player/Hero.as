@@ -13,8 +13,6 @@
 	import engine.actors.specials.*;
 	import controls.KeyMap;
 	import engine.actors.weapons.Weapon;
-	import engine.ISubscriber;
-	import engine.Subscriber;
 	import engine.ISubject;
 	import engine.actors.weapons.HatWeapon;
 	import flash.media.Sound;

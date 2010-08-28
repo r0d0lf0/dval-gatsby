@@ -3,95 +3,25 @@ package engine.actors.enemies {
     import engine.IObserver;
     import engine.ISubject;
     import engine.actors.player.Hero;
-    import engine.actors.geoms.*;
     import flash.events.Event;
     
     public class EnemyFemaleDancer extends EnemyWalker implements ISubject, IObserver {
         
-        private var observers:Array = new Array();
-        private var walkSpeed:Number = 1;
-        private var walkDir:int = -1;
-        
-        private var frameCount:int = 0;
-        private var frameDelay:int = 0;
         private var danceCount:int = 0;
-        
-        private var groundCollide:Boolean;
-        
-        public function EnemyFemaleDancer() {
-			if (stage != null) {
-				setup();
-			} else {
-				addEventListener(Event.ADDED_TO_STAGE, addedToStage);
-			}
-		}
 		
-		private function addedToStage(evt) {
-			removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
-			setup();
-		}
-		
-		private function setup() {
-		    setSkin('FemaleDancerSkin',2,2);
-		    setLoop(0, 0, 2, 0, 1);
-		    trace("Dancer setup.");
-		}
-        
-        public function addObserver(observer):void {
-		    observers.push(observer);
-		}
-		
-		public function removeObserver(observer):void {
-		    for (var ob:int=0; ob<observers.length; ob++) {
-                if(observers[ob] == observer) {
-                    observers.splice (ob,1); break;
-                    break;
-                }
-            }
-		}
-		
-		public function notifyObservers():void {
-		    for(var ob=0; ob<observers.length; ob++) {
-		        observers[ob].notify(this);
-		    }
-		}
-		
-		override public function notify(subject):void {
-		    if(checkCollision(subject)) {
-		        if(subject is Hero) {
-		            subject.receiveDamage(1);
-		        }
-            }
-		}
-		
-		public function collide(subject) {
-		    if(subject is Cloud) {
-		        if(!groundCollide) {
-    		        groundCollide = true;
-    		    }
-		    }
-		}
-		
-		override public function update():void {
-		    animate();
-		    groundCollide = false;
-		    if(frameCount >= frameDelay) {
-		        this.x += walkSpeed * walkDir;
-		        frameCount = 0;
-		        danceCount++;
-		    } else {
-		        frameCount++;
-		    }
+		override public function setup() {
 		    
-		    if(danceCount >= 100) {
-		        loopRow = loopRow == 0;
-		        danceCount = 0;
-		    }
+		    myName = "EnemyFemaleDancer"; // the generic name of our enemy
+            mySkin = "FemaleDancerSkin"; // the name of the skin for this enemy
 		    
-		    notifyObservers();
-		    if(!groundCollide && !deadFlag) {
-		        walkDir = walkDir * -1;
-		    }
+		    startFrame = 0; // the first frame to loop on
+            endFrame = 0; // the final frame in the row
+            nowFrame = 0; // current frame in row
+            loopFrame = 0; // frame at which to loop
+            loopType = 1; // 0 loops, 1 bounces
+            loopRow = 0; // which row are we on
+            loopDir = 1; // loop forward (to the right) by default
+            speed = 5; // how many frames should go by before we advance
 		}
         
     }

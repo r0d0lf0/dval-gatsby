@@ -26,11 +26,8 @@
 		
 		private var heroHP:Number = 3; // current HP of the hero, this is sorta convoluted
 		
-		private var status:String = 'ACTIVE';
-	    private var scoreboard:Scoreboard;
-
-		//public var game:MovieClip;
-		//private var hero:Hero;
+		private var status:String = 'ACTIVE'; // default status, i sort of forget what this is for
+	    private var scoreboard:Scoreboard; // grab an instance of our scoreboard
 		
 		public function Map():void {
 			//trace("game loaded");
@@ -49,7 +46,8 @@
 		
 		private function buildMap():void {
 		    // loop through all the child objects attached to this library item, and put
-		    // references to them into a local array
+		    // references to them into appropriate local arrays.  Afterwards, we'll subscribe
+		    // them to each other, and to the map itself
 			for(var n=0; n<this.numChildren; n++){
     			for(var n=0; n<this.numChildren; n++){
     				//trace(this.getChildAt(n));

@@ -43,14 +43,14 @@
 		//
 		//public var aBytes:ByteArray = animData.getPixels(animCopy); // the pixels in the aDisplay
         
-        protected var startFrame = 0; // the first frame to loop on
-        protected var endFrame = 0; // the final frame in the row
-        protected var nowFrame = 0; // current frame in row
-        protected var loopFrame = 0; // frame at which to loop
-        protected var loopType = 1; // 0 loops, 1 bounces
-        protected var loopRow = 0; // which row are we on
-        protected var loopDir = 1; // loop forward (to the right) by default
-        protected var speed = 5; // how many frames should go by before we advance
+        public var startFrame = 0; // the first frame to loop on
+        public var endFrame = 0; // the final frame in the row
+        public var nowFrame = 0; // current frame in row
+        public var loopFrame = 0; // frame at which to loop
+        public var loopType = 1; // 0 loops, 1 bounces
+        public var loopRow = 0; // which row are we on
+        public var loopDir = 1; // loop forward (to the right) by default
+        public var speed = 5; // how many frames should go by before we advance
         protected var frameCounter = 0;
         public var goingLeft = 0;
         
@@ -58,19 +58,7 @@
 		public function Animatable():void{
 			//
 		}
-		//Animatable assumes that there is a sprite sheet to be animated
-		//length of teh animatio, frame to loop at 
-		/*public function setLoop(len:int=-1,rep:int = 0):void{
-			//if our playhead is greater than the anim cycle:
-			//set to beginnign of loop
-			if(len>=0){
-				if(this.frame>= len){
-					this.frame = rep;
-				}
-			}
-		}//end animate*/
-		
-		//handles loading textures in the library
+
 		public function setSkin(tex:String,w:int,h:int):void {
 			
 			horzT = w;
@@ -113,17 +101,24 @@
 			    frameCounter++;
 			} else {
 			    frameCounter = 0;
-			    aCopy = getCurrentFrame();
-			    aBytes = animData.getPixels(aCopy);
+			    aCopy = getCurrentFrame();  // this is the rectangle frame
+			    
+		        aBytes = animData.getPixels(aCopy); // here are the bytes of that rectangle on top of our spritesheet
     			//reset array pointer (necessary so we can read array from beginning)
     			aBytes.position = 0;
-    			displayData.setPixels(aPaste,aBytes);
+    		    displayData.setPixels(aPaste,aBytes);
                 incrementFrame();
 			}            
 		}
 		
 		private function getCurrentFrame() {
 		    return getRectangle(loopRow + goingLeft, nowFrame);
+		}
+		
+		public function getRectangle(row, frame) {
+		    var xPos = frame * tile * tilesWide;  // calculate our tile's x position
+		    var yPos = row * tile * tilesTall; // and its y position
+		    return new Rectangle(xPos, yPos, tile * tilesWide, tile * tilesTall);  // and get a rectangle the right size and position
 		}
 		
 		private function incrementFrame() {
@@ -155,12 +150,6 @@
 		    }
 		}
 		
-		public function getRectangle(row, frame) {
-		    var xPos = frame * tile * tilesWide;  // calculate our tile's x position
-		    var yPos = row * tile * tilesTall; // and its y position
-		    return new Rectangle(xPos, yPos, tile * tilesWide, tile * tilesTall);  // and get a rectangle the right size and position
-		}
-		
 		public function setLoop(loopRow, startFrame, endFrame, loopFrame, loopType, speed = 5) {
 		    this.loopRow = loopRow;
 		    this.startFrame = startFrame;
@@ -171,7 +160,7 @@
 		    nowFrame = startFrame;
 		    frameCounter = speed;
 		    animate();
-		    frameCounter = 3;
+		    //frameCounter = 3;
 		}
 		
 	}//end class

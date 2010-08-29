@@ -27,7 +27,6 @@ package engine.actors {
         private var effectsChannel;
         
         public function DialogBox() {
-            effectsChannel = DialogBoxSound.play(0, 100);
             textArea.text = " ";
             
             // set up our down arrow blinking dealie
@@ -47,6 +46,7 @@ package engine.actors {
         
         public function typeText() {
             typingFlag = true;
+            effectsChannel = DialogBoxSound.play(0, 100);
         }
         
         public function blinkArrow(event:TimerEvent) {

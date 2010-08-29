@@ -10,9 +10,6 @@ package engine.actors.enemies {
         protected var HP:Number = 1;
         protected var attack_strength:Number = 1;
         protected var deadFlag:Boolean = false;
-        
-        protected var mySkin:String = "GenericEnemySkin";
-        protected var myName:String = "GenericEnemy";
 
         protected var dieSound = new enemy_die();
         protected var hitDirection = 0;
@@ -28,17 +25,17 @@ package engine.actors.enemies {
 		private function addedToStage(evt) {
 			removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			setup();
-    	    setSkin(mySkin,2,2);
     	    trace(myName + " created.");
-		}
-		
-		public function setup() {
-		    // this will get overridden
 		}
         
         // this should get the enterFrame tick like everything else
         override public function update():void {
 
+        }
+        
+        override public function setup() {
+            mySkin = "GenericEnemySkin";
+            myName = "GenericEnemy";
         }
         
         // default collision methods, will probably get overwritten

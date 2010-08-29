@@ -80,7 +80,7 @@
 		private function getMap(mapIndex) {
 		    switch(mapIndex) {
 		        case 1:
-		            return new level1_map1();
+		            return new level1_map2();
 		        case 2:
 		            return new level1_map2();
 		        case 3:

@@ -1,51 +1,34 @@
-﻿package engine.actors.geoms {
+package engine.actors.geoms {
     
-    import engine.IObserver;
-    import engine.ISubject;
-    import engine.actors.player.Hero;
-    import engine.actors.Animatable;
-    import engine.actors.geoms.*;
-    import flash.events.Event;
+    import engine.actors.Actor;
+    import engine.actors.geoms.FountainPlatform;
     
-    public class Fountain extends Animatable implements ISubject, IObserver {
-		
-        private var velocity = 1;
-	
-		public function Fountain() {
-			if (stage != null) {
-				setup();
-			} else {
-				addEventListener(Event.ADDED_TO_STAGE, addedToStage);
-			}
-		}
-		
-		private function addedToStage(evt) {
-			removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
-			setup();
-		}
-		
-		private function setup() {
-		    tilesWide = 1;
-    		tilesTall = 2;
-		    setSkin('FountainSkin',1,2);
-		    setLoop(0, 0, 2, 0, 0);
-		    trace("Waiter setup.");
-		}
-		
-		override public function notify(subject):void {
-		    if(checkCollision(subject)) {
-                subject.collide(this);
-            }
-		}
-		
-		override public function update():void {
-		    animate();
-		    if(this.y < 50) {
-		        velocity = 1;
-		    } else if(this.y > 140) {
-		        velocity = -1;
-		    }
-		    this.y += velocity;
-		}
-	}
+    public class Fountain extends Actor {
+        
+        private var myPlatform = new FountainPlatform();
+        private var myMask = new FountainMask();
+        
+        public function Fountain() {
+            
+        }
+        
+        override public function setup() {
+            addChild(myMask);
+            this.y = this.y - this.height;
+            var maskHeight = this.height;
+            addChild(myPlatform);
+            // myPlatform.y = this.height - mask.height;
+            myPlatform.mask = myMask;
+        }
+        
+        override public function update():void {
+            myPlatform.update();
+        }
+        
+        override public function notify(subject:*):void {
+            myPlatform.notify(subject);
+        }
+        
+    }
+    
 }

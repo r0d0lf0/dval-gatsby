@@ -40,6 +40,9 @@
 		public var displayData:BitmapData;
 		public var aCopy:Rectangle;
 		public var aPaste:Rectangle;
+		
+		public var mySkin:String = "GenericEnemySkin";
+        public var myName:String = "GenericEnemy";
 		//
 		//public var aBytes:ByteArray = animData.getPixels(animCopy); // the pixels in the aDisplay
         
@@ -56,7 +59,16 @@
         
     
 		public function Animatable():void{
-			//
+            // nothing to see here
+		}
+		
+		override public function buildObject():void {
+		    onStage = true;
+		    setup();
+		    setSkin(mySkin,tilesWide,tilesTall);
+			this.addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+			//this.addEventListener(Event.ENTER_FRAME, onFrame);
+			//doTexture(this.tex);
 		}
 
 		public function setSkin(tex:String,w:int,h:int):void {
@@ -96,7 +108,7 @@
 			this.tile = size;
 		}
 		
-		public function animate(act:String = null):void{
+		public function animate():void{
 			if(frameCounter < speed) {
 			    frameCounter++;
 			} else {
@@ -119,6 +131,12 @@
 		    var xPos = frame * tile * tilesWide;  // calculate our tile's x position
 		    var yPos = row * tile * tilesTall; // and its y position
 		    return new Rectangle(xPos, yPos, tile * tilesWide, tile * tilesTall);  // and get a rectangle the right size and position
+		}
+		
+		override public function update():void {
+		    if(onStage) {
+		        animate(); // the most basic animatable sprite will only animate
+		    }
 		}
 		
 		private function incrementFrame() {
@@ -160,7 +178,6 @@
 		    nowFrame = startFrame;
 		    frameCounter = speed;
 		    animate();
-		    frameCounter = 3;
 		}
 		
 	}//end class

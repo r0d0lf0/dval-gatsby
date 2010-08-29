@@ -86,7 +86,6 @@
 		
 		private var newAction;
 		private var prevAction;
-		
 		private var scoreboard = Scoreboard.getInstance();
 		
 		// constructor, geesh
@@ -103,10 +102,7 @@
 			buildHero();
 		}
 		private function buildHero():void{
-		    collide_left = 10; // what pixel do we collide on on the left
-    		collide_right = 22; // what pixel do we collide on on the right
 			keys.addEventListener(KeyMap.KEY_UP, onKeyRelease);
-			skinHero();
 			hat = new HatWeapon(this);
 		}
 		
@@ -126,12 +122,15 @@
 		// keeps anim going if it needs to
 		private function onKeyRelease(evt:Event):void{
 		    
-		}	
-		
-		//show some skin
-		private function skinHero() {
-			setSkin('HeroSkin',2,2);
 		}
+		
+		override public function setup() {
+		    collide_left = 10; // what pixel do we collide on on the left
+    		collide_right = 22; // what pixel do we collide on on the right
+		    
+		    myName = "Hero"; // the generic name of our enemy
+            mySkin = "HeroSkin"; // the name of the skin for this enemy
+		}	
 		
 		private function flipCollide(collide) {
 		    return this.width - collide;
@@ -142,7 +141,7 @@
 		        HP -= damageAmount;
 		        scoreboard.setHP(HP);
     		    damageFlag = true;
-    		    effectsChannel = hurtSound.play(0);  // play it, looping 100 times
+    		    effectsChannel = hurtSound.play(0);  // play it
 		    }
 		}
 		
@@ -163,7 +162,11 @@
 		
 		private function land(observer):void {
 		    this.vely = 0;
-	        this.y = observer.y - this.height;
+		    if(observer is FountainPlatform) {
+		        this.y = (observer.y + observer.velocity) - this.height;
+		    } else {
+		        this.y = observer.y - this.height;
+		    }
 	        jumpCount = 0;
 	        standFlag = true;
 	        if(stuckTo != observer) {
@@ -195,19 +198,33 @@
 		    return false;
 		}
 		
+		private function getGlobals(observer) {
+		    var localCoords = new Point(observer.x, observer.y);
+            var globalCoords = observer.localToGlobal(localCoords);
+            return globalCoords;
+		}
+		
 		private function checkTop(observer):Boolean {
-		    if((this.y + this.height) > observer.y) { // if we're collided with the top currently
-		        if((this.y + this.height) - this.vely <= observer.y) { // and we hadn't collided in the previous frame
-		            return true;
-		        }
-		    }
-		    return false;
+                trace("Platform: x:" + observer.x + "y:" + observer.y);
+                var globalCoords = getGlobals(observer);
+                trace("Global: x:" + (observer.parent.x + observer.parent.height));
+                trace("Hero: x:" + this.x + "y:" + this.y);
+    		    if((this.y + this.height) > observer.y) { // if we're collided with the top currently
+    		        if((this.y + this.height) - this.vely <= observer.y) { // and we hadn't collided in the previous frame
+    		            return true;
+    		        }
+    		    }
+            //}
+            return false;
 		}
 		
 		public function collide(observer, ...args) {
-		    if(observer is Cloud || observer is Fountain) {
+		    if(observer is Cloud || observer is FountainPlatform) {
 		        if(checkTop(observer) || observer == stuckTo) {
 		            land(observer);
+		            if(observer is FountainPlatform) {
+		                trace("landing on platform!");
+		            }
 		        }
 		    } else if(observer is Door) {
 		        trace("Door collision!");

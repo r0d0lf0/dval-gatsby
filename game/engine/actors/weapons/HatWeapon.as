@@ -16,7 +16,7 @@ package engine.actors.weapons {
         private var returning:Boolean = false;
         private var throwDistance:int = 15;
         
-        private var inertia:Number = 7; // amount of inertia to change velocity
+        private var inertia:Number = 4; // amount of inertia to change velocity
         private var velX:Number = 0;
         private var velY:Number = 0;
         
@@ -25,26 +25,26 @@ package engine.actors.weapons {
         
         public function HatWeapon(owner) {
             this.owner = owner;
-			if (stage != null) {
-				setup();
-			} else {
-				addEventListener(Event.ADDED_TO_STAGE, addedToStage);
-			}
 		}
 		
-		private function addedToStage(evt) {
-			removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
-			setup();
-		}
-		
-		private function setup() {
+		override public function setup() {
+		    myName = "HatWeapon";
+            mySkin = "HatWeaponSkin";
+		    
 		    tilesWide = 1;
     		tilesTall = 1;
 		    collide_left = 2; // what pixel do we collide on on the left
     		collide_right = 14; // what pixel do we collide on on the right
-		    setSkin('HatWeaponSkin',1,1);
-		    setLoop(0, 0, 1, 0, 0);
-		    trace("HatWeaponSkin");
+    		
+    		startFrame = 0; // the first frame to loop on
+            endFrame = 3; // the final frame in the row
+            nowFrame = 0; // current frame in row
+            loopFrame = 0; // frame at which to loop
+            loopType = 1; // 0 loops, 1 bounces
+            loopRow = 0; // which row are we on
+            loopDir = 1; // loop forward (to the right) by default
+            speed = 2; // how many frames should go by before we advance
+    		
 		}
 		
 		public function setOwner(owner) {

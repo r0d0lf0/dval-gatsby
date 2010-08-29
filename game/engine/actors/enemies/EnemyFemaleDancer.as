@@ -1,11 +1,8 @@
 package engine.actors.enemies {
     
-    import engine.IObserver;
-    import engine.ISubject;
-    import engine.actors.player.Hero;
     import flash.events.Event;
     
-    public class EnemyFemaleDancer extends EnemyWalker implements ISubject, IObserver {
+    public class EnemyFemaleDancer extends EnemyWalker {
         
         private var danceCount:int = 0;
 		

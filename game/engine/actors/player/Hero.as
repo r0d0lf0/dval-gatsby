@@ -19,11 +19,8 @@
 	import flash.media.SoundChannel;
 	import engine.Scoreboard;
 
-	dynamic public class Hero extends Animatable implements ISubject {
-	    
-	    // Here's where the observer pattern stuff goes
-	    private var observers:Array = new Array();
-	    
+	dynamic public class Hero extends Animatable{
+	    	    
 	    // these hold what things we can currently do
 	    private var walkEnabled = true;
 	    private var jumpEnabled = false;
@@ -162,25 +159,6 @@
 
 		    effectsChannel = powerupSound.play(0);
 		    map.removeFromMap(powerup);
-		}
-		
-		public function addObserver(observer):void {
-		    observers.push(observer);
-		}
-		
-		public function removeObserver(observer):void {
-		    for (var ob:int=0; ob<observers.length; ob++) {
-                if(observers[ob] == observer) {
-                    observers.splice (ob,1); break;
-                    break;
-                }
-            }
-		}
-		
-		public function notifyObservers():void {
-		    for(var ob=0; ob<observers.length; ob++) {
-		        observers[ob].notify(this);
-		    }
 		}
 		
 		private function land(observer):void {
@@ -337,7 +315,7 @@
 	        }
 	        
             if(newAction != prevAction) {
-                trace("New Action = " + newAction);
+//                trace("New Action = " + newAction);
                 setAction(newAction);
                 setAnimation(newAction);
             }

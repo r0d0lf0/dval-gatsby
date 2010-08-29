@@ -1,5 +1,8 @@
 ﻿package engine.actors{
 
+    import engine.IObserver;
+    import engine.ISubject;
+    import engine.actors.player.Hero;
 	import flash.display.MovieClip;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -9,8 +12,9 @@
 	import engine.ISubject;
 	
 
-	dynamic public class Actor extends MovieClip {
+	dynamic public class Actor extends MovieClip implements ISubject, IObserver {
 
+        protected var observers:Array = new Array();
 		protected var me:Point = localToGlobal(new Point(0,0));
 		private var actor:*;
 		private var ldr;
@@ -94,12 +98,28 @@
 			//this is overwritten by each unique subclass
 		}
 		
+		public function notify(subject:*):void {
+		    // this will be overwritten
+		}
 		
-		public function addSubscription(target:MovieClip):void{
-			//
+		public function addObserver(observer):void {
+		    observers.push(observer);
 		}
-		public function cancelSubscription(target:MovieClip):void{
-			//
+		
+		public function removeObserver(observer):void {
+		    for (var ob:int=0; ob<observers.length; ob++) {
+                if(observers[ob] == observer) {
+                    observers.splice(ob,1);
+                    break;
+                }
+            }
 		}
+		
+	    public function notifyObservers():void {
+		    for(var ob=0; ob<observers.length; ob++) {
+		        observers[ob].notify(this);
+		    }
+		}
+		
 	}
 }

@@ -7,7 +7,6 @@ package engine.actors.enemies {
     
     public class Enemy extends Animatable {
         
-        protected var observers:Array = new Array();
         protected var HP:Number = 1;
         protected var attack_strength:Number = 1;
         protected var deadFlag:Boolean = false;
@@ -42,25 +41,6 @@ package engine.actors.enemies {
 
         }
         
-        public function addObserver(observer):void {
-		    observers.push(observer);
-		}
-		
-		public function removeObserver(observer):void {
-		    for (var ob:int=0; ob<observers.length; ob++) {
-                if(observers[ob] == observer) {
-                    observers.splice(ob,1);
-                    break;
-                }
-            }
-		}
-		
-		public function notifyObservers():void {
-		    for(var ob=0; ob<observers.length; ob++) {
-		        observers[ob].notify(this);
-		    }
-		}
-        
         // default collision methods, will probably get overwritten
         override public function checkCollision(subject) {
             if(Math.abs((subject.x + (.25 * subject.width)) - (this.x + (.25 * this.width))) <= this.width/2) {
@@ -86,7 +66,7 @@ package engine.actors.enemies {
             }
         }
 
-		public function notify(subject):void {
+		override public function notify(subject):void {
 		    if(checkCollision(subject) && !deadFlag) { // If i'm colliding with something, and I'm alive...
 		        if(subject is Hero) {
 		            subject.receiveDamage(1);

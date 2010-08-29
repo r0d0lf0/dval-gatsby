@@ -5,7 +5,7 @@
 	import engine.IObserver;
 	import engine.actors.specials.Door;
 
-	public class Cloud extends Actor implements IObserver {
+	public class Cloud extends Actor {
 		
 		public function Cloud():void{
 			super();
@@ -23,7 +23,7 @@
 			}
 		}
 		
-		public function notify(subject:*):void {
+		override public function notify(subject:*):void {
 		    if(subject is Door) {
 		        
 		    } else {

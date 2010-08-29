@@ -9,9 +9,8 @@ package engine.actors.weapons {
     import flash.events.Event;
     import engine.actors.Animatable;
     
-    public class HatWeapon extends Animatable implements ISubject, IObserver {
+    public class HatWeapon extends Animatable {
         
-        private var observers:Array = new Array();
         private var flySpeed:Number = 7;
         private var owner:Actor;
         private var returning:Boolean = false;
@@ -51,27 +50,8 @@ package engine.actors.weapons {
 		public function setOwner(owner) {
 		    this.owner = owner;
 		}
-        
-        public function addObserver(observer):void {
-		    observers.push(observer);
-		}
-		
-		public function removeObserver(observer):void {
-		    for (var ob:int=0; ob<observers.length; ob++) {
-                if(observers[ob] == observer) {
-                    observers.splice (ob,1); break;
-                    break;
-                }
-            }
-		}
-		
-		public function notifyObservers():void {
-		    for(var ob=0; ob<observers.length; ob++) {
-		        observers[ob].notify(this);
-		    }
-		}
-		
-		public function notify(subject):void {
+				
+		override public function notify(subject):void {
 		    if(checkCollision(subject)) {
 		        if(subject is Enemy) {
 		            trace("Hit!");

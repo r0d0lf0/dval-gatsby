@@ -15,7 +15,7 @@ package engine.actors.background {
             trace("ground created");
         }
         
-        public function notify(subject:*):void {
+        override public function notify(subject:*):void {
             if(subject is Hero) {
                 playerOffset -= speed;
                 if(playerOffset <= -loopPoint) {

@@ -4,13 +4,13 @@
 	import engine.actors.Actor;
 	import engine.IObserver;
 
-	dynamic public class Block extends Actor implements IObserver {
+	dynamic public class Block extends Actor {
 		
 		public function Block():void{
 			super();
 		}
 		
-		public function notify(subject:*):void {
+		override public function notify(subject:*):void {
 		    if(checkCollision(subject)) {
 		        subject.collide(this);
 		    }

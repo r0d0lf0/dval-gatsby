@@ -15,7 +15,7 @@ package engine.actors.specials {
             trace("powerup!");
         }
         
-        public function notify(subject:*):void {
+        override public function notify(subject:*):void {
             if(!taken && subject is Hero) {
                 if(checkCollision(subject)) {
                     subject.receivePowerup(this);

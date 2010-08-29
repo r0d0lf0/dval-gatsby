@@ -10,10 +10,8 @@
 	import engine.actors.Actor;
 	import engine.actors.player.Hero;
 
-	dynamic public class Door extends Actor implements IObserver, ISubject {
-		
-		private var observers:Array = new Array();
-		
+	dynamic public class Door extends Actor {
+				
 		public function Door():void{
 			super();
 		}
@@ -38,7 +36,7 @@
 			}
 		}
 		
-		public function notify(subject:*):void {
+		override public function notify(subject:*):void {
 		    if(subject is Hero) {
 		        if(subject.y >= this.y && subject.y <= (this.y+this.height)) {
     		        if(subject.x >= this.x && subject.x <= (this.x+this.width)) {
@@ -48,23 +46,5 @@
 		    }
 		}
 		
-		public function addObserver(observer):void {
-		    observers.push(observer);
-		}
-		
-		public function removeObserver(observer):void {
-		    for (var ob:int=0; ob<observers.length; ob++) {
-                if(observers[ob] == observer) {
-                    observers.splice (ob,1); break;
-                    break;
-                }
-            }
-		}
-		
-		public function notifyObservers():void {
-		    for(var ob=0; ob<observers.length; ob++) {
-		        observers[ob].notify(this);
-		    }
-		}
 	}
 }

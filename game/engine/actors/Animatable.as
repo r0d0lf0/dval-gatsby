@@ -160,7 +160,7 @@
 		    nowFrame = startFrame;
 		    frameCounter = speed;
 		    animate();
-		    //frameCounter = 3;
+		    frameCounter = 3;
 		}
 		
 	}//end class

@@ -1,11 +1,6 @@
 package engine.actors.enemies {
     
-    import engine.IObserver;
-    import engine.ISubject;
-    import flash.media.Sound;
-	import flash.media.SoundChannel;
-    
-    public class EnemyWaiter extends EnemyWalker implements ISubject, IObserver {
+    public class EnemyWaiter extends EnemyWalker {
 		
 		override public function setup() {
 		    collide_left = 10; // what pixel do we collide on on the left

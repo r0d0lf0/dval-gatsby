@@ -16,6 +16,7 @@
 
         protected var observers:Array = new Array();
 		protected var me:Point = localToGlobal(new Point(0,0));
+		protected var onStage:Boolean = false;
 		private var actor:*;
 		private var ldr;
 		
@@ -40,17 +41,26 @@
 			removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			buildObject();
 		}
+		
 		//initialize object after it's on stage
 		public function buildObject():void {
+		    onStage = true;
+		    setup();
 			this.addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
 			//this.addEventListener(Event.ENTER_FRAME, onFrame);
 			//doTexture(this.tex);
 		}
+		
+		public function setup() {
+		    // this will get overwritten later
+		}
+		
 		//clean up and free resources
 		public function onRemove(evt:Event):void{
 			//this.removeEventListener(Event.ENTER_FRAME, onFrame);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, onRemove);
 		}
+		
 		//handles loading textures in the library
 		public function skin(tex):Bitmap {
 			var ClassReference:Class = getDefinitionByName(tex) as Class;

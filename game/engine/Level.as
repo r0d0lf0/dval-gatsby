@@ -8,15 +8,15 @@
 	
 	dynamic public class Level extends MovieClip implements IScreen {
 	
+	    protected var levelNumber:String = "LEVEL X";
+	    protected var levelName:String = "UNNAMED";
+	
 		protected var mapList:Array;
 		protected var currentMapIndex:Number = 0;
 		protected var currentScreen;
 		protected var status:String = 'UNINITIALIZED';
 		protected var scoreboardDisplay:ScoreboardDisplay;
 		protected var scoreboard:Scoreboard;
-		
-		//protected var startScreen = new LevelStart();
-		// add in stuff for level start screen later
 		
  		public function Level():void{
 			if(stage){

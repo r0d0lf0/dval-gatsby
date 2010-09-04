@@ -66,7 +66,6 @@
 		
 		override public function update():void {
 		    animate();
-		    trace("P: " + this.y);
 		    if(this.y < 50) {
 		        velocity = 1;
 		    } else if(this.y > 140) {

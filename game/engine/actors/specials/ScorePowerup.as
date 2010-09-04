@@ -38,6 +38,7 @@ package engine.actors.specials {
                 if(checkCollision(subject)) {
                     subject.receivePowerup(this);
                     taken = true;
+                    myMap.removeFromMap(this);
                 }   
             }
         }

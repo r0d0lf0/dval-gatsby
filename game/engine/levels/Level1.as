@@ -16,9 +16,6 @@
 	
 	public class Level1 extends Level implements ISubject, IObserver {
 	    
-	    private var levelNumber:String = "LEVEL 1";
-	    private var levelName:String = "GATSBY'S PARTY";
-	    
 	    private var observers:Array = new Array();
 	    private var music:music_level1;
 	    private var musicChannel:SoundChannel;
@@ -26,6 +23,8 @@
 	    
 		public function Level1():void{
 		    mapList = new Array('level1_map1', 'level1_map2', 'level1_map3'); // use this later for dylan-style level loading by converting strings to classes
+			levelNumber = "LEVEL 1";
+			levelName = "GATSBY'S PARTY";
 			currentScreen = new LevelStart(); // we're just starting, so create a LevelStart screen
 			currentScreen.setLevelName(levelName);  // give it our level name
 			currentScreen.setLevelNumber(levelNumber); // and our level number
@@ -80,7 +79,7 @@
 		private function getMap(mapIndex) {
 		    switch(mapIndex) {
 		        case 1:
-		            return new level1_map2();
+		            return new level1_map1();
 		        case 2:
 		            return new level1_map2();
 		        case 3:

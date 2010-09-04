@@ -2,6 +2,7 @@
 
     import engine.IObserver;
     import engine.ISubject;
+    import engine.Map;
     import engine.actors.player.Hero;
 	import flash.display.MovieClip;
 	import flash.display.Bitmap;
@@ -17,6 +18,8 @@
         protected var observers:Array = new Array();
 		protected var me:Point = localToGlobal(new Point(0,0));
 		protected var onStage:Boolean = false;
+		protected var myMap:Map;
+		public var myStatus = 'INACTIVE';
 		private var actor:*;
 		private var ldr;
 		
@@ -66,20 +69,7 @@
 			var ClassReference:Class = getDefinitionByName(tex) as Class;
 			var newScreen = new ClassReference();
 			return newScreen;
-		
-			//written this way for levelEDitor compatibility
-			//if tex is null, load a Charlie (It's white square! hahahaha)
-			/*if (tex != null && tex != undefined && tex!= '') {
-				imgLdr.load(tex);
-			} else {
-				textureLoadFail();
-			}*/
-		}/*
-		//check if the thing hit the Hero
-		//look up "Axis based collisions"
-		private function onFrame(evt:Event):void{
-			
-		}*/
+		}
 		
 		public function checkCollision(subject) {
 		    if((subject.x + subject.collide_right) >= this.x && (subject.x + subject.collide_left) <= this.x + this.width) {
@@ -110,6 +100,10 @@
 		
 		public function notify(subject:*):void {
 		    // this will be overwritten
+		}
+		
+		public function setMap(map:Map):void {
+		    myMap = map;
 		}
 		
 		public function addObserver(observer):void {

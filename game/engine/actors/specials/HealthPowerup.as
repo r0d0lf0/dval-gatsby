@@ -16,7 +16,6 @@ package engine.actors.specials {
         }
         
         override public function setup() {
-		    trace("Setup!");
 		    myName = "Money"; // the generic name of our enemy
             mySkin = "ItemMartiniSkin"; // the name of the skin for this enemy
             
@@ -39,6 +38,7 @@ package engine.actors.specials {
                 if(checkCollision(subject)) {
                     subject.receivePowerup(this);
                     taken = true;
+                    myMap.removeFromMap(this);
                 }   
             }
         }

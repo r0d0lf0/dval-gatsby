@@ -49,6 +49,12 @@ package engine.actors {
             effectsChannel = DialogBoxSound.play(0, 100);
         }
         
+        public function start() {
+            // here's where we start the dialog box
+            this.alpha = 1;
+            typingFlag = true;
+        }
+        
         public function blinkArrow(event:TimerEvent) {
             if(DownArrow.alpha) {
                 DownArrow.alpha = 0;

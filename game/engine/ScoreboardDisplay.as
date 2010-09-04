@@ -75,7 +75,6 @@ package engine{
             setHealth(scoreboard.getHP());
             setScore(scoreboard.getScore());
             setLives(scoreboard.getLives());
-            trace("Lives " + scoreboard.getLives());
         }
         
     }

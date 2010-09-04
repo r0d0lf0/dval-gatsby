@@ -22,7 +22,7 @@ package engine.actors.enemies {
 		    
 		    if(deadFlag) {
 		       if(this.y > 240) {
-                   // shouldn't something happen right here?
+                   myMap.removeFromMap(this);
 		       } else {
 		           setLoop(0, 2, 2, 2, 0);
     		       this.y += 2;

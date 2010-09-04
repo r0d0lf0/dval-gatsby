@@ -82,7 +82,6 @@
 		
 		private var frameStarted:Boolean = false;
 		private var statusSet:Boolean = false;
-		private var map;
 		
 		private var newAction;
 		private var prevAction;
@@ -90,8 +89,6 @@
 		
 		// constructor, geesh
 		public function Hero():void {    
-		    //observers = new Array(); // initialize our observers array
-			//trace("game loaded");
 			if (stage != null) {
 				buildHero();
 			} else {
@@ -107,16 +104,20 @@
 		}
 		
 		public override function update():void {
-		    if(damageFlag) {  // if we're being damaged
-		        if(damageCounter < damageDuration) { // flicker our alpha
-		            this.alpha = damageCounter % 2; // every other frame
-		            damageCounter++; // and count how long we've been damaged
-		        } else { // if there's a damage flag, and duration is up
-		            damageCounter = 0; // reset the damage counter
-		            damageFlag = false; // and remove damage flag
-		        }
+		    if(HP) {
+		        if(damageFlag) {  // if we're being damaged
+    		        if(damageCounter < damageDuration) { // flicker our alpha
+    		            this.alpha = damageCounter % 2; // every other frame
+    		            damageCounter++; // and count how long we've been damaged
+    		        } else { // if there's a damage flag, and duration is up
+    		            damageCounter = 0; // reset the damage counter
+    		            damageFlag = false; // and remove damage flag
+    		        }
+    		    }
+    		    moveMe();
+		    } else {
+                killMe();
 		    }
-		    moveMe();
 		}
 		
 		// keeps anim going if it needs to
@@ -155,9 +156,7 @@
 		    } else if(powerup is ScorePowerup) {
 		        scoreboard.addToScore(powerup.points);
 		    }
-
 		    effectsChannel = powerupSound.play(0);
-		    map.removeFromMap(powerup);
 		}
 		
 		private function land(observer):void {
@@ -177,7 +176,6 @@
 		private function depart(observer):void {
 		    standFlag = false;
 		    stuckTo = false;
-		    trace("departed!");
 		}
 		
 		private function checkRight(observer):Boolean {
@@ -205,10 +203,7 @@
 		}
 		
 		private function checkTop(observer):Boolean {
-                trace("Platform: x:" + observer.x + "y:" + observer.y);
                 var globalCoords = getGlobals(observer);
-                trace("Global: x:" + (observer.parent.x + observer.parent.height));
-                trace("Hero: x:" + this.x + "y:" + this.y);
     		    if((this.y + this.height) > observer.y) { // if we're collided with the top currently
     		        if((this.y + this.height) - this.vely <= observer.y) { // and we hadn't collided in the previous frame
     		            return true;
@@ -222,12 +217,9 @@
 		    if(observer is Cloud || observer is FountainPlatform) {
 		        if(checkTop(observer) || observer == stuckTo) {
 		            land(observer);
-		            if(observer is FountainPlatform) {
-		                trace("landing on platform!");
-		            }
 		        }
 		    } else if(observer is Door) {
-		        trace("Door collision!");
+
 		    } else if(observer is Block) {
                 if(checkRight(observer)) {  // if we hit the right edge of the block
 	                this.x = (observer.x + observer.width) - collide_left; // set us to there
@@ -243,10 +235,6 @@
 		
 		public function getHP():Number {
 		    return HP;
-		}
-		
-		public function setMap(map) {
-		    this.map = map;
 		}
 	    
 	    private function readInput():void {
@@ -300,14 +288,13 @@
 	    private function throwHat() {
 	        throwSound.play(0);
 	        hat.throwHat(goingLeft);
-	        map.spawnActor(hat);
-            trace("Shoot!");
+	        myMap.spawnActor(hat);
             hatAvailable = false;
 	    }
 	    
 	    public function catchMe(object) {
 	        if(!hatAvailable) {
-	            map.removeFromMap(object);
+	            myMap.removeFromMap(object);
     	        hatAvailable = true;
 	        }
 	    }
@@ -332,7 +319,6 @@
 	        }
 	        
             if(newAction != prevAction) {
-//                trace("New Action = " + newAction);
                 setAction(newAction);
                 setAnimation(newAction);
             }
@@ -357,25 +343,26 @@
 		public function setAnimation(status) {
 			switch(myAction) {
 		        case WALK:
-		            setLoop(0, 1, 4, 2, 1);
+		            setLoop(0, 1, 4, 1, 1, 5);
 		            break;
 		        case JUMP:
-		            setLoop(2, 2, 2, 2, 0);
+		            setLoop(2, 1, 1, 1, 0, 5);
 		            break;
 		        case STAND:
-		            setLoop(0, 0, 0, 0, 0);
+		            setLoop(0, 5, 5, 5, 0, 5);
 		            break;
 		        case FALL:
-		            setLoop(2, 2, 2, 2, 0);
+		            setLoop(2, 1, 1, 1, 0, 5);
 		            break;
 		        case DUCK:
-		            setLoop(4, 0, 1, 1, 1);
+		            setLoop(4, 0, 1, 1, 1, 5);
 		            break;
 		        case THROW:
-		            setLoop(6, 0, 1, 1, 1);
+		            setLoop(6, 0, 1, 1, 1, 5);
 		            break;
 		        case DIE:
-		            setLoop(8, 0, 1, 0, 0);
+		            setLoop(8, 0, 1, 0, 0, 5);
+		            trace("Death animation!");
 		            break;
 		    }
 		}
@@ -418,16 +405,33 @@
     			
     			updateStatus(); // update our status
 
-				animate(); // animate, now that we know what we're doing
+				
 
     			frameCount = 0;
 				frameStarted = false;
 		    } else {
 		        frameCount++;
 		    }
-		    
+            animate(); // animate, now that we know what we're doing
 		}
 		
+		public function killMe():void {
+		    if(myStatus != 'DYING') {
+	            myStatus = 'DYING';
+	            this.vely = -10;
+	            setLoop(8, 0, 1, 0, 0, 2);
+	        }
+		    if(frameCount >= frameDelay) {
+		        applyPhysics();
+		        this.y += vely;
+		        animate();
+		        if(this.y > 240) {
+		            myStatus = 'DEAD';
+		        }
+		    } else {
+		        frameCount++;
+		    }
+		}
 		
 	}
 }

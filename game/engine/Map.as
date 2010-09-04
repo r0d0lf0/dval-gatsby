@@ -16,7 +16,7 @@
 		public var observerArray:Array = new Array(); // this is the array of observers on the map
 		public var subjectArray:Array = new Array(); // this is the array of subjects on the map
 		
-		private var observers:Array = new Array(); // this is the array of objects subscribed to this
+		private var observers:Array = new Array(); // this is the array of objects subscribed to this map
 		
 		private var screenPadding:Number = 90; // the number of pixels near the edge before the screen begins panning
 		private var screenWidth:Number = 256; // how wide is our viewport
@@ -30,7 +30,6 @@
 	    private var scoreboard:Scoreboard; // grab an instance of our scoreboard
 		
 		public function Map():void {
-			//trace("game loaded");
 			if (stage != null) {
 				buildMap();
 			} else {
@@ -56,7 +55,6 @@
     				    subjectArray.push(myChild);
     				    if(myChild is Hero) {
     				        myHero = myChild;
-    				        myHero.setMap(this);
     				    }
     				}
     				if(myChild is IObserver) {
@@ -64,6 +62,9 @@
     				    if(myChild is Cloud || myChild is Door || myChild is Block) {
     				        myChild.alpha = 0;
     				    }
+    				}
+    				if(myChild is Actor) {
+    				    myChild.setMap(this);
     				}
     			}
     			
@@ -76,11 +77,6 @@
     		    
 
 			}
-			
-			
-
-			
-			
 			//move to bottom screen of map
 			//this.y = 0-(this.height - (game.screenHeight*2));
 			trace("objects referenced.");
@@ -158,7 +154,6 @@
 		        if(heroHP != subject.getHP()) { // if our hero's HP has changed
 		            heroHP = subject.getHP(); // reset our holder for HP
 		            notifyObservers(); // and tell the level about it
-		            trace("LIFE LOST");
 		        }
 		    } else if(subject is Door) {
 		        status = 'COMPLETE';
@@ -207,15 +202,16 @@
 		public function update():Boolean {
 		    customUpdate();
 		    updateSubjects();
-		    if(heroHP) {
-		        if(status == 'COMPLETE') {
+		    
+		    if(status == 'COMPLETE') {
+		        return false;
+		    } else {
+		        if(myHero.myStatus == 'DEAD') {
+		            status = 'HERO DEAD';
 		            return false;
 		        } else {
 		            return true;
 		        }
-		    } else {
-		        status = 'HERO DEAD';
-		        return false;
 		    }
 		}
 	}

@@ -70,7 +70,6 @@ package controls{
 		}
 		
 		static public function getLastKey():int {
-			//trace(last_key_pressed);
 		    return last_key_pressed;
 		}
 		//check if any keys are pressed. (helper function)

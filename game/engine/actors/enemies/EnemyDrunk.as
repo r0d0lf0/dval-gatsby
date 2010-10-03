@@ -33,9 +33,24 @@ package engine.actors.enemies {
             loopRow = 0; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
             speed = 5; // how many frames should go by before we advance
+            
+            velx = 0;
 		}
 		
-		override public function moveMe() {
+		public override function moveMe():void {
+		    if(frameCount >= frameDelay) { 
+    			frameStarted = true;
+				statusSet = false;
+
+		        this.y += vely; // update our y variable
+    			this.x += velx; // update our x variable
+    			
+    			notifyObservers(); // tell everybody where we are now
+    			applyPhysics(); // apply our enviromental variables
+    			updateStatus(); // update our status
+                frameCount = 0;
+				frameStarted = false;
+		    }
 		    if(currentStatus == STUMBLING) {
 		        if(actionCounter >= actionDuration) {
 		            if(Math.ceil(Math.random() * 4) == 4) {
@@ -71,6 +86,7 @@ package engine.actors.enemies {
 		    }
 		    this.x += walkSpeed;
 		    actionCounter++;
+		    animate();
 		}
 		
 		private function throwBottle() {

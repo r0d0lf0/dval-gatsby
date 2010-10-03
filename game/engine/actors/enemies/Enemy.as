@@ -7,7 +7,6 @@ package engine.actors.enemies {
     
     public class Enemy extends Animatable {
         
-        protected var HP:Number = 1;
         protected var attack_strength:Number = 1;
         protected var deadFlag:Boolean = false;
 
@@ -53,14 +52,6 @@ package engine.actors.enemies {
 		        deadFlag = true;
 		    }
 		    return false;
-        }
-        
-        // the hero will use this to deal damage
-        public function receiveDamage(damage:Number) {
-            HP -= damage;
-            if(HP <= 0) {
-                HP = 0;
-            }
         }
 
 		override public function notify(subject):void {

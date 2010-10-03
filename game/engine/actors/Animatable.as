@@ -43,6 +43,10 @@
 		
 		public var mySkin:String = "GenericEnemySkin";
         public var myName:String = "GenericEnemy";
+        
+        protected var frameDelay:Number = 0; // number of frames 
+		protected var frameCount:Number = 0; // current frame count
+
 		//
 		//public var aBytes:ByteArray = animData.getPixels(animCopy); // the pixels in the aDisplay
         
@@ -67,8 +71,6 @@
 		    setup();
 		    setSkin(mySkin,tilesWide,tilesTall);
 			this.addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
-			//this.addEventListener(Event.ENTER_FRAME, onFrame);
-			//doTexture(this.tex);
 		}
 
 		public function setSkin(tex:String,w:int,h:int):void {
@@ -89,12 +91,9 @@
 			displayData.setPixels(aPaste,aBytes);
 			//adjust bitmap positio in sprite
 			display = new Bitmap(displayData);
-			//display.y = -32;
-			//display.x = -8;
 			//plop it on stage for all to see
 			this.addChild(display);
 		    this.y -= this.height;
-    		//return wClass;
 		}
 		
 		//status is which anim we are playing

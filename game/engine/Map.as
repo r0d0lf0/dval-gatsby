@@ -151,19 +151,18 @@
 		private function moveMap(subject):void {
 		    var stageLeft = -this.x + screenPadding;
 		    var stageRight = -this.x + (screenWidth - screenPadding);
+		    trace(subject.x + ' and ' + this.x);
 		    if(subject.x < stageLeft) {
 		       this.x = -subject.x + screenPadding;
 		    } else if(subject.x > stageRight) {
 		        this.x = -subject.x + (screenWidth - screenPadding);
 		    }
 		    
-		    if(this.x < -this.width + screenWidth) {
-		        this.x = -this.width + screenWidth;
+		    if(this.x < -this.width + (screenWidth * 1.5)) {
+		        this.x = -this.width + (screenWidth * 1.5);
 		    } else if(this.x > 0) {
 		        this.x = 0;
 		    }
-		    this.x += 1; // bizarre framerate fix
-		    this.x -= 1; // keeps things moving quickly on mac
 		}
 		
 		public function getHeroHP():Number {

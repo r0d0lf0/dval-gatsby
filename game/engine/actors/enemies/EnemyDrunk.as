@@ -53,7 +53,7 @@ package engine.actors.enemies {
 		    }
 		    if(currentStatus == STUMBLING) {
 		        if(actionCounter >= actionDuration) {
-		            if(Math.ceil(Math.random() * 4) == 4) {
+		            if(Math.ceil(Math.random() * 3) == 3) {
 		                actionDuration = drinkDuration;
     		            currentStatus = DRINKING;
     		            setLoop(2, 0, 1, 0, 0);

@@ -36,12 +36,13 @@
 		        switch(currentScreen.getStatus()) {
 		            case 'COMPLETE': // if our map returned COMPLETE
 		                currentMapIndex++; // increment the current map index
-		                if(currentMapIndex == 1) {
-		                    startMusic();
+		                if(currentMapIndex == 1) { // if we're on the first map
+		                    startMusic(); // start the music
 		                }
 		                if(currentMapIndex < (mapList.length + 1)) { // and if we haven't finished the last map
 		                    myKeys.removeObserver(currentScreen); // unsubscribe it from the KeyMap
-		                    removeChild(currentScreen); // remove the current map
+		                    currentScreen.alpha = 0; // make the current map invisible invisible
+		                    removeChild(currentScreen); // and remove it from the stage
 		                    currentScreen = getMap(currentMapIndex);  // get the next one
 		                    addChild(scoreboardDisplay); // add the scoreboard
                             addChild(currentScreen); // add the new child

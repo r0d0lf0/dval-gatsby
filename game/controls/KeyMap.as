@@ -4,15 +4,18 @@ package controls{
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
+	import engine.ISubject;
 	
-	dynamic public class KeyMap extends Sprite {
+	dynamic public class KeyMap extends Sprite implements ISubject {
 		
 		static public var _keyMap:Array=new Array();
+		private static var _instance:KeyMap=null;
 		public static const KEY_DOWN:String = KeyboardEvent.KEY_DOWN;
 		public static const KEY_UP:String = KeyboardEvent.KEY_UP;
 		private static var last_key_pressed:int = 0;
+		private var observers:Array = new Array();
 		
-		public function KeyMap():void {
+		public function KeyMap(e:SingletonEnforcer):void {
 			// map control keys
 			_keyMap[32]=false; //SPACEBAR
 			_keyMap[37]=false; //LEFT
@@ -43,6 +46,14 @@ package controls{
 				addEventListener(Event.ADDED_TO_STAGE,subInit);
 			}
 		}
+		
+		public static function getInstance():KeyMap{
+            if(_instance==null){
+                _instance=new KeyMap(new SingletonEnforcer());
+            }
+            return _instance;
+        }
+		
 		//load listeners after stage is loaded
 		private function subInit(evt:Event):void{
 			buildKeys();
@@ -80,5 +91,40 @@ package controls{
 			}
 			return tmp;
 		}
+		
+		public function addObserver(observer):void {
+		    if(!isObserver(observer)) {
+		        observers.push(observer);
+		    }
+		}
+		
+		public function isObserver(observer):Boolean {
+		    for(var ob:int=0; ob<observers.length; ob++) {
+		        if(observers[ob] == observer) {
+		            return true;
+		        }
+		    }
+		    return false;
+		}
+		
+		public function removeObserver(observer):void {
+		    for (var ob:int=0; ob<observers.length; ob++) {
+                if(observers[ob] == observer) {
+                    observers.splice(ob,1);
+                    break;
+                }
+            }
+		}
+		
+	    public function notifyObservers():void {
+		    for(var ob=0; ob<observers.length; ob++) {
+		        observers[ob].notify(this);
+		    }
+		}
 	}
+}
+
+//I’m outside the package so I can only be access internally
+class SingletonEnforcer{
+//nothing else required here
 }

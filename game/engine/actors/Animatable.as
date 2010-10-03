@@ -163,9 +163,6 @@
 		    if(nowFrame < 0) {
 		        nowFrame = 0;
 		    }
-		    if(nowFrame > 5) {
-		        nowFrame = 5;
-		    }
 		}
 		
 		public function setLoop(loopRow, startFrame, endFrame, loopFrame, loopType, speed = 5) {

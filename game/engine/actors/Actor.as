@@ -13,7 +13,7 @@
 	import engine.ISubject;
 	
 
-	dynamic public class Actor extends MovieClip implements ISubject, IObserver {
+	dynamic public class Actor extends MovieClip implements IObserver, ISubject {
 
         protected var observers:Array = new Array();
 		protected var me:Point = localToGlobal(new Point(0,0));
@@ -107,13 +107,24 @@
 		}
 		
 		public function addObserver(observer):void {
-		    observers.push(observer);
+		    if(!isObserver(observer)) {
+		        observers.push(observer);
+		    }
+		}
+		
+		public function isObserver(observer):Boolean {
+		    for(var ob:int=0; ob<observers.length; ob++) {
+		        if(observers[ob] == observer) {
+		            return true;
+		        }
+		    }
+		    return false;
 		}
 		
 		public function removeObserver(observer):void {
-		    for (var ob:int=0; ob<observers.length; ob++) {
-                if(observers[ob] == observer) {
-                    observers.splice(ob,1);
+		    for (var ro:int=0; ro<observers.length; ro++) {
+                if(observers[ro] == observer) {
+                    observers.splice(ro,1);
                     break;
                 }
             }

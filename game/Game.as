@@ -10,7 +10,7 @@
 	
 		//public var scrnManager:ScreenManager = new ScreenManager();
 		private var engine:Engine;
-		private var keymap:KeyMap = new KeyMap();
+		private var keymap:KeyMap = KeyMap.getInstance();
 		public function Game():void{
 			
 			if(stage){

@@ -1,7 +1,6 @@
 package engine.actors.weapons {
     
     import engine.IObserver;
-    import engine.ISubject;
     import engine.actors.Actor;
     import engine.actors.player.Hero;
     import engine.actors.enemies.Enemy;
@@ -9,10 +8,8 @@ package engine.actors.weapons {
     import flash.events.Event;
     import engine.actors.Animatable;
     
-    public class HatWeapon extends Animatable {
+    public class HatWeapon extends Weapon implements IObserver {
         
-        private var flySpeed:Number = 7;
-        private var owner:Actor;
         private var returning:Boolean = false;
         private var throwDistance:int = 15;
         
@@ -20,14 +17,14 @@ package engine.actors.weapons {
         private var velX:Number = 0;
         private var velY:Number = 0;
         
-        private var frameCount:int = 0;
-        private var frameDelay:int = 2;
-        
         public function HatWeapon(owner) {
-            this.owner = owner;
-		}
+            super(owner);
+        }
 		
 		override public function setup() {
+		    
+		    damage = 1;
+		    
 		    myName = "HatWeapon";
             mySkin = "HatWeaponSkin";
 		    
@@ -46,17 +43,14 @@ package engine.actors.weapons {
             speed = 2; // how many frames should go by before we advance
     		
 		}
-		
-		public function setOwner(owner) {
-		    this.owner = owner;
-		}
 				
 		override public function notify(subject):void {
 		    if(checkCollision(subject)) {
 		        if(subject is Enemy) {
-		            trace("Hit!");
-		            subject.receiveDamage(1);
-		            returning = true;
+		            subject.receiveDamage(damage);
+		            if(!returning) {
+		                returning = true;
+		            }
 		        } else if(subject is Hero && returning) {
 		            subject.catchMe(this);
 		        }
@@ -64,6 +58,7 @@ package engine.actors.weapons {
 		}
 		
 		public function throwHat(goingLeft) {
+		    frameCount = 0;
 		    frameDelay = throwDistance;
 		    if(goingLeft) {
     		    velX = -flySpeed;
@@ -111,12 +106,10 @@ package engine.actors.weapons {
 		        frameCount = 0;
 		        if(!returning) {
 		            returning = true;
-		            frameDelay = 2;
     		    } else {
     		        flyBack();
     		    }
-    		    
-		        
+    		    frameDelay = 2;
 		    } else {
 		        frameCount++;
 		    }

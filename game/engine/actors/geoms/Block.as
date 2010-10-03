@@ -1,10 +1,10 @@
 ﻿package engine.actors.geoms{
 	
 	import flash.display.DisplayObject;
-	import engine.actors.Actor;
+	import engine.actors.geoms.Geom;
 	import engine.IObserver;
 
-	dynamic public class Block extends Actor {
+	dynamic public class Block extends Geom {
 		
 		public function Block():void{
 			super();

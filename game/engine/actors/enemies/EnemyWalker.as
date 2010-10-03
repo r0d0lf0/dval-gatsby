@@ -16,19 +16,10 @@ package engine.actors.enemies {
 		    this.y -= this.height; // bring waiters up to floor
         }
         
-        override public function update():void {
-		    animate();
-            checkDeath();
-		    
-		    if(deadFlag) {
-		       if(this.y > 240) {
-                   myMap.removeFromMap(this);
-		       } else {
-		           setLoop(0, 2, 2, 2, 0);
-    		       this.y += 2;
-		       }
-		    }
-		    if(frameCount >= frameDelay) {
+        public function moveMe() {
+            // this will get overwritten later,
+            // this is to control how the guy moves around
+            if(frameCount >= frameDelay) {
 		        this.x += walkSpeed;
 		        frameCount = 0;
 		        notifyObservers();
@@ -43,11 +34,27 @@ package engine.actors.enemies {
 		    } else {
 		        frameCount++;
 		    }
+        }
+        
+        override public function update():void {
+            moveMe();
+		    animate();
+            checkDeath();
+		    
+		    if(deadFlag) {
+		       if(this.y > 240) {
+                   myMap.removeFromMap(this);
+		       } else {
+		           setLoop(0, 2, 2, 2, 0);
+    		       this.y += 2;
+		       }
+		    }
+		    
 		    groundCollide = false;
 		}
         
         public function collide(subject) {
-		    if(subject is Cloud) {
+		    if(subject is Geom) {
 		        if(!groundCollide) {
     		        groundCollide = true;
     		    }

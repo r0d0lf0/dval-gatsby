@@ -61,14 +61,25 @@ package engine {
             Scoreboard.lives = newLives;
         }
         
-        public function addObserver(observer):void {
-		    observers.push(observer);
+		public function addObserver(observer):void {
+		    if(!isObserver(observer)) {
+		        observers.push(observer);
+		    }
+		}
+		
+		public function isObserver(observer):Boolean {
+		    for(var ob:int=0; ob<observers.length; ob++) {
+		        if(observers[ob] == observer) {
+		            return true;
+		        }
+		    }
+		    return false;
 		}
 		
 		public function removeObserver(observer):void {
 		    for (var ob:int=0; ob<observers.length; ob++) {
                 if(observers[ob] == observer) {
-                    observers.splice (ob,1); break;
+                    observers.splice (ob,1);
                     break;
                 }
             }

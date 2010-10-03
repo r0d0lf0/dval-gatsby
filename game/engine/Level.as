@@ -1,12 +1,13 @@
 ﻿package engine{
 	
 	import flash.display.MovieClip;
+	import controls.KeyMap;
 	import flash.events.Event;
 	import engine.screens.*;
 	import engine.ScoreboardDisplay;
 	import engine.Scoreboard;
 	
-	dynamic public class Level extends MovieClip implements IScreen {
+	dynamic public class Level extends MovieClip implements IScreen, ISubject, IObserver {
 	
 	    protected var levelNumber:String = "LEVEL X";
 	    protected var levelName:String = "UNNAMED";
@@ -17,6 +18,10 @@
 		protected var status:String = 'UNINITIALIZED';
 		protected var scoreboardDisplay:ScoreboardDisplay;
 		protected var scoreboard:Scoreboard;
+		
+	    private var observers:Array = new Array();
+	    
+	    protected var myKeys:KeyMap = KeyMap.getInstance();
 		
  		public function Level():void{
 			if(stage){
@@ -43,6 +48,11 @@
 		    return status;
 		}
 		
+		private function loadScreen(screen:MovieClip) {
+		    myKeys.addSubscriber(screen);
+		    this.addChild(screen);
+		}
+		
 		public function setStatus(status:String):void {
 		    this.status = status;
 		}
@@ -53,6 +63,40 @@
 		
 		public function restart():void {
 		    
+		}
+		
+		public function notify(subject:*):void {
+
+		}
+		
+		public function addObserver(observer):void {
+		    if(!isObserver(observer)) {
+		        observers.push(observer);
+		    }
+		}
+		
+		public function isObserver(observer):Boolean {
+		    for(var ob:int=0; ob<observers.length; ob++) {
+		        if(observers[ob] == observer) {
+		            return true;
+		        }
+		    }
+		    return false;
+		}
+		
+		public function removeObserver(observer):void {
+		    for (var ob:int=0; ob<observers.length; ob++) {
+                if(observers[ob] == observer) {
+                    observers.splice (ob,1);
+                    break;
+                }
+            }
+		}
+		
+		public function notifyObservers():void {
+		    for(var ob=0; ob<observers.length; ob++) {
+		        observers[ob].notify(this);
+		    }
 		}
 		
 		

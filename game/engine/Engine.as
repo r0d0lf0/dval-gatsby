@@ -19,7 +19,7 @@
 	    private var playerScore:Number = 0;
 	    private var playerLives:Number = 1;
 	    
-	    static private var screenList:Array = new Array('gameOpen','Level1','Level2');
+	    static private var screenList:Array = new Array('Level1','Level2');
 		
 		public function Engine():void {
 			//check for flash spacetime coordinates
@@ -49,7 +49,7 @@
             if(!currentScreen.update()) {  // if our current screen returns false
                 switch(currentScreen.getStatus()) {  // find out why and react
                     case 'COMPLETE': // our screen completed successfully
-                        removeChild(currentScreen) // remove the current screen from the stage
+                        //removeChild(currentScreen) // remove the current screen from the stage
                         currentScreenIndex++; // increment our index
                         if(currentScreenIndex >= screenList.length) {  // if we're out of screens
                             // game's over.  restart
@@ -64,11 +64,11 @@
                     case 'HERO DEAD': // if our hero died
                         scoreboard.removeLife(); //
                         if(scoreboard.getLives() <= 0) { // if we're out of lives
-                            removeChild(currentScreen);
+                            //removeChild(currentScreen);
                             currentScreen = new GameOver();
                             addChild(currentScreen);
                         } else { // if he still has at least one life
-                            removeChild(currentScreen); // remove the current screen
+                            //removeChild(currentScreen); // remove the current screen
                             currentScreen = screenManager.getScreen(screenList[currentScreenIndex]); // recreate the current screen
                             if(currentScreen is ISubject) { // if it's subscribable
                                 currentScreen.addObserver(this); // subscribe to it
@@ -77,7 +77,7 @@
                         }
                         break;
                     case 'GAME OVER':
-                        removeChild(currentScreen);
+                        //removeChild(currentScreen);
                         currentScreenIndex = 0;
                         scoreboard.setLives(3);
                         currentScreen = screenManager.getScreen(screenList[currentScreenIndex]); // create an instance of our first screen

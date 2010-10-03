@@ -13,6 +13,7 @@ package engine.screens{
 	    private var counter:Number = 0;
 	    private var levelNumber = "UNDEFINED";
 	    private var levelName = "UNDEFINED";
+	    
 	    public function LevelStart() {
 	        trace("GameOpen opened.");
 	        status = 'ACTIVE';

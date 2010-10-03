@@ -23,8 +23,13 @@
 		private var actor:*;
 		private var ldr;
 		
+		protected var HP:Number = 1;
+		
 		public var collide_left:int = 10; // what pixel do we collide on on the left
 		public var collide_right:int = 22; // what pixel do we collide on on the right
+		
+		public var collide_left_ground:int = 22;
+		public var collide_right_ground:int = 10;
 		
 		//so nice
 		//public var imgLdr = new ImageLoader(textureLoadSuccess,textureLoadFail);
@@ -77,6 +82,16 @@
 		            return true;
 		        }
 		    }
+		    return false;
+		}
+		
+		public function checkGroundCollision(subject) {
+		    if((subject.x + subject.collide_right_ground) >= this.x && (subject.x + subject.collide_left_ground) <= this.x + this.width) {
+		        if((this.y + this.height) >= subject.y && this.y <= (subject.y + subject.height)) {
+		            return true;
+		        }
+		    }
+		    return false;
 		}
 		
 		//show the background image
@@ -99,12 +114,26 @@
 		}
 		
 		public function notify(subject:*):void {
-		    // this will be overwritten
+		    if(checkCollision(subject)) {
+		        subject.collide(this);
+		    }
+		}
+		
+		public function collide(observer, ...args) {
+		    // this will get overwritten later
 		}
 		
 		public function setMap(map:Map):void {
 		    myMap = map;
 		}
+		
+		// the hero will use this to deal damage
+        public function receiveDamage(damage:Number):void {
+            HP -= damage;
+            if(HP <= 0) {
+                HP = 0;
+            }
+        }
 		
 		public function addObserver(observer):void {
 		    if(!isObserver(observer)) {

@@ -80,6 +80,7 @@
 		        if(!subjectExists(actor)) { // and they haven't been registered yet
     		        subjectArray.push(actor); // add them to our subjects array
     		        actor.addObserver(this); // and subscribe the map to them
+    		        subscribeAllTo(actor); // and subscribe all our observers to it
     		    }
 		    }
 		    if(actor is IObserver) { // if they're an observer
@@ -98,17 +99,23 @@
 		    }
 		}
 		
-		private function unsubscribeAll(actor) {
+		private function unsubscribeAllFrom(actor) {
 		    for(var q:int=0; q<observerArray.length; q++) { // and then loop through all our observers
                 actor.removeObserver(observerArray[q]); // and unsubscribe them from our actor  
             }
+		}
+		
+		private function subscribeAllTo(actor) {
+		    for(var q:int=0; q<observerArray.length; q++) {
+		        actor.addObserver(observerArray[q]);
+		    }
 		}
 		
 		private function deregisterActor(actor) {
 		   if(actor is ISubject) { // if he's a subject
 		       for (var sb:int=0; sb<subjectArray.length; sb++) { // go through all of our subjects
                    if(subjectArray[sb] == actor) { // and when you find the subject that's our subject
-                       unsubscribeAll(actor); // get this off everythang
+                       unsubscribeAllFrom(actor); // get this off everythang
                        subjectArray.splice(sb,1); // remove it from the array
                    }
                }

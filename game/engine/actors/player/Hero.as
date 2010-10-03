@@ -1,13 +1,13 @@
 ﻿package engine.actors.player {
+    
 	import flash.display.MovieClip;
 	import flash.geom.Rectangle;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.utils.ByteArray;
-	import flash.geom.Point;
 	import flash.events.Event;
 	import engine.actors.Actor;
-	import engine.actors.Animatable;
+	import engine.actors.Walker;
 	import engine.actors.geoms.*;
 	import engine.actors.specials.*;
 	import controls.KeyMap;
@@ -17,72 +17,30 @@
 	import flash.media.SoundChannel;
 	import engine.Scoreboard;
 
-	dynamic public class Hero extends Animatable {
+	dynamic public class Hero extends Walker {
 	    	    
 	    // these hold what things we can currently do
-	    private var walkEnabled = true;
-	    private var jumpEnabled = false;
 	    private var shootEnabled = true;
-	    private var hatAvailable = true;
-	    
-		//CHANGE THESE
-		public var jumpVelocity:uint = 10; //exponential. 20 jumps 3x higher than 10
+	    private var hatAvailable = true;		
 		
-		public var Xspeed:Number = 2;
+		public var hat;  // holder for our weapon object
 		
-		private var frameDelay:Number = 0; // number of frames 
-		private var frameCount:Number = 0; // current frame count
-		
-		//
-		public var fric:Number = 1;  //frictional coefficient of go
-		public var gravity:Number = 1;  //how much the velocity changes on each frameEvent
-		
-		
-		public var hat;  // are you using this?
-		
-		// MAX_VEL_Y has to be less than the height of most shallow platform.
-		// otherwise you will fall through the ground
-		const MAX_VEL_Y:Number = 6; // so min platform height should be 22.
-		const MAX_VEL_X:Number = 3;
-		//DON'T CHANGE THESE
-		public var vely:Number = 0;
-		public var velx:Number = 0;
-		public var imon:Boolean = false; // On|Off the ground = true|false (stnading sure-footedly)
-		public var ihit:Boolean = false; // On|Off any object = true|false (smack a wall, hit by baddy)
-		public var ldir:Boolean = true;  // Right|Left = true|false (last direction player went)
 		private var keys:KeyMap = KeyMap.getInstance();
-		private var myAction:uint = 3;
-		private var previousAction;
-		private var colliders:Array = new Array();  // temporary storage for all our colliders
-		
+						
 		private var keyboardStatus:Array = new Array();
-		
-		private var jumpCount:Number = 0;
-		private var jumpPressed:Boolean = false;
-		private var attackFlag:Boolean = false;
-		private var duckFlag:Boolean = false;
-		private var standFlag:Boolean = false;
-		
+				
 		private var jumpSound = new hero_jump();
 		private var hurtSound = new hero_hurt();
 		private var powerupSound = new powerup_sound();
 		private var throwSound = new hero_throw();
 		private var effectsChannel;
 		
-		private var stuckTo; // what surface are we currently stuck to
-		
 		private var damageFlag = false; // flag for if the hero has been damaged
 		private var damageCounter = 0; // counter variable to see how long we've been damaged
 		private var damageDuration = 60; // number of frames to be invincible after damage
 		
 		private var maxHP = 3; // max number of health points
-		private var HP = maxHP; // starting HP
-		
-		private var frameStarted:Boolean = false;
-		private var statusSet:Boolean = false;
-		
-		private var newAction;
-		private var prevAction;
+
 		private var scoreboard = Scoreboard.getInstance();
 		
 		// constructor, geesh
@@ -99,9 +57,10 @@
 		private function buildHero():void{
 			keys.addEventListener(KeyMap.KEY_UP, onKeyRelease);
 			hat = new HatWeapon(this);
+			HP = maxHP;
 		}
 		
-		public override function update():void {
+		override public function update():void {
 		    if(HP) {
 		        if(damageFlag) {  // if we're being damaged
     		        if(damageCounter < damageDuration) { // flicker our alpha
@@ -112,6 +71,7 @@
     		            damageFlag = false; // and remove damage flag
     		        }
     		    }
+    		    readInput();
     		    moveMe();
 		    } else {
                 killMe();
@@ -131,14 +91,10 @@
             mySkin = "HeroSkin"; // the name of the skin for this enemy
 		}	
 		
-		private function flipCollide(collide) {
-		    return this.width - collide;
-		}
-		
-		public function receiveDamage(damageAmount):void {
+		override public function receiveDamage(damage:Number):void {
 		    if(!damageFlag) {
 		        trace("hit");
-		        HP -= damageAmount;
+		        HP -= damage;
 		        scoreboard.setHP(HP);
     		    damageFlag = true;
     		    effectsChannel = hurtSound.play(0);  // play it
@@ -156,80 +112,6 @@
 		        scoreboard.addToScore(powerup.points);
 		    }
 		    effectsChannel = powerupSound.play(0);
-		}
-		
-		private function land(observer):void {
-		    this.vely = 0;
-		    if(observer is FountainPlatform) {
-		        this.y = (observer.y + observer.velocity) - this.height;
-		    } else {
-		        this.y = observer.y - this.height;
-		    }
-	        jumpCount = 0;
-	        standFlag = true;
-	        if(stuckTo != observer) {
-	            stuckTo = observer;
-	        }
-		}
-		
-		private function depart(observer):void {
-		    standFlag = false;
-		    stuckTo = false;
-		}
-		
-		private function checkRight(observer):Boolean {
-		    if((this.x + this.collide_left) < observer.x + observer.width) { // if we're collided with the square's right side currently
-		        if((this.x + this.collide_left) - this.velx >= observer.x + observer.width) { // and we hadn't collided in the previous frame
-		            return true;
-		        }
-		    }
-		    return false;
-		}
-		
-		private function checkLeft(observer):Boolean {
-		    if((this.x + this.collide_right) > observer.x) { // if we're collided with the block's left side currently
-		        if((this.x + this.collide_right) - this.velx <= observer.x) { // and we hadn't collided in the previous frame
-		            return true;
-		        }
-		    }
-		    return false;
-		}
-		
-		private function getGlobals(observer) {
-		    var localCoords = new Point(observer.x, observer.y);
-            var globalCoords = observer.localToGlobal(localCoords);
-            return globalCoords;
-		}
-		
-		private function checkTop(observer):Boolean {
-                var globalCoords = getGlobals(observer);
-    		    if((this.y + this.height) > observer.y) { // if we're collided with the top currently
-    		        if((this.y + this.height) - this.vely <= observer.y) { // and we hadn't collided in the previous frame
-    		            return true;
-    		        }
-    		    }
-            //}
-            return false;
-		}
-		
-		public function collide(observer, ...args) {
-		    if(observer is Cloud || observer is FountainPlatform) {
-		        if(checkTop(observer) || observer == stuckTo) {
-		            land(observer);
-		        }
-		    } else if(observer is Door) {
-
-		    } else if(observer is Block) {
-                if(checkRight(observer)) {  // if we hit the right edge of the block
-	                this.x = (observer.x + observer.width) - collide_left; // set us to there
-	            } else if(checkLeft(observer)) { // if we hit the left edge of the block
-	                this.x = observer.x - collide_right; // stop us there
-	            } else if(myAction == FALL) { // if we just fell and collided
-    	             land(observer); // land us on the top
-	            } else if(observer == stuckTo) { // otherwise, if we're colliding with the thing we're stuck to
-	                land(observer); // continue to follow it
-	            }
-		    }
 		}
 		
 		public function getHP():Number {
@@ -298,48 +180,14 @@
 	        }
 	    }
 	    
-	    private function updateStatus():void {
-	        newAction = STAND; // by default, we're standing
-	        
-	        if(standFlag) { // if we're standing on something
-	            if(!stuckTo.checkCollision(this)) { // and we're colliding with it anymore
-	                depart(stuckTo); // depart whatever platform we were on
-	            } else if(velx == 0) { // otherwise, if we're not moving
-	                newAction = STAND; // we're standing
-	            } else { // otherwise, we're walking
-	                newAction = WALK;
-	            }
-	        } else if(vely < 0) { // if we're going up
-	            newAction = JUMP; // we're jumping
-	        } else if(vely > 0) { // if we're going down
-	            newAction = FALL; // we're falling
-	        } else { // otherwise, we just peaked in a jump
-	            newAction = FALL; // now we're falling
-	        }
-	        
-            if(newAction != prevAction) {
-                setAction(newAction);
-                setAnimation(newAction);
-            }
-            prevAction = newAction;
-	    }
-	    
-	    public function setAction(myAction) {
-	        if(this.myAction != myAction) { // if we're defining a new action
-	            this.myAction = myAction;
-	            if(myAction == JUMP || myAction == FALL) {
-	                walkEnabled = true;
-	                jumpEnabled = false;
-	                shootEnabled = true;
-	            } else if(myAction == STAND || myAction == WALK) {
-	                walkEnabled = true;
-	                jumpEnabled = true;
-	                shootEnabled = true;
-	            }
-	        }
+	    override public function notify(subject:*):void {
+		    if(checkCollision(subject)) {
+		        if(subject is Actor)
+		        subject.collide(this);
+		    }
 		}
 		
-		public function setAnimation(status) {
+		override public function setAnimation(status) {
 			switch(myAction) {
 		        case WALK:
 		            setLoop(0, 1, 4, 1, 1, 5);
@@ -365,56 +213,8 @@
 		            break;
 		    }
 		}
-	    
-	    private function applyPhysics():void {
-
-		    // velocitize y (gravity)
-			if (this.vely < MAX_VEL_Y) {
-			    this.vely += this.gravity;
-            }
-			
-			// apply friction
-			if (this.velx > 0) {
-				this.velx -= fric;
-			} else if (this.velx < 0) {
-				this.velx += fric;
-			}
-			
-			// check map bounds
-			if(this.x < 0) {
-			    this.x = 0;
-			}
-			
-		}
 		
-		public function moveMe():void {
-		    
-		    if(frameCount >= frameDelay) { 
-    			frameStarted = true;
-				statusSet = false;
-				
-		        readInput(); // read our keyboard input and apply what is valid
-
-		        this.y += vely; // update our y variable
-    			this.x += velx; // update our x variable
-    			
-    			notifyObservers(); // tell everybody where we are now
-    			
-    			applyPhysics(); // apply our enviromental variables
-    			
-    			updateStatus(); // update our status
-
-				
-
-    			frameCount = 0;
-				frameStarted = false;
-		    } else {
-		        frameCount++;
-		    }
-            animate(); // animate, now that we know what we're doing
-		}
-		
-		public function killMe():void {
+		override public function killMe():void {
 		    if(myStatus != 'DYING') {
 		        setLoop(8, 0, 0, 0, 0, 5);
 	            myStatus = 'DYING';

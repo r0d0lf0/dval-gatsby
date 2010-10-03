@@ -3,7 +3,7 @@ package engine.actors.weapons {
     import engine.IObserver;
     import engine.actors.Actor;
     import engine.actors.player.Hero;
-    import engine.actors.enemies.Enemy;
+    import engine.actors.enemies.*;
     import engine.actors.geoms.*;
     import flash.events.Event;
     import engine.actors.Animatable;
@@ -46,7 +46,7 @@ package engine.actors.weapons {
 				
 		override public function notify(subject):void {
 		    if(checkCollision(subject)) {
-		        if(subject is Enemy) {
+		        if(subject is Enemy || subject is EnemyWalker) {
 		            subject.receiveDamage(damage);
 		            if(!returning) {
 		                returning = true;
@@ -93,10 +93,6 @@ package engine.actors.weapons {
 		    } else if(velY <= -flySpeed) {
 		       velY = -flySpeed;
 		    }
-		}
-		
-		public function collide(subject) {
-		    
 		}
 		
 		override public function update():void {

@@ -1,9 +1,9 @@
 package engine.actors.geoms {
     
-    import engine.actors.Actor;
+    import engine.actors.geoms.Geom;
     import engine.actors.geoms.FountainPlatform;
     
-    public class Fountain extends Actor {
+    public class Fountain extends Geom {
         
         private var myPlatform = new FountainPlatform();
         private var myMask = new FountainMask();

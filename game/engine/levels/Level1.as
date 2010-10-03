@@ -13,10 +13,10 @@
 	import engine.IObserver;
 	import engine.Map;
 	import engine.actors.player.Hero;
+	import engine.IScreen;
 	
 	public class Level1 extends Level implements ISubject, IObserver {
 	    
-	    private var observers:Array = new Array();
 	    private var music:music_level1;
 	    private var musicChannel:SoundChannel;
 	    private var myTransform:SoundTransform;
@@ -40,6 +40,7 @@
 		                    startMusic();
 		                }
 		                if(currentMapIndex < (mapList.length + 1)) { // and if we haven't finished the last map
+		                    myKeys.removeObserver(currentScreen); // unsubscribe it from the KeyMap
 		                    removeChild(currentScreen); // remove the current map
 		                    currentScreen = getMap(currentMapIndex);  // get the next one
 		                    addChild(scoreboardDisplay); // add the scoreboard
@@ -86,29 +87,6 @@
 		            return new level1_map3();
 		    }
 		    return false;
-		}
-		
-		public function notify(subject:*):void {
-
-		}
-		
-		public function addObserver(observer):void {
-		    observers.push(observer);
-		}
-		
-		public function removeObserver(observer):void {
-		    for (var ob:int=0; ob<observers.length; ob++) {
-                if(observers[ob] == observer) {
-                    observers.splice (ob,1); break;
-                    break;
-                }
-            }
-		}
-		
-		public function notifyObservers():void {
-		    for(var ob=0; ob<observers.length; ob++) {
-		        observers[ob].notify(this);
-		    }
 		}
 		
 	}//end class

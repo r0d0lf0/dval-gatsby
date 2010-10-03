@@ -1,11 +1,11 @@
 ﻿package engine.actors.geoms {
 	
 	import flash.display.DisplayObject;
-	import engine.actors.Actor;
+	import engine.actors.geoms.Geom;
 	import engine.IObserver;
 	import engine.actors.specials.Door;
 
-	public class Cloud extends Actor {
+	public class Cloud extends Geom {
 		
 		public function Cloud():void{
 			super();

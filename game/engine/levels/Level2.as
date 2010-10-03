@@ -14,18 +14,16 @@
 	import engine.Map;
 	import engine.actors.player.Hero;
 	
-	public class Level2 extends Level implements ISubject, IObserver {
+	public class Level2 extends Level {
 	    
-	    private var levelNumber:String = "LEVEL 2";
-	    private var levelName:String = "THE VALLEY OF ASHES";
-	    
-	    private var observers:Array = new Array();
 	    private var music:music_level1;
 	    private var musicChannel:SoundChannel;
 	    private var myTransform:SoundTransform;
 	    
 		public function Level2():void{
 		    mapList = new Array('level2_map1'); // use this later for dylan-style level loading by converting strings to classes
+			levelNumber = "LEVEL 2";
+			levelName = "TRAIN TO THE CITY";
 			currentScreen = new LevelStart(); // we're just starting, so create a LevelStart screen
 			currentScreen.setLevelName(levelName);  // give it our level name
 			currentScreen.setLevelNumber(levelNumber); // and our level number
@@ -84,29 +82,6 @@
 		    }
 		    return false;
 		}
-		
-		public function notify(subject:*):void {
-
-		}
-		
-		public function addObserver(observer):void {
-		    observers.push(observer);
-		}
-		
-		public function removeObserver(observer):void {
-		    for (var ob:int=0; ob<observers.length; ob++) {
-                if(observers[ob] == observer) {
-                    observers.splice (ob,1); break;
-                    break;
-                }
-            }
-		}
-		
-		public function notifyObservers():void {
-		    for(var ob=0; ob<observers.length; ob++) {
-		        observers[ob].notify(this);
-		    }
-		}
-		
+				
 	}//end class
 }//end package

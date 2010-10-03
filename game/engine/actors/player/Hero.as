@@ -1,6 +1,5 @@
 ﻿package engine.actors.player {
 	import flash.display.MovieClip;
-	//import flash.display.Sprite;
 	import flash.geom.Rectangle;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -13,13 +12,12 @@
 	import engine.actors.specials.*;
 	import controls.KeyMap;
 	import engine.actors.weapons.Weapon;
-	import engine.ISubject;
 	import engine.actors.weapons.HatWeapon;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
 	import engine.Scoreboard;
 
-	dynamic public class Hero extends Animatable{
+	dynamic public class Hero extends Animatable {
 	    	    
 	    // these hold what things we can currently do
 	    private var walkEnabled = true;
@@ -40,8 +38,8 @@
 		public var gravity:Number = 1;  //how much the velocity changes on each frameEvent
 		
 		
-		public var hat;
-		// public var airFric:Number = 1; // not sure yet 
+		public var hat;  // are you using this?
+		
 		// MAX_VEL_Y has to be less than the height of most shallow platform.
 		// otherwise you will fall through the ground
 		const MAX_VEL_Y:Number = 6; // so min platform height should be 22.
@@ -52,7 +50,7 @@
 		public var imon:Boolean = false; // On|Off the ground = true|false (stnading sure-footedly)
 		public var ihit:Boolean = false; // On|Off any object = true|false (smack a wall, hit by baddy)
 		public var ldir:Boolean = true;  // Right|Left = true|false (last direction player went)
-		private var keys:KeyMap = new KeyMap();
+		private var keys:KeyMap = KeyMap.getInstance();
 		private var myAction:uint = 3;
 		private var previousAction;
 		private var colliders:Array = new Array();  // temporary storage for all our colliders
@@ -75,7 +73,7 @@
 		
 		private var damageFlag = false; // flag for if the hero has been damaged
 		private var damageCounter = 0; // counter variable to see how long we've been damaged
-		private var damageDuration = 120; // number of frames to be invincible after damage
+		private var damageDuration = 60; // number of frames to be invincible after damage
 		
 		private var maxHP = 3; // max number of health points
 		private var HP = maxHP; // starting HP
@@ -139,6 +137,7 @@
 		
 		public function receiveDamage(damageAmount):void {
 		    if(!damageFlag) {
+		        trace("hit");
 		        HP -= damageAmount;
 		        scoreboard.setHP(HP);
     		    damageFlag = true;
@@ -287,8 +286,8 @@
 	    
 	    private function throwHat() {
 	        throwSound.play(0);
+	        myMap.spawnActor(hat, this.x, this.y + 5);
 	        hat.throwHat(goingLeft);
-	        myMap.spawnActor(hat);
             hatAvailable = false;
 	    }
 	    
@@ -361,7 +360,7 @@
 		            setLoop(6, 0, 1, 1, 1, 5);
 		            break;
 		        case DIE:
-		            setLoop(8, 0, 1, 0, 0, 5);
+		            setLoop(8, 1, 0, 0, 0, 5);
 		            trace("Death animation!");
 		            break;
 		    }
@@ -417,9 +416,9 @@
 		
 		public function killMe():void {
 		    if(myStatus != 'DYING') {
+		        setLoop(8, 0, 0, 0, 0, 5);
 	            myStatus = 'DYING';
 	            this.vely = -10;
-	            setLoop(8, 0, 1, 0, 0, 2);
 	        }
 		    if(frameCount >= frameDelay) {
 		        applyPhysics();

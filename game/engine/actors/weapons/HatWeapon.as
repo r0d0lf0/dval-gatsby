@@ -50,6 +50,7 @@ package engine.actors.weapons {
 		            subject.receiveDamage(damage);
 		            if(!returning) {
 		                returning = true;
+		                velX = -velX;
 		            }
 		        } else if(subject is Hero && returning) {
 		            subject.catchMe(this);

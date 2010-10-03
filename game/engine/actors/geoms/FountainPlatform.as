@@ -10,6 +10,7 @@
     public class FountainPlatform extends Animatable implements ISubject, IObserver {
 		
         public var velocity = 1;
+        public var liftSpeed = 2; // how quickly should the fountain move
         private var myParent;
         private var convertedMe;
         private var oldX;
@@ -66,10 +67,10 @@
 		
 		override public function update():void {
 		    animate();
-		    if(this.y < 50) {
-		        velocity = 1;
+		    if(this.y < 80) {
+		        velocity = liftSpeed;
 		    } else if(this.y > 140) {
-		        velocity = -1;
+		        velocity = -liftSpeed;
 		    }
 		    this.y += velocity;
 		}

@@ -1,34 +1,29 @@
 package engine.actors.npc {
     
-    import engine.actors.Actor;
-    import engine.actors.DialogBox;
-    import engine.IObserver;
-	import controls.KeyMap;
+    import engine.actors.Animatable;
     import engine.actors.player.Hero;
     
-    public class NPC extends Actor implements IObserver {
+    public class NPC extends Animatable {
         
-        protected var hitYet = false;
-        
-        public function NPC() {
-            // i live
-        }
+        public var hitYet = false;
+        protected var triggeredYet = false;
+        protected var dialogBox;
         
         public function collisionAction() {
             // this will get overwritten later
         }
         
         override public function notify(subject:*):void {
-            if(!hitYet) {
-                if(checkCollision(subject) && subject is Hero) {
-                    hitYet = true;
-                    collisionAction();
+            if(!hitYet) { // if nobody's collided with me yet
+                if(checkCollision(subject) && subject is Hero) { // and I'm colliding with a Hero
+                    collisionAction(); // do something important
+                    hitYet = true; // then let us know we've been hit
                 }   
             }
         }
         
         override public function update():void {
-            
+            // if we need to do anything
         }
         
     }

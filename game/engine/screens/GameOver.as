@@ -1,33 +1,24 @@
 package engine.screens {
     
     import flash.display.MovieClip;
-    import engine.IScreen;
+    import engine.Screen;
     
-    public class GameOver extends MovieClip implements IScreen {
+    public class GameOver extends Screen {
         
         private var counter:Number = 0;
-        private var status:String = "UNINITIALIZED"
         
         public function GameOver() {
-            status = "ACTIVE";
+            updateStatus(ACTIVE);
         }
         
-        public function update():Boolean {
+        override public function update(evt = null):Boolean {
             counter++;
             if(counter > 120) {
-                status = 'GAME OVER';
+                updateStatus(GAME_OVER);
                 return false;
             } else {
                 return true;
             }
-        }
-        
-        public function getStatus():String {
-            return status;
-        }
-        
-        public function restart():void {
-            
         }
         
     }

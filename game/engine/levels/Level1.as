@@ -9,13 +9,10 @@
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
 	import flash.media.SoundTransform;
-	import engine.ISubject;
-	import engine.IObserver;
 	import engine.Map;
 	import engine.actors.player.Hero;
-	import engine.IScreen;
 	
-	public class Level1 extends Level implements ISubject, IObserver {
+	public class Level1 extends Level {
 	    
 	    private var music:music_level1;
 	    private var musicChannel:SoundChannel;
@@ -31,10 +28,10 @@
 			addChild(currentScreen); // and attach it to the stage
 		}
 		
-		public override function update():Boolean {
+		override public function update(evt = null):Boolean {
 		    if(!currentScreen.update()) { // update the current screen to see if it's finished
 		        switch(currentScreen.getStatus()) {
-		            case 'COMPLETE': // if our map returned COMPLETE
+		            case COMPLETE: // if our map returned COMPLETE
 		                currentMapIndex++; // increment the current map index
 		                if(currentMapIndex == 1) { // if we're on the first map
 		                    startMusic(); // start the music
@@ -47,15 +44,15 @@
 		                    addChild(scoreboardDisplay); // add the scoreboard
                             addChild(currentScreen); // add the new child
                             currentScreen.y += scoreboardDisplay.height; // move the screen down so that it doesn't cover the scoreboard
-		                    return true; // and return true
 		                } else { // otherwise, we've completed the final map so
-		                    setStatus('COMPLETE');  // set the level exit status to COMPLETE
+		                    stopMusic(); // stop the music
+		                    removeChild(currentScreen); // get rid of the current screen
+		                    updateStatus(COMPLETE);  // set the level exit status to COMPLETE
 		                    return false; // and return false to the Engine
 		                }
 		                break;
-		            case 'HERO DEAD': // if the map returns HERO DEAD
-		                setStatus('HERO DEAD');  // set the level exit status to HERO DEAD
-		                trace("Hero dead."); // debug that the hero died
+		            case HERO_DEAD: // if the map returns HERO DEAD
+		                updateStatus(HERO_DEAD);  // set the level exit status to HERO DEAD
 		                stopMusic(); // stop our music
 		                return false; // and return false to the Engine
 		                break;

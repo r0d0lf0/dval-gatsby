@@ -23,12 +23,15 @@
 				var newScreen = new ClassReference();
 				return newScreen;*/
 				switch(screen) {
-				    case 'gameOpen':
-				        return new gameOpen();
+				    case 'GameOpen':
+				        return new GameOpen();
+				        break;
 				    case 'Level1':
 				        return new Level1();
+				        break;
 				    case 'Level2':
 				        return new Level2();
+				        break;
 				}
 				return false;
 		}

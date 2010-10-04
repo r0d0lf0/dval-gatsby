@@ -3,6 +3,7 @@ package engine.actors {
    import engine.actors.Animatable;
    import engine.actors.geoms.*;
    import flash.geom.Point;
+   import engine.Scoreboard;
    
    public class Walker extends Animatable {
        
@@ -14,6 +15,7 @@ package engine.actors {
 		public var vely:Number = 0;
 		public var velx:Number = 1;
 
+        protected var scoreboard = Scoreboard.getInstance();
 		
 		//CHANGE THESE
 		public var jumpVelocity:uint = 10; //exponential. 20 jumps 3x higher than 10
@@ -28,7 +30,7 @@ package engine.actors {
 		protected var attackFlag:Boolean = false;
 		protected var duckFlag:Boolean = false;
 		protected var standFlag:Boolean = false;
-		protected var stuckTo; // what surface are we currently stuck to
+		protected var stuckTo = false; // what surface are we currently stuck to
 		
 		protected var frameStarted:Boolean = false;
 		protected var statusSet:Boolean = false;
@@ -216,7 +218,6 @@ package engine.actors {
 		
 		public function killMe():void {
 		    if(myStatus != 'DYING') {
-		        //setLoop(8, 0, 0, 0, 0, 5);
 	            myStatus = 'DYING';
 	            this.vely = -10;
 	        }

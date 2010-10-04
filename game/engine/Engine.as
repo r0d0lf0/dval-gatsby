@@ -7,8 +7,9 @@
 	import managers.ScreenManager;
 	import engine.IObserver;
 	import engine.screens.*;
+	import engine.Screen;
 
-	dynamic public class Engine extends MovieClip implements IObserver {
+	dynamic public class Engine extends Screen {
 	    
 	    private var screenManager:ScreenManager;
 	    
@@ -19,7 +20,7 @@
 	    private var playerScore:Number = 0;
 	    private var playerLives:Number = 1;
 	    
-	    static private var screenList:Array = new Array('Level1','Level2');
+	    static private var screenList:Array = new Array(/*'GameOpen',*/ 'Level1','Level2');
 		
 		public function Engine():void {
 			//check for flash spacetime coordinates
@@ -43,13 +44,15 @@
 			addChild(currentScreen); // add it to the stage
 			this.addEventListener(Event.ENTER_FRAME, update); // attach onEnterFrame to onFrame
 			trace('Engine Started.'); 
+			updateStatus(ACTIVE);
 		}
 			
-		private function update(evt:Event):void{
+		override public function update(evt = null):Boolean{
             if(!currentScreen.update()) {  // if our current screen returns false
                 switch(currentScreen.getStatus()) {  // find out why and react
-                    case 'COMPLETE': // our screen completed successfully
-                        //removeChild(currentScreen) // remove the current screen from the stage
+                    case COMPLETE: // our screen completed successfully
+                        currentScreen.alpha = 0;
+                        removeChild(currentScreen) // remove the current screen from the stage
                         currentScreenIndex++; // increment our index
                         if(currentScreenIndex >= screenList.length) {  // if we're out of screens
                             // game's over.  restart
@@ -61,14 +64,15 @@
                             addChild(currentScreen); // and add it to the stage
                         }
                         break;
-                    case 'HERO DEAD': // if our hero died
+                    case HERO_DEAD: // if our hero died
+                        trace("hero died");
                         scoreboard.removeLife(); //
                         if(scoreboard.getLives() <= 0) { // if we're out of lives
-                            //removeChild(currentScreen);
+                            removeChild(currentScreen);
                             currentScreen = new GameOver();
                             addChild(currentScreen);
                         } else { // if he still has at least one life
-                            //removeChild(currentScreen); // remove the current screen
+                            removeChild(currentScreen); // remove the current screen
                             currentScreen = screenManager.getScreen(screenList[currentScreenIndex]); // recreate the current screen
                             if(currentScreen is ISubject) { // if it's subscribable
                                 currentScreen.addObserver(this); // subscribe to it
@@ -76,7 +80,7 @@
                             addChild(currentScreen); // and add it to the stage
                         }
                         break;
-                    case 'GAME OVER':
+                    case GAME_OVER: // if the game's over
                         //removeChild(currentScreen);
                         currentScreenIndex = 0;
                         scoreboard.setLives(3);
@@ -85,10 +89,7 @@
                         break;
                 }
             }
-		}
-		
-		public function notify(subject:*):void {
-		    
+            return true;
 		}
 		
 	}//end class

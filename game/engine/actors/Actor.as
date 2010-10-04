@@ -14,6 +14,15 @@
 	
 
 	dynamic public class Actor extends MovieClip implements IObserver, ISubject {
+	    
+	    
+	    public static const DEFAULT = 1;
+        public static const ACTIVE = 2;
+        public static const PAUSING = 30;
+        public static const PAUSED = 31;
+        public static const COMPLETE = 4;
+        public static const HERO_DEAD = 5;
+        public static const GAME_OVER = 6
 
         protected var observers:Array = new Array();
 		protected var me:Point = localToGlobal(new Point(0,0));

@@ -68,12 +68,14 @@ package controls{
 		public function keyDownHandler(evt:KeyboardEvent):void {
 			_keyMap[evt.keyCode]=true;
 			last_key_pressed = evt.keyCode;
-			dispatchEvent(new Event(KEY_DOWN))
+			dispatchEvent(new Event(KEY_DOWN));
+			notifyObservers();
 		}
 		// onKeyUp set same item False
 		public function keyUpHandler(evt:KeyboardEvent):void {
 			_keyMap[evt.keyCode]=false;
-			dispatchEvent(new Event(KEY_UP))
+			dispatchEvent(new Event(KEY_UP));
+			notifyObservers();
 		}
 		// return reference to array
 		public static function get keyMap():Array{

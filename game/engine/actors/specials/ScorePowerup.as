@@ -6,12 +6,12 @@ package engine.actors.specials {
     
     public class ScorePowerup extends Animatable {
         
-        public var points = 10;
+        public var points = 50;
         private var taken = false;
         
         public function ScorePowerup() {
             // i construct, therefore, i am.
-            trace("powerup!");
+
         }
         
         override public function setup() {

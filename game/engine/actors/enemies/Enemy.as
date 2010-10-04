@@ -4,6 +4,7 @@ package engine.actors.enemies {
     import flash.events.Event;
     import engine.actors.player.Hero;
     import engine.actors.weapons.HatWeapon;
+    import engine.Scoreboard;
     
     public class Enemy extends Animatable {
         
@@ -12,6 +13,10 @@ package engine.actors.enemies {
 
         protected var dieSound = new enemy_die();
         protected var hitDirection = 0;
+        
+        protected var points:Number = 100;
+        
+        protected var scoreboard:Scoreboard = Scoreboard.getInstance();
         
         public function Enemy() {
 			if (stage != null) {
@@ -50,6 +55,7 @@ package engine.actors.enemies {
             if(HP <= 0 && !deadFlag) {
 		        dieSound.play(0);
 		        deadFlag = true;
+		        scoreboard.addToScore(points);
 		    }
 		    return false;
         }

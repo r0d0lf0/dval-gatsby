@@ -1,6 +1,8 @@
 package engine.actors.enemies {
     
     import engine.actors.weapons.BottleWeapon;
+    import flash.media.Sound;
+	import flash.media.SoundChannel;
     
     public class EnemyDrunk extends EnemyWalker {
         
@@ -13,6 +15,8 @@ package engine.actors.enemies {
         protected const STUMBLING = 1;
         protected const DRINKING = 2;
         protected var currentStatus = STUMBLING;
+        
+        private var bottleSound = new bottle_sound();
         
         private var bottleWeapon:BottleWeapon;
 		
@@ -92,6 +96,7 @@ package engine.actors.enemies {
 		private function throwBottle() {
 		    myMap.spawnActor(bottleWeapon, this.x, this.y + 5);
 		    bottleWeapon.throwBottle(goingLeft);
+		    var soundChannel = bottleSound.play(0);
 		}
         
         public function catchBottle(bottle) {

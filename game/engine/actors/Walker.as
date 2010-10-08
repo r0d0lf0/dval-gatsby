@@ -31,6 +31,7 @@ package engine.actors {
 		protected var duckFlag:Boolean = false;
 		protected var standFlag:Boolean = false;
 		protected var stuckTo = false; // what surface are we currently stuck to
+		protected var hitDirection:String; // what direction were we hit from
 		
 		protected var frameStarted:Boolean = false;
 		protected var statusSet:Boolean = false;
@@ -220,6 +221,11 @@ package engine.actors {
 		    if(myStatus != 'DYING') {
 	            myStatus = 'DYING';
 	            this.vely = -10;
+	            if(hitDirection == 'LEFT') {
+	                this.velx = 3;
+	            } else if(hitDirection == 'RIGHT')  {
+	                this.velx = -3;
+	            }
 	        }
 		    if(frameCount >= frameDelay) {
 		        applyPhysics();

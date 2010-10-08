@@ -27,9 +27,7 @@ package engine.actors.geoms {
 		}
 		
 		override public function notify(subject:*):void {
-		    if(subject is Door) {
-		        
-		    } else {
+		    if(subject is Hero) {
 		        if((subject.y + subject.height) >= this.y && subject.y <= (this.y+this.height)) {
     		        if((subject.x + subject.collide_right) >= this.x && (subject.x + subject.collide_left) <= (this.x+this.width)) {
     		            if(!killFlag) {

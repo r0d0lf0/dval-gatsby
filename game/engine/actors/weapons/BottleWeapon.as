@@ -9,15 +9,21 @@ package engine.actors.weapons {
     
     public class BottleWeapon extends Weapon implements IObserver {
         
-        private var throwDistance:int = 30;
+        private var throwDistance:int = 60;
+        private var throwHeight = -14;
         private var velX:Number = 0;
+        private var velY:Number = 0;
+        private var gravity = 1;
+        private const MAX_VEL_Y = 8;
+        private const MAX_VEL_X = 5;
         
         public function BottleWeapon(owner) {
             super(owner);
         }
         
 		override public function setup() {
-		    flySpeed = 4;
+		    flySpeed = 2;
+		    velY = throwHeight;
 		    damage = 1;
 		    
 		    myName = "BottleWeapon";
@@ -32,7 +38,7 @@ package engine.actors.weapons {
             endFrame = 7; // the final frame in the row
             nowFrame = 0; // current frame in row
             loopFrame = 0; // frame at which to loop
-            loopType = 1; // 0 loops, 1 bounces
+            loopType = 0; // 0 loops, 1 bounces
             loopRow = 0; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
             speed = 2; // how many frames should go by before we advance
@@ -42,13 +48,14 @@ package engine.actors.weapons {
 		override public function notify(subject):void {
 		    if(subject is Hero) {
 		        if(checkCollision(subject)) {
-    	            subject.receiveDamage(damage);
+    	            subject.receiveDamage(this);
     	            frameCount = frameDelay;
                 }
 		    }
 		}
 		
 		public function throwBottle(goingLeft) {
+		    this.velY = throwHeight;
 		    frameCount = 0;
 		    frameDelay = throwDistance;
 		    if(goingLeft) {
@@ -56,6 +63,18 @@ package engine.actors.weapons {
     		} else {
     		    velX = flySpeed;
     		}
+		}
+		
+		public function applyPhysics():void {
+		    // velocitize y (gravity)
+			if (this.velY < MAX_VEL_Y) {
+			    this.velY += this.gravity;
+            }
+			
+			// check map bounds
+			if(this.x < 0) {
+			    this.x = 0;
+			}
 		}
 		
 		override public function update():void {
@@ -66,7 +85,15 @@ package engine.actors.weapons {
 		    } else {
 		        frameCount++;
 		    }
+		    applyPhysics();
+		    if(velX > MAX_VEL_X) {
+		        velX = MAX_VEL_X;
+		    }
+		    if(velY > MAX_VEL_Y) {
+		        velY = MAX_VEL_Y;
+		    }
 		    this.x += velX;
+		    this.y += velY;
 		    notifyObservers();
 		}
 		

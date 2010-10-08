@@ -47,7 +47,7 @@ package engine.actors.weapons {
 		override public function notify(subject):void {
 		    if(checkCollision(subject)) {
 		        if(subject is Enemy || subject is EnemyWalker) {
-		            subject.receiveDamage(damage);
+		            subject.receiveDamage(this);
 		            if(!returning) {
 		                returning = true;
 		                velX = -velX;

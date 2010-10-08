@@ -6,7 +6,7 @@ package engine.actors.enemies {
     import engine.actors.geoms.*;
     
     public class EnemyHobo extends EnemyWalker {
-		
+        
 		override public function setup() {
 		    collide_left = 10; // what pixel do we collide on on the left
     		collide_right = 22; // what pixel do we collide on on the right
@@ -32,7 +32,6 @@ package engine.actors.enemies {
                     vely = -jumpVelocity;
                     setLoop(0, 1, 0, 0, 0, 2);
                 }
-                trace(myAction);
                 moveMe();
                 checkDeath();
     		    if(deadFlag) {

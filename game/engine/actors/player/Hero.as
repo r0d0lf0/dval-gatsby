@@ -41,6 +41,7 @@
 		private var jumpSound = new hero_jump();
 		private var hurtSound = new hero_hurt();
 		private var powerupSound = new powerup_sound();
+		private var healthPowerupSound = new martini_sound();
 		private var throwSound = new hero_throw();
 		private var effectsChannel;
 		
@@ -70,7 +71,7 @@
 		}
 		
 		override public function update():void {
-		    if(scoreboard.getHP()) {
+		    if(scoreboard.getHP()) { // if we're alive
 		        if(damageFlag) {  // if we're being damaged
     		        if(damageCounter < damageDuration) { // flicker our alpha
     		            this.alpha = damageCounter % 2; // every other frame
@@ -80,10 +81,10 @@
     		            damageFlag = false; // and remove damage flag
     		        }
     		    }
-    		    moveMe();
-    		    readInput();
-		    } else {
-                killMe();
+    		    moveMe(); // move me around
+    		    readInput(); // and read the input for the next frame
+		    } else { // otherwise, if i have no HP
+                killMe(); // kill me
 		    }
 		}
 		
@@ -126,10 +127,10 @@
             mySkin = "HeroSkin"; // the name of the skin for this enemy
 		}	
 		
-		override public function receiveDamage(damage:Number):void {
+		override public function receiveDamage(attacker):void {
 		    if(!damageFlag) {
-		        trace("hit");
-		        HP -= damage;
+		        trace("hit " + attacker.damage);
+		        HP -= attacker.damage;
 		        scoreboard.setHP(HP);
     		    damageFlag = true;
     		    effectsChannel = hurtSound.play(0);  // play it
@@ -143,10 +144,11 @@
 		            HP = maxHP;
 		        }
     		    scoreboard.setHP(HP);
+    		    effectsChannel = healthPowerupSound.play(0);
 		    } else if(powerup is ScorePowerup) {
 		        scoreboard.addToScore(powerup.points);
+		        effectsChannel = powerupSound.play(0);
 		    }
-		    effectsChannel = powerupSound.play(0);
 		}
 		
 		public function getHP():Number {
@@ -195,52 +197,7 @@
 	            jumpPressed = false;
 	        }
 		}
-	    /*
-	    private function readInput():void {
-	        
-	        if(walkEnabled) {  // if we're allowed to walk, input our walk info
-	            if (KeyMap.keyMap[68] || KeyMap.keyMap[39]) {					
-					this.velx += this.Xspeed;
-					goingLeft = 0;
-                    if(this.velx > MAX_VEL_X) {
-                        this.velx = MAX_VEL_X;
-                    }
-				} else if(KeyMap.keyMap[65] || KeyMap.keyMap[37]) {
-					this.velx -= this.Xspeed;
-					goingLeft = 1;
-					if(this.velx < -MAX_VEL_X) {
-					    this.velx = -MAX_VEL_X;
-					}
-				}
-	        }
-	        
-	        if(jumpEnabled == true && jumpCount == 0 && jumpPressed == false) { // if we're allowed to jump
-	            if (KeyMap.keyMap[32] || KeyMap.keyMap[38]) {
-					// -speed breaks the moving platform buffer s well as still platforms.
-					effectsChannel = jumpSound.play(0);  // play it, looping 100 times
-					this.y -= gravity;
-					this.vely = -jumpVelocity;
-					jumpCount++;
-					jumpPressed = true;
-				}
-	        }
-	        
-	        if(shootEnabled && hatAvailable) {
-	            if(KeyMap.keyMap[88] || KeyMap.keyMap[17]) {
-	                if(hatAvailable) {
-	                   throwHat(); 
-	                }
-	            }
-	        }
-	        
-	        if(KeyMap.keyMap[32] || KeyMap.keyMap[38]) {
-	            jumpPressed = true;
-	        } else {
-	            jumpPressed = false;
-	        }
-	        
-	    }
-	    */
+
 	    private function throwHat() {
 	        throwSound.play(0);
 	        myMap.spawnActor(hat, this.x, this.y + 5);
@@ -260,7 +217,7 @@
 	            
 	        } else if(checkCollision(subject)) {
 		        if(subject is Actor)
-		        subject.collide(this);
+		            subject.collide(this);
 		    }
 		}
 		
@@ -279,8 +236,9 @@
 	            } else if(observer == stuckTo) { // otherwise, if we're colliding with the thing we're stuck to
 	                land(observer); // continue to follow it
 	            }
-		    } else if(observer is KillBlock) {
-		        scoreboard.setHP(0);
+		    } else if(observer is KillBlock) { // otherwise, if we're hitting a KillBlock
+		        scoreboard.setHP(0); // ... kill us
+		        trace("killblock collision!");
 		    }
 		} 
 		
@@ -312,21 +270,20 @@
 		}
 		
 		override public function killMe():void {
-		    if(myStatus != 'DYING') {
-		        setLoop(8, 0, 0, 0, 0, 5);
-	            myStatus = 'DYING';
-	            this.vely = -10;
+		    if(myStatus != 'DYING') { // if killMe's been issued, and i'm not yet dying
+		        setLoop(8, 0, 0, 0, 0, 5); // set my dying animation
+	            myStatus = 'DYING'; // set my status to dying
+	            this.vely = -10; // and begin my death jump
 	        }
-		    if(frameCount >= frameDelay) {
-		        applyPhysics();
-		        this.y += vely;
-		        animate();
-		        if(this.y > 240) {
-		            myStatus = 'DEAD';
-		            trace("Hero dead");
+		    if(frameCount >= frameDelay) { // if we're good on framecount
+		        applyPhysics(); // apply physics for my fall
+		        this.y += vely; // move me
+		        animate(); // animate me
+		        if(this.y > 240) { // and if i'm off the screen
+		            myStatus = 'DEAD'; // i'm dead
 		        }
-		    } else {
-		        frameCount++;
+		    } else { // otherwise
+		        frameCount++; // increase the framecount
 		    }
 		}
 		

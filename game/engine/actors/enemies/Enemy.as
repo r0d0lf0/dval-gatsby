@@ -8,7 +8,7 @@ package engine.actors.enemies {
     
     public class Enemy extends Animatable {
         
-        protected var attack_strength:Number = 1;
+        protected var damage:Number = 1;
         protected var deadFlag:Boolean = false;
 
         protected var dieSound = new enemy_die();
@@ -63,10 +63,10 @@ package engine.actors.enemies {
 		override public function notify(subject):void {
 		    if(checkCollision(subject) && !deadFlag) { // If i'm colliding with something, and I'm alive...
 		        if(subject is Hero) {
-		            subject.receiveDamage(1);
+		            subject.receiveDamage(this);
 		        }
 		        if(subject is HatWeapon) {
-		            receiveDamage(1);
+		            receiveDamage(subject);
 		            hitDirection = subject.goingLeft;
 		        }
             }

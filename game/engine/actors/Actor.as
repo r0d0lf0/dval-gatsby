@@ -15,7 +15,6 @@
 
 	dynamic public class Actor extends MovieClip implements IObserver, ISubject {
 	    
-	    
 	    public static const DEFAULT = 1;
         public static const ACTIVE = 2;
         public static const PAUSING = 30;
@@ -64,8 +63,6 @@
 		    onStage = true;
 		    setup();
 			this.addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
-			//this.addEventListener(Event.ENTER_FRAME, onFrame);
-			//doTexture(this.tex);
 		}
 		
 		public function setup() {
@@ -74,7 +71,6 @@
 		
 		//clean up and free resources
 		public function onRemove(evt:Event):void{
-			//this.removeEventListener(Event.ENTER_FRAME, onFrame);
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, onRemove);
 		}
 		
@@ -137,10 +133,15 @@
 		}
 		
 		// the hero will use this to deal damage
-        public function receiveDamage(damage:Number):void {
-            HP -= damage;
+        public function receiveDamage(attacker):void {
+            HP -= attacker.damage;
             if(HP <= 0) {
                 HP = 0;
+                if(attacker.velx > 0) {
+                    this.velx = 1;
+                } else {
+                    this.velx = -1;
+                }
             }
         }
 		

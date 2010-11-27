@@ -36,15 +36,9 @@
 		public var collide_left:int = 10; // what pixel do we collide on on the left
 		public var collide_right:int = 22; // what pixel do we collide on on the right
 		
-		public var collide_left_ground:int = 22;
-		public var collide_right_ground:int = 10;
+		public var collide_left_ground:int = 10;
+		public var collide_right_ground:int = 20;
 		
-		//so nice
-		//public var imgLdr = new ImageLoader(textureLoadSuccess,textureLoadFail);
-		//The constructor 
-		// initialize instance variables and see 
-		// if its 'safe' to add listeners.
-		//public function Actor(w,h,tex = null):void {
 		public function Actor():void {
 			//Check we exist in Flash spacetime
 			if (stage != null) {
@@ -119,13 +113,13 @@
 		}
 		
 		public function notify(subject:*):void {
-		    if(checkCollision(subject)) {
-		        subject.collide(this);
+		    if(checkCollision(subject)) { // if we're colliding with the subject
+		        subject.collide(this); // then collide with them
 		    }
 		}
 		
 		public function collide(observer, ...args) {
-		    // this will get overwritten later
+		    // this will get overwritten later, for use by observers when they collide with us
 		}
 		
 		public function setMap(map:Map):void {
@@ -137,7 +131,7 @@
             HP -= attacker.damage;
             if(HP <= 0) {
                 HP = 0;
-                if(attacker.velx > 0) {
+                if(attacker.velX > 0) {
                     this.velx = 1;
                 } else {
                     this.velx = -1;

@@ -14,8 +14,8 @@ package engine.actors.weapons {
         private var throwDistance:int = 15;
         
         private var inertia:Number = 4; // amount of inertia to change velocity
-        private var velX:Number = 0;
-        private var velY:Number = 0;
+        public var velX:Number = 0;
+        public var velY:Number = 0;
         
         public function HatWeapon(owner) {
             super(owner);

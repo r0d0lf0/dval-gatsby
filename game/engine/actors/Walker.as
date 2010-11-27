@@ -88,20 +88,12 @@ package engine.actors {
 		    return false;
 		}
 		
-		public function getGlobals(observer) {
-		    var localCoords = new Point(observer.x, observer.y);
-            var globalCoords = observer.localToGlobal(localCoords);
-            return globalCoords;
-		}
-		
 		public function checkTop(observer):Boolean {
-                var globalCoords = getGlobals(observer);
-    		    if((this.y + this.height) > observer.y) { // if we're collided with the top currently
-    		        if((this.y + this.height) - this.vely <= observer.y) { // and we hadn't collided in the previous frame
-    		            return true;
-    		        }
-    		    }
-            //}
+		    if((this.y + this.height) >= observer.y) { // if we're collided with the top currently
+		        if((this.y + this.height) - this.vely <= observer.y) { // and we hadn't collided in the previous frame
+		            return true;  // then we've just collided with the top
+		        }
+		    }
             return false;
 		}
 		
@@ -111,15 +103,15 @@ package engine.actors {
 		
 		override public function collide(observer, ...args) {
 		    if(observer is Cloud || observer is FountainPlatform) {  // if we're a cloud or a fountain
-		        if(checkTop(observer) || observer == stuckTo) { // if we just collided with the top of it
-		            land(observer); // land on it
+		        if(checkTop(observer) || observer == stuckTo) { // if we just collided with the top of it, and we're already stuckTo it
+		            land(observer); // land on it again
 		        }
-		    } else if(observer is Block) {
+		    } else if(observer is Block) { // otherwise, if it's a block
                 if(checkRight(observer)) {  // if we hit the right edge of the block
 	                this.x = (observer.x + observer.width) - collide_left; // set us to there
 	            } else if(checkLeft(observer)) { // if we hit the left edge of the block
 	                this.x = observer.x - collide_right; // stop us there
-	            } else if(myAction == FALL) { // if we just fell and collided
+	            } else if(myAction == FALL && checkTop(observer)) { // if we just fell and collided with the top
     	             land(observer); // land us on the top
 	            } else if(observer == stuckTo) { // otherwise, if we're colliding with the thing we're stuck to
 	                land(observer); // continue to follow it

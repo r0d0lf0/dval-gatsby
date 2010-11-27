@@ -32,6 +32,9 @@
 				    case 'Level2':
 				        return new Level2();
 				        break;
+				    case 'Level3':
+				        return new Level3();
+				        break;
 				}
 				return false;
 		}

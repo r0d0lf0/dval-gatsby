@@ -103,7 +103,7 @@ package engine.actors {
 		
 		override public function collide(observer, ...args) {
 		    if(observer is Cloud || observer is FountainPlatform) {  // if we're a cloud or a fountain
-		        if(checkTop(observer) || observer == stuckTo) { // if we just collided with the top of it, and we're already stuckTo it
+		        if(checkTop(observer) || observer == stuckTo) { // if we just collided with the top of it, or we're already stuckTo it
 		            land(observer); // land on it again
 		        }
 		    } else if(observer is Block) { // otherwise, if it's a block
@@ -116,7 +116,9 @@ package engine.actors {
 	            } else if(observer == stuckTo) { // otherwise, if we're colliding with the thing we're stuck to
 	                land(observer); // continue to follow it
 	            }
-		    }
+		    } else if(observer is KillBlock) {
+				receiveDamage(observer);
+			}
 		}
 		
 		public function updateStatus():void {

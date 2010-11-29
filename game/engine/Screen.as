@@ -4,7 +4,7 @@ package engine{
     import engine.IObserver;
     import engine.ISubject;
     
-	public class Screen extends MovieClip implements ISubject, IObserver {
+	public dynamic class Screen extends MovieClip implements ISubject, IObserver {
         
         public static const DEFAULT = 1;
         public static const ACTIVE = 2;

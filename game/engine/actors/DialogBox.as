@@ -3,6 +3,7 @@ package engine.actors {
     import engine.actors.Actor;
     import engine.IKeyboard;
     import flash.ui.Keyboard;
+	import controls.KeyMap;
     import flash.text.TextField;
     import flash.media.Sound;
 	import flash.media.SoundChannel;
@@ -25,6 +26,9 @@ package engine.actors {
         private var textCounter = 0;
         private var myMessage = "Default message";
         private var typingFlag = false;
+
+		private var keys:KeyMap = KeyMap.getInstance();
+		private var keyboardStatus:Array = new Array();
         
         public const CONTINUE = 1;
         public const EXIT = 2;

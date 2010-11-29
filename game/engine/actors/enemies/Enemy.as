@@ -10,12 +10,9 @@ package engine.actors.enemies {
         
         protected var damage:Number = 1;
         protected var deadFlag:Boolean = false;
-
         protected var dieSound = new enemy_die();
         protected var hitDirection = 0;
-        
         protected var points:Number = 100;
-        
         protected var scoreboard:Scoreboard = Scoreboard.getInstance();
         
         public function Enemy() {

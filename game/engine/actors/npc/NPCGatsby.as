@@ -43,7 +43,6 @@ package engine.actors.npc {
                    'GOOD JOB, OLD SPORT!' 
                 ));
                 dialogBox.setExitFunction(dialogBox.EXIT);
-                trace(dialogBox.EXIT + " haha");
                 triggeredYet = true;
             }
        }

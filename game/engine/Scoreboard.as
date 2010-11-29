@@ -21,6 +21,9 @@ package engine {
         }
         
         public function setHP(HP) {
+			if(HP < 0) {
+				HP = 0;
+			}
             Scoreboard.HP = HP;
             notifyObservers();
         }        

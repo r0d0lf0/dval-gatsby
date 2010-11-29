@@ -9,21 +9,10 @@ package engine.actors.geoms {
 	public class KillBlock extends Geom {
 	    
 	    private var killFlag:Boolean = false;
+		public var damage:Number = 100;
 		
 		public function KillBlock():void{
 			super();
-		}
-		
-		public function behave(smackData:Object,characterObject:*):void{	
-			var dy = smackData.dy;
-			//only stop downward movement
-			if(characterObject.y < me.y+(this.height/2)){
-				if(dy > 0){
-					characterObject.y = me.y;
-					characterObject.vely = 0;
-					characterObject.imon = true;
-				}
-			}
 		}
 		
 		override public function notify(subject:*):void {

@@ -19,9 +19,6 @@
 		        if((subject.y + subject.height) >= this.y && subject.y <= (this.y+this.height)) {
     		        if((subject.x + subject.collide_right) >= this.x && (subject.x + subject.collide_left) <= (this.x+this.width)) {
     		            subject.collide(this);
-						if(subject is Hero) {
-							trace("hero x: " + subject.x + " platform x: " + this.x + " " + (this.x + this.width));
-						}
     		        }
     		    }
 		    }

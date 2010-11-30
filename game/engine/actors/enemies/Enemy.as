@@ -8,7 +8,7 @@ package engine.actors.enemies {
     
     public class Enemy extends Animatable {
         
-        protected var damage:Number = 1;
+        public var damage:Number = 1;
         protected var deadFlag:Boolean = false;
         protected var dieSound = new enemy_die();
         protected var hitDirection = 0;

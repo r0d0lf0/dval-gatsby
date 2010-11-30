@@ -201,7 +201,7 @@ package engine.actors {
 		public function setAnimation(status) {
 			switch(myAction) {
 		        default:
-		            setLoop(0, 0, 1, 0, 0);
+		            setLoop(loopRow, startFrame, endFrame, loopFrame, loopType);
 		            break;
 		    }
 		}
@@ -209,6 +209,7 @@ package engine.actors {
 		public function reverseDirection() {
 		    velx = -velx;
 		    goingLeft = goingLeft == 0;
+			this.x += velx;
 		}
 		
 		public function killMe():void {

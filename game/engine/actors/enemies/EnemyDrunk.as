@@ -61,15 +61,15 @@ package engine.actors.enemies {
 		                actionDuration = drinkDuration;
     		            currentStatus = DRINKING;
     		            setLoop(2, 0, 1, 0, 0);
-    		            walkSpeed = 0;
+    		            velx = 0;
     		        } else {
     		            currentStatus = STUMBLING;
     		            stumbleDuration = Math.ceil((Math.random() * stumbleDurationMax) + stumbleDurationMin);
     		            goingLeft = goingLeft == 0;
     		            if(Math.round(Math.random())) {
-    		                walkSpeed = 1;
+    		                velx = walkSpeed;
     		            } else {
-    		                walkSpeed = -1;
+    		                velx = -walkSpeed;
     		            }
     		        }
     		        actionCounter = 0;
@@ -78,17 +78,17 @@ package engine.actors.enemies {
 		        if(actionCounter >= actionDuration) {
 		            actionDuration = stumbleDuration;
 		            actionCounter = 0;
-		            if(Math.round(Math.random())) {
-		                walkSpeed = 1;
-		            } else {
-		                walkSpeed = -1;
-		            }
+   		            if(Math.round(Math.random())) {
+   		                velx = walkSpeed;
+   		            } else {
+   		                velx = -walkSpeed;
+   		            }
 		            currentStatus = STUMBLING;
 		            setLoop(0, 0, 1, 0, 0);
 		            throwBottle();
 		        }
 		    }
-		    this.x += walkSpeed;
+		    frameCount++;
 		    actionCounter++;
 		    animate();
 		}

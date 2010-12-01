@@ -80,7 +80,7 @@ package engine.levels{
 		private function getMap(mapIndex) {
 		    switch(mapIndex) {
 		        case 1:
-		            return new level3_map1();
+		            return new level3_map2();
 					break;
 				case 2:
 					return new level3_map2();

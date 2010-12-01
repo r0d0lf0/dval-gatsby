@@ -17,7 +17,7 @@ package engine.actors.geoms {
             this.y = this.y - this.height;
             var maskHeight = this.height;
             addChild(myPlatform);
-            // myPlatform.y = this.height - mask.height;
+            myPlatform.y = this.height - maskHeight;
             myPlatform.mask = myMask;
         }
         

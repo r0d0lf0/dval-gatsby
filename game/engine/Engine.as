@@ -12,15 +12,13 @@
 	dynamic public class Engine extends Screen {
 	    
 	    private var screenManager:ScreenManager;
-	    
 	    private var scoreboard:Scoreboard;
 	    private var currentScreen;
 	    private var currentScreenIndex:Number = 0;
-	    
 	    private var playerScore:Number = 0;
 	    private var playerLives:Number = 1;
 	    
-	    static private var screenList:Array = new Array(/*'GameOpen',*/'Level1','CutScene1','Level2','Level3');
+	    static private var screenList:Array = new Array(/*'GameOpen','Level1','CutScene1','Level2',*/'Level1');
 		
 		public function Engine():void {
 			//check for flash spacetime coordinates
@@ -72,11 +70,11 @@
                             currentScreen = new GameOver();
                             addChild(currentScreen);
                         } else { // if he still has at least one life
+							var currentCheckpoint = currentScreen.getMapIndex();
                             removeChild(currentScreen); // remove the current screen
                             currentScreen = screenManager.getScreen(screenList[currentScreenIndex]); // recreate the current screen
-                            if(currentScreen is ISubject) { // if it's subscribable
-                                currentScreen.addObserver(this); // subscribe to it
-                            }
+                            currentScreen.addObserver(this); // subscribe to it
+							currentScreen.setMapIndex(currentCheckpoint);
                             addChild(currentScreen); // and add it to the stage
                         }
                         break;

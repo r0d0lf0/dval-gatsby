@@ -1,6 +1,7 @@
 package engine.actors.enemies {
     
     import engine.actors.enemies.Enemy;
+	import engine.actors.player.Hero;
     
     public class EnemyFlyer extends EnemyWalker {
         
@@ -9,6 +10,12 @@ package engine.actors.enemies {
         public function EnemyFlyer() {
 		    trace("EnemyFlyer");
         }
+
+        override public function collide(observer, ...args) {
+			if(observer is Hero && !deadFlag) {
+		        observer.receiveDamage(this); // otherwise, if we've hit the hero, make him regret it
+		    }
+		}
         
         public override function moveMe():void {
             velx = -flySpeed;

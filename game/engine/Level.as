@@ -48,6 +48,14 @@
 		    myKeys.addSubscriber(screen);
 		    this.addChild(screen);
 		}
+		
+		public function getMapIndex() {
+			return currentMapIndex - 1;
+		}
+		
+		public function setMapIndex(newIndex:Number) {
+			currentMapIndex = newIndex;
+		}
 			
 	}//end class
 }//end package

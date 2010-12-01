@@ -53,10 +53,18 @@ package engine.actors {
        
        	public function land(observer):void {
 		    this.vely = 0;
+			var observerHeight:Number;
+			
+			if(observer is FountainPlatform) {
+				observerHeight = observer.convertedY;
+			} else {
+				observerHeight = observer.y;
+			}
+			
 		    if(observer is FountainPlatform) {
-		        this.y = (observer.y + observer.velocity) - this.height;
+		        this.y = (observerHeight + observer.velocity) - this.height;
 		    } else {
-		        this.y = observer.y - this.height;
+		        this.y = observerHeight - this.height;
 		    }
 	        jumpCount = 0;
 	        standFlag = true;
@@ -71,8 +79,8 @@ package engine.actors {
 		}
 		
 		public function checkRight(observer):Boolean {
-		    if((this.x + this.collide_left) < observer.x + observer.width) { // if we're collided with the square's right side currently
-		        if((this.x + this.collide_left) - this.velx >= observer.x + observer.width) { // and we hadn't collided in the previous frame
+		    if((this.x + this.collide_left_ground) < observer.x + observer.width) { // if we're collided with the square's right side currently
+		        if((this.x + this.collide_left_ground) - this.velx >= observer.x + observer.width) { // and we hadn't collided in the previous frame
 		            return true;
 		        }
 		    }
@@ -80,8 +88,8 @@ package engine.actors {
 		}
 		
 		public function checkLeft(observer):Boolean {
-		    if((this.x + this.collide_right) > observer.x) { // if we're collided with the block's left side currently
-		        if((this.x + this.collide_right) - this.velx <= observer.x) { // and we hadn't collided in the previous frame
+		    if((this.x + this.collide_right_ground) > observer.x) { // if we're collided with the block's left side currently
+		        if((this.x + this.collide_right_ground) - this.velx <= observer.x) { // and we hadn't collided in the previous frame
 		            return true;
 		        }
 		    }
@@ -89,11 +97,37 @@ package engine.actors {
 		}
 		
 		public function checkTop(observer):Boolean {
-		    if((this.y + this.height) >= observer.y) { // if we're collided with the top currently
-		        if((this.y + this.height) - this.vely <= observer.y) { // and we hadn't collided in the previous frame
-		            return true;  // then we've just collided with the top
-		        }
-		    }
+			var observerHeight:Number;
+			var observerX:Number;
+			if(observer is FountainPlatform) {
+				observerHeight = observer.convertedY;
+				observerX = observer.convertedX;
+			} else {
+				observerHeight = observer.y;
+				observerX = observer.x;
+			}
+			
+			if((this.x + this.collide_right_ground) > observerX && (this.x + this.collide_left_ground) < (observerX + observer.width)) {
+			    if((this.y + this.height) >= observerHeight) { // if we're collided with the top currently
+			        if((this.y + this.height) - this.vely <= observerHeight) { // and we hadn't collided in the previous frame
+			            return true;  // then we've just collided with the top
+			        }
+			    }	
+			}
+            return false;
+		}
+		
+		public function checkWidth(observer):Boolean {
+			var observerX:Number;
+			if(observer is FountainPlatform) {
+				observerX = observer.convertedX;
+			} else {
+				observerX = observer.x;
+			}
+			
+			if((this.x + this.collide_right_ground) > observerX && (this.x + this.collide_left_ground) < (observerX + observer.width)) {
+				return true;	
+			}
             return false;
 		}
 		
@@ -108,9 +142,9 @@ package engine.actors {
 		        }
 		    } else if(observer is Block) { // otherwise, if it's a block
                 if(checkRight(observer)) {  // if we hit the right edge of the block
-	                this.x = (observer.x + observer.width) - collide_left; // set us to there
+	                this.x = (observer.x + observer.width) - collide_left_ground; // set us to there
 	            } else if(checkLeft(observer)) { // if we hit the left edge of the block
-	                this.x = observer.x - collide_right; // stop us there
+	                this.x = observer.x - collide_right_ground; // stop us there
 	            } else if(myAction == FALL && checkTop(observer)) { // if we just fell and collided with the top
     	             land(observer); // land us on the top
 	            } else if(observer == stuckTo) { // otherwise, if we're colliding with the thing we're stuck to
@@ -125,8 +159,12 @@ package engine.actors {
 	        newAction = STAND; // by default, we're standing
 	        
 	        if(standFlag) { // if we're standing on something
-	            if(!stuckTo.checkCollision(this)) { // and we're not colliding with it anymore
-	                depart(stuckTo); // depart whatever platform we were on
+				if(!stuckTo.checkGroundCollision(this)) { // and we're not colliding with it anymore
+					if(stuckTo is FountainPlatform && checkWidth(stuckTo) && jumpCount == 0) {
+						land(stuckTo);
+					} else {
+						depart(stuckTo); // depart whatever platform we were on
+					}
 	            } else if(velx == 0) { // otherwise, if we're not moving
 	                newAction = STAND; // we're standing
 	            } else { // otherwise, we're walking
@@ -204,12 +242,6 @@ package engine.actors {
 		            setLoop(loopRow, startFrame, endFrame, loopFrame, loopType);
 		            break;
 		    }
-		}
-		
-		public function reverseDirection() {
-		    velx = -velx;
-		    goingLeft = goingLeft == 0;
-			this.x += velx;
 		}
 		
 		public function killMe():void {

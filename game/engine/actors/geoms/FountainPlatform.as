@@ -9,15 +9,17 @@
     
     public class FountainPlatform extends Animatable implements ISubject, IObserver {
 		
-        public var velocity = 1;
         public var liftSpeed = 2; // how quickly should the fountain move
+        public var velocity = liftSpeed;
         private var myParent;
         private var convertedMe;
         private var oldX;
         private var oldY;
+		public var convertedX;
+		public var convertedY;
 	
 		public function FountainPlatform() {
-		    trace("I'm a fountain platform!");
+			
 		}
 		
 		override public function setup() {
@@ -42,12 +44,8 @@
 		}
 		
         private function convertCoords() {
-            oldX = this.x;
-            oldY = this.y;
-
-            this.x = this.x + parent.x;
-            this.y = this.y + parent.y;
-            
+			convertedX = this.x + parent.x;
+            convertedY = this.y + parent.y;
         }
         
         private function revertCoords() {
@@ -56,12 +54,15 @@
         }
         
         override public function checkCollision(subject) {
+			convertCoords();
             return this.hitTestObject(subject);
         }
 		
 		override public function notify(subject):void {
 		    if(checkCollision(subject)) {
-                subject.collide(this);
+				if((subject.x + subject.collide_right_ground) > convertedX && (subject.x + subject.collide_left_ground) < convertedX + this.width) {
+	                subject.collide(this);
+				}
             }
 		}
 		
@@ -69,7 +70,7 @@
 		    animate();
 		    if(this.y < 80) {
 		        velocity = liftSpeed;
-		    } else if(this.y > 140) {
+		    } else if(this.y > 130) {
 		        velocity = -liftSpeed;
 		    }
 		    this.y += velocity;

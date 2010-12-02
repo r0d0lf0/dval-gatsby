@@ -36,9 +36,9 @@
 		        switch(currentScreen.getStatus()) {
 		            case COMPLETE: // if our map returned COMPLETE
 		                currentMapIndex++; // increment the current map index
-		                if(currentMapIndex == 1) {
-		                    startMusic();
-		                }
+						if(currentScreen is LevelStart) {
+							startMusic();
+						}
 		                if(currentMapIndex < (mapList.length + 1)) { // and if we haven't finished the last map
 		                    removeChild(currentScreen); // remove the current map
 		                    currentScreen = getMap(currentMapIndex);  // get the next one

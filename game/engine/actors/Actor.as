@@ -23,6 +23,7 @@
         public static const HERO_DEAD = 5;
         public static const GAME_OVER = 6
 
+		public var isRemoved = false;
         protected var observers:Array = new Array();
 		protected var me:Point = localToGlobal(new Point(0,0));
 		protected var onStage:Boolean = false;
@@ -66,6 +67,10 @@
 		//clean up and free resources
 		public function onRemove(evt:Event):void{
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+		}
+		
+		public function getHP() {
+			return HP;
 		}
 		
 		//handles loading textures in the library

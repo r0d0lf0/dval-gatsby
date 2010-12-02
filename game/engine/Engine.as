@@ -79,9 +79,10 @@
                         }
                         break;
                     case GAME_OVER: // if the game's over
-                        //removeChild(currentScreen);
+                        removeChild(currentScreen);
                         currentScreenIndex = 0;
                         scoreboard.setLives(3);
+						scoreboard.setScore(0);
                         currentScreen = screenManager.getScreen(screenList[currentScreenIndex]); // create an instance of our first screen
             			addChild(currentScreen); // add it to the stage
                         break;

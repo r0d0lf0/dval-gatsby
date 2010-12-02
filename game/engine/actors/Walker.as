@@ -11,9 +11,11 @@ package engine.actors {
 		// otherwise you will fall through the ground
 		protected const MAX_VEL_Y:Number = 6; // so min platform height should be 22.
 		protected const MAX_VEL_X:Number = 3;
+		protected var walkSpeed:Number = 1;
+		
 		//DON'T CHANGE THESE
 		public var vely:Number = 0;
-		public var velx:Number = 1;
+		public var velx:Number = walkSpeed;
 
         protected var scoreboard = Scoreboard.getInstance();
 		

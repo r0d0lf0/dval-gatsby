@@ -32,10 +32,10 @@
 		    if(!currentScreen.update()) { // update the current screen to see if it's finished
 		        switch(currentScreen.getStatus()) {
 		            case COMPLETE: // if our map returned COMPLETE
+						if(currentScreen is LevelStart) { // if we just finished the LevelStart screen
+							startMusic(); // then it's time to start the music
+						}
 		                currentMapIndex++; // increment the current map index
-		                if(currentMapIndex == 1) { // if we're on the first map
-		                    startMusic(); // start the music
-		                }
 		                if(currentMapIndex < (mapList.length + 1)) { // and if we haven't finished the last map
 		                    myKeys.removeObserver(currentScreen); // unsubscribe it from the KeyMap
 		                    currentScreen.alpha = 0; // make the current map invisible invisible

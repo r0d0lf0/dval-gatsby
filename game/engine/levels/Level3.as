@@ -22,7 +22,7 @@ package engine.levels{
 	    private var myTransform:SoundTransform;
 	    
 		public function Level3():void{
-		    mapList = new Array('level3_map1', 'level3_map2', 'level3_map3'); // use this later for dylan-style level loading by converting strings to classes
+		    mapList = new Array('level3_map1', 'level3_map2', 'level3_map3', 'level3_map4'); // use this later for dylan-style level loading by converting strings to classes
 			levelNumber = "LEVEL 3";
 			levelName = "NEW YORK CITY";
 			currentScreen = new LevelStart(); // we're just starting, so create a LevelStart screen
@@ -36,9 +36,9 @@ package engine.levels{
 		        switch(currentScreen.getStatus()) {
 		            case COMPLETE: // if our map returned COMPLETE
 		                currentMapIndex++; // increment the current map index
-		                if(currentMapIndex == 1) {
-		                    startMusic();
-		                }
+						if(currentScreen is LevelStart) {
+							startMusic();
+						}
 		                if(currentMapIndex < (mapList.length + 1)) { // and if we haven't finished the last map
 		                    removeChild(currentScreen); // remove the current map
 		                    currentScreen = getMap(currentMapIndex);  // get the next one
@@ -80,13 +80,16 @@ package engine.levels{
 		private function getMap(mapIndex) {
 		    switch(mapIndex) {
 		        case 1:
-		            return new level3_map2();
+		            return new level3_map4();
 					break;
 				case 2:
 					return new level3_map2();
 					break;
 				case 3:
 					return new level3_map3();
+					break;
+				case 4:
+					return new level3_map4();
 					break;
 		    }
 		    return false;

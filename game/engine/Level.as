@@ -13,6 +13,7 @@
 	
 	    protected var levelNumber:String = "LEVEL X";
 	    protected var levelName:String = "UNNAMED";
+		protected var startedFlag:Boolean = false;
 	
 		protected var mapList:Array;
 		protected var currentMapIndex:Number = 0;

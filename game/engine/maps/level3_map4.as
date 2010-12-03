@@ -2,8 +2,14 @@ package engine.maps {
     
     import engine.Map;
     import engine.actors.player.Hero;
+	import engine.actors.enemies.EnemyBossWolfsheim;
+	import engine.actors.EnemyFactory;
 
     public class level3_map4 extends Map {
+	
+		protected var EnemyBoss;
+		protected var enemyFactories = new Array();
+		protected const factoryCount = 2;
 		
 		override public function customUpdate():void {
 		    // this will be replaced later
@@ -23,6 +29,15 @@ package engine.maps {
 			notifyObservers(); // tell our observers that we've completed our load out
 		}
 		
+		private function getWolfsheim() {
+			for(var i = 0; i < observerArray.length; i++) {
+				if(observerArray[i] is EnemyBossWolfsheim) {
+					return observerArray[i];
+					break;
+				}
+			}
+		}
+		
 		override public function notify(subject:*):void {
 		    if(subject is Hero) {
 		        //moveMap(subject);
@@ -33,7 +48,28 @@ package engine.maps {
 		            heroHP = scoreboard.getHP(); // reset our holder for HP
 		            notifyObservers(); // and tell the level about it
 		        }
-		    }
+		    } else if(subject is EnemyBossWolfsheim) {
+				if(EnemyBoss == null) {
+					EnemyBoss = subject;
+				}
+			} else if(subject is EnemyFactory) { // if a factory's all done
+				if(!isListed(subject)) { // and we don't yet have a record of it
+					enemyFactories.push(subject); // add it to our dead factories list
+					trace("Factory empty!"); // and send up a flare
+					if(enemyFactories.length >= factoryCount) { // if all our factories are empty
+						EnemyBoss.killMe(); // kill the boss
+					}
+				}				
+			}
+		}
+		
+		private function isListed(factory:*) {
+			for (var ob:int=0; ob<enemyFactories.length; ob++) { // loop through all of our enemies
+                if(enemyFactories[ob] == factory) { // and if we find this one
+					return true;
+				}
+			}
+			return false;
 		}
         
     }

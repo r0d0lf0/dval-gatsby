@@ -248,13 +248,15 @@ package engine.actors {
 		
 		public function killMe():void {
 		    if(myStatus != 'DYING') {
+				HP = 0;
 	            myStatus = 'DYING';
-	            this.vely = -10;
 	            if(hitDirection == 'LEFT') {
 	                this.velx = 3;
 	            } else if(hitDirection == 'RIGHT')  {
 	                this.velx = -3;
 	            }
+				notifyObservers();
+	            this.vely = -10;
 	        }
 		    if(frameCount >= frameDelay) {
 		        applyPhysics();

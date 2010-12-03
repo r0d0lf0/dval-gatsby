@@ -8,8 +8,8 @@ package engine.actors.enemies {
     public class EnemyChandelier extends Enemy {
 	
 		protected var falling = false;
-		protected const fallSpeed = 3;
-		protected const triggerDistance = 25;
+		protected const fallSpeed = 4;
+		protected const triggerDistance = 30;
 		protected var vely = 0;
 		
 		private var chandelierSound = new chandelier_sound();

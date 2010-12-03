@@ -19,7 +19,7 @@ package engine.actors.enemies {
             loopRow = 0; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
             speed = 5; // how many frames should go by before we advance
-
+			deathFrame = 3;
 		}
         
     }

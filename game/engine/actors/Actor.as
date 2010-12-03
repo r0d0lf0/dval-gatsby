@@ -29,6 +29,7 @@
 		protected var onStage:Boolean = false;
 		protected var myMap:Map;
 		public var myStatus = 'INACTIVE';
+		public var alwaysOn = false;
 		private var actor:*;
 		private var ldr;
 		
@@ -58,6 +59,10 @@
 		    onStage = true;
 		    setup();
 			this.addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+		}
+		
+		public function getStatus() {
+			return myStatus;
 		}
 		
 		public function setup() {

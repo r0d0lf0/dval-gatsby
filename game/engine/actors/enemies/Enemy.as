@@ -50,6 +50,7 @@ package engine.actors.enemies {
         
         public function checkDeath():Boolean {
             if(HP <= 0 && !deadFlag) {
+				HP = 0;
 		        dieSound.play(0);
 		        deadFlag = true;
 		        scoreboard.addToScore(points);
@@ -59,12 +60,12 @@ package engine.actors.enemies {
 
 		override public function notify(subject):void {
 		    if(checkCollision(subject) && !deadFlag) { // If i'm colliding with something, and I'm alive...
-		        if(subject is Hero) {
-		            subject.receiveDamage(this);
+		        if(subject is Hero) {  // if it's the hero
+		            subject.receiveDamage(this); // damage him
 		        }
-		        if(subject is HatWeapon) {
-		            receiveDamage(subject);
-		            hitDirection = subject.goingLeft;
+		        if(subject is HatWeapon) { // if it's the hero's weapon
+		            receiveDamage(subject); // receive damage
+		            hitDirection = subject.goingLeft; // and determine the direction from whence you were hit
 		        }
             }
 		}

@@ -34,8 +34,33 @@ package engine.actors.enemies {
             speed = 5; // how many frames should go by before we advance            
 		}
 		
+		override public function killMe():void {
+			HP = 0;
+		    if(myStatus != 'DYING') {
+				setLoop(2, 0, 1, 0, 0, 1); // make us die
+	            myStatus = 'DYING';
+	            this.vely = -10;
+	            if(hitDirection == 'LEFT') {
+	                this.velx = 3;
+	            } else if(hitDirection == 'RIGHT')  {
+	                this.velx = -3;
+	            }
+	        }
+		    if(frameCount >= frameDelay) {
+		        applyPhysics();
+		        this.y += vely;
+		        animate();
+		        if(this.y > 240) {
+					myStatus = 'DEAD';
+					myMap.updateStatus(COMPLETE);
+		            myMap.removeFromMap(this);
+		        }
+		    } else {
+		        frameCount++;
+		    }
+		}
+		
 		override public function moveMe():void {
-			
 			if(frameCount >= frameDelay) { 
 				if(actionCounter >= actionDelay) { // if we've waited long enough
 					if(currentAction == JUMPING) { // and we're jumping

@@ -35,6 +35,9 @@
 				    case 'Level3':
 				        return new Level3();
 				        break;
+					case 'Level4':
+						return new Level4();
+						break;
 					case 'CutScene1':
 						return new CutScene1();
 						break;

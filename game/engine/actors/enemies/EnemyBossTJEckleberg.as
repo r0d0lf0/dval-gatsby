@@ -6,22 +6,39 @@ package engine.actors.enemies {
     import engine.actors.geoms.*;
 	import engine.actors.player.Hero;
 	
+	import flash.media.Sound;
+	import flash.media.SoundChannel;
+	
 	import flash.geom.Point;
+	import engine.actors.weapons.LaserWeapon;
     
     public class EnemyBossTJEckleberg extends EnemyWalker {
 	
-		protected const actionDelay = 60;
+		private var laserSound = new laser_sound();
+	
+		protected const flyingDuration = 30;
+		protected const damageDuration = 30;
+		protected const shootWarningDuration = 10;
+		protected const shootDuration = 0;
+	
+		protected var actionDelay = flyingDuration;
 		protected var actionCounter = 0;
 		protected var currentRow = 0;
 		protected const FLYING = 1;
 		protected const SHOOTING = 2;
+		protected const SHOOT_WARNING = 3;
 		
 		protected var damagedFlag = 0;
 		protected var damagedCounter = 0;
 		protected const damagedDuration = 30;
 		
-		protected var destinationPoint:Point = new Point(256, 50);
+		protected var destinationPoint:Point = new Point(256, 40);
+		protected var destArray = new Array();
 		protected var currentPoint:Point = new Point(0, 0);
+		protected var pointCounter = 0;
+		protected const pointProximity = 20;
+		
+		protected var myHero = null;
 		
 		protected const MAX_VEL = 3; // fastest we're allowed to go by the universe
 		protected const INERTIA = .25; // the fastest we're allowed to increase in velocity per frame
@@ -34,7 +51,7 @@ package engine.actors.enemies {
 
 			walkSpeed = 0;
 			velx = walkSpeed;
-			HP = 10;
+			HP = 5;
     		
     		myName = "EnemyBossTJEckleberg"; // the generic name of our enemy
             mySkin = "TJEcklebergSkin2"; // the name of the skin for this enemy
@@ -48,6 +65,8 @@ package engine.actors.enemies {
             loopDir = 1; // loop forward (to the right) by default
             speed = 5; // how many frames should go by before we advance            
 		
+			destArray = new Array( (new Point(this.x, 33)), (new Point(this.x + 128, 33)) );
+		
 		    tilesWide = 5;
 		    tilesTall = 2;
 		}
@@ -59,7 +78,7 @@ package engine.actors.enemies {
 		override public function killMe():void {
 			HP = 0;
 		    if(myStatus != 'DYING') {
-				setLoop(2, 0, 1, 0, 0, 1); // make us die
+				setLoop(1, 1, 1, 1, 0, 1); // make us die
 	            myStatus = 'DYING';
 	            this.vely = -10;
 	            if(hitDirection == 'LEFT') {
@@ -83,26 +102,29 @@ package engine.actors.enemies {
 		}
 		
 		private function moveEyes(hero) {
-			var heroDelta = (this.x + 32) - (hero.x + 10); // subtract Eckleberg's center from the hero's and see what's what
+			if(currentAction == SHOOT_WARNING) {
+			//	var damagedFlag = 1;
+			}
+			var heroDelta = (this.x + (this.width / 2)) - (hero.x + (this.height / 2)); // subtract Eckleberg's center from the hero's and see what's what
 			if(heroDelta > 64) {
 				if(currentRow != 0) {
 					currentRow = 0;
-					setLoop(currentRow, 0, damagedFlag, 0, 0, 0);
+					setLoop(currentRow, 0, damagedFlag, 0, 0, 1);
 				}
 			} else if(heroDelta > 0 && heroDelta < 64) {
 				if(currentRow != 1) {
 					currentRow = 1;
-					setLoop(currentRow, 0, damagedFlag, 0, 0, 0);
+					setLoop(currentRow, 0, damagedFlag, 0, 0, 1);
 				}
 			} else if(heroDelta > -64 && heroDelta < 0) {
 				if(currentRow != 2) {
 					currentRow = 2;
-					setLoop(currentRow, 0, damagedFlag, 0, 0, 0);
+					setLoop(currentRow, 0, damagedFlag, 0, 0, 1);
 				}
 			} else if(heroDelta < -64) {
 				if(currentRow != 3) {
 					currentRow = 3;
-					setLoop(currentRow, 0, damagedFlag, 0, 0, 0);
+					setLoop(currentRow, 0, damagedFlag, 0, 0, 1);
 				}
 			}
 			
@@ -116,6 +138,9 @@ package engine.actors.enemies {
 		
 			if(subject is Hero) {
 				moveEyes(subject);
+				if(myHero == null) {
+					myHero = subject;
+				}
 			}
 		}
 		
@@ -134,6 +159,45 @@ package engine.actors.enemies {
 				damagedFlag = 1;	
 			}
         }
+
+		private function shootLaser(hero) {
+			
+			// calculate the center of each of us
+			var thisCenter = new Point(this.x + (this.width / 2), this.y + (this.height / 2));
+			var heroCenter = new Point(hero.x + (hero.width / 2), hero.y + (hero.height / 2));
+			
+			
+			// get a vector to the hero's position
+			var lenX = (heroCenter.x - thisCenter.x);
+			var lenY = (heroCenter.y - thisCenter.y);
+			
+			// calculate the length of the vector
+			var vectorLength = Math.sqrt((lenX * lenX) + (lenY * lenY));
+			
+			// normalize it
+			var heroVX = (lenX / vectorLength);
+			var heroVY = (lenY / vectorLength);
+			
+			trace("Vectors: X=" + heroVX + " Y=" + heroVY);
+			
+			var newLaser = new LaserWeapon(this, heroVX, heroVY);
+			myMap.spawnActor(newLaser, thisCenter.x, thisCenter.y);
+			var soundChannel = laserSound.play(0);
+			
+		}
+		
+		private function updatePoints() {
+			// see how close we are to our destination point
+			var currentPoint = new Point(this.x + (this.width / 2), this.y + (this.height / 2));
+			var destPoint = destArray[pointCounter];
+			if(Math.abs(destPoint.x - currentPoint.x) <= pointProximity && Math.abs(destPoint.y - currentPoint.y) <= pointProximity) {
+				pointCounter++;
+			}
+			trace(Math.abs(destPoint.x - currentPoint.x) + " and " + Math.abs(destPoint.y - currentPoint.y));
+			if(pointCounter > (destArray.length - 1)) {
+				pointCounter = 0;
+			}
+		}
 
 		private function flyToPoint(destinationPoint) {
 			
@@ -169,16 +233,29 @@ package engine.actors.enemies {
 			
 		}
 		
+		override public function updateStatus():void {
+			
+	    }
+		
 		override public function moveMe():void {
-			flyToPoint(destinationPoint);
+			updatePoints();
+			flyToPoint(destArray[pointCounter]);
 			if(frameCount >= frameDelay) { 
-				if(actionCounter >= actionDelay) { // if we've waited long enough
-					if(currentAction == FLYING) { // and we're jumping
-						//setLoop(0, 0, 3, 0, 1); // make us point
-						currentAction = SHOOTING; // switch us to pointing mode
-					} else if(currentAction == SHOOTING) { // otherwise, if we're pointing
-						//setLoop(1, 0, 3, 0, 1); // make us jump
-						currentAction = FLYING; // and switch us to jumping mode
+				if(actionCounter >= actionDelay) { // if we've waited long enough for our current action
+					if(currentAction == FLYING) { // and we're flying
+						actionDelay = shootWarningDuration; // set our delay value
+						currentAction = SHOOT_WARNING; // switch us to shoot warning mode
+						setLoop(currentRow, 0, 1, 0, 0, 1); // set our animation to do what it does
+					} else if(currentAction == SHOOT_WARNING) { // otherwise, if we're shoot warning, then we're done
+						setLoop(currentRow, 0, 0, 0, 0, 0); // set us back to normal animation
+						actionDelay = shootDuration; // set our pause duration to shoot
+						currentAction = SHOOTING; // and set us to ready to shoot
+					} else if(currentAction == SHOOTING) { // otherwise, if we're ready to shoot
+						if(myHero != null) { // if we've got a hero
+							shootLaser(myHero); // shoot a laser beam at him
+						}
+						actionDelay = flyingDuration; // get us prepped to fly
+						currentAction = FLYING; // and start just flying
 					}
 					actionCounter = 0;
 				}

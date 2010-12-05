@@ -81,18 +81,18 @@ package engine.levels{
 		private function getMap(mapIndex) {
 		    switch(mapIndex) {
 		        case 1:
-		            return new level3_map3();
+		            return new level3_map1();
 					break;
 				case 2:
-					stopMusic();
-					bossMusic = new boss_music();
-					musicChannel = bossMusic.play(0, 100);
-					return new level3_map4();
+					return new level3_map2();
 					break;
 				case 3:
 					return new level3_map3();
 					break;
 				case 4:
+					stopMusic();
+					bossMusic = new boss_music();
+					musicChannel = bossMusic.play(0, 100);
 					return new level3_map4();
 					break;
 		    }

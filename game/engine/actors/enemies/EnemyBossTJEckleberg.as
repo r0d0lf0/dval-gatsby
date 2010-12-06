@@ -53,6 +53,8 @@ package engine.actors.enemies {
 			walkSpeed = 0;
 			velx = walkSpeed;
 			HP = 5;
+			
+			points = 2500;
     		
     		myName = "EnemyBossTJEckleberg"; // the generic name of our enemy
             mySkin = "TJEcklebergSkin2"; // the name of the skin for this enemy

@@ -3,11 +3,12 @@ package engine.actors.specials {
     import engine.actors.Animatable;
     import engine.Scoreboard;
     import engine.actors.player.Hero;
-    
+   	import engine.actors.ActorScore;
+
     public class ScorePowerup extends Animatable {
         
-        public var points = 50;
         private var taken = false;
+		protected var scoreboard:Scoreboard = Scoreboard.getInstance();
         
         public function ScorePowerup() {
             // i construct, therefore, i am.
@@ -37,6 +38,7 @@ package engine.actors.specials {
             if(!taken && subject is Hero) {
                 if(checkCollision(subject)) {
                     subject.receivePowerup(this);
+					scoreboard.addToScore(this, points);
                     taken = true;
                     myMap.removeFromMap(this);
                 }   

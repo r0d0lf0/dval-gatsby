@@ -1,4 +1,6 @@
 package engine {
+	
+	import engine.actors.ActorScore;
     
     public class Scoreboard implements ISubject {
         
@@ -7,6 +9,7 @@ package engine {
         public static var lives:int = 3;
         public static var HP:int = 3;
         private static var observers:Array = new Array();
+		public static var multiplier = 1;
         
         public function Scoreboard(pvt:PrivateClass) {
             
@@ -31,9 +34,17 @@ package engine {
         public function getHP():Number {
             return Scoreboard.HP;
         }
+
+		public function setMultiplier(newMultiplier) {
+			Scoreboard.multiplier = newMultiplier;
+		}
         
-        public function addToScore(amount:Number) {
-            Scoreboard.score += amount;
+        public function addToScore(giver, amount:Number) {
+			var additionalAmount = amount * Scoreboard.multiplier;
+            Scoreboard.score += additionalAmount;
+			var myScore = new ActorScore(additionalAmount, giver.x, giver.y);
+			var myMap = giver.getMap();
+			myMap.addChild(myScore);
             notifyObservers();
         }
         

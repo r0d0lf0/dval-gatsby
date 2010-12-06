@@ -15,6 +15,7 @@ package engine.actors.enemies {
     public class EnemyBossTJEckleberg extends EnemyWalker {
 	
 		private var laserSound = new laser_sound();
+		private var roarSound = new tjeckleberg_roar();
 	
 		protected const flyingDuration = 30;
 		protected const damageDuration = 30;
@@ -147,6 +148,7 @@ package engine.actors.enemies {
 		// the hero will use this to deal damage
         override public function receiveDamage(attacker):void {
 			if(damagedFlag == 0) {
+				var soundChannel = roarSound.play(0);
 			    HP -= attacker.damage;
 	            if(HP <= 0) {
 	                HP = 0;

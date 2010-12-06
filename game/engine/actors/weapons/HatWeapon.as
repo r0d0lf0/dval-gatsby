@@ -2,6 +2,7 @@ package engine.actors.weapons {
     
     import engine.IObserver;
     import engine.actors.Actor;
+	import engine.Scoreboard;
     import engine.actors.player.Hero;
     import engine.actors.enemies.*;
     import engine.actors.geoms.*;
@@ -16,6 +17,9 @@ package engine.actors.weapons {
         private var inertia:Number = 4; // amount of inertia to change velocity
         public var velX:Number = 0;
         public var velY:Number = 0;
+		private var scoreboard:Scoreboard = Scoreboard.getInstance();
+
+		private var successiveHits = 0;
         
         public function HatWeapon(owner) {
             super(owner);
@@ -47,13 +51,19 @@ package engine.actors.weapons {
 		override public function notify(subject):void {
 		    if(checkCollision(subject)) {
 		        if(subject is Enemy || subject is EnemyWalker) {
-		            subject.receiveDamage(this);
-		            if(!returning) {
-		                returning = true;
-		                velX = -velX;
-		            }
+					if(subject.getHP() > 0) {
+						successiveHits++;
+						scoreboard.setMultiplier(successiveHits);
+						subject.receiveDamage(this);
+			            if(!returning) {
+			                returning = true;
+			                velX = -velX;
+			            }
+					}
 		        } else if(subject is Hero && returning) {
 		            subject.catchMe(this);
+					successiveHits = 0;
+					scoreboard.setMultiplier(1);
 		        }
             }
 		}

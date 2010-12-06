@@ -12,6 +12,8 @@
 	import flash.utils.getDefinitionByName;
 	import engine.ISubject;
 	
+	import engine.actors.ActorScore;
+	
 
 	dynamic public class Actor extends MovieClip implements IObserver, ISubject {
 	    
@@ -23,6 +25,8 @@
         public static const HERO_DEAD = 5;
         public static const GAME_OVER = 6
 
+        public var points = 50;
+
 		public var isRemoved = false;
         protected var observers:Array = new Array();
 		protected var me:Point = localToGlobal(new Point(0,0));
@@ -32,6 +36,8 @@
 		public var alwaysOn = false;
 		private var actor:*;
 		private var ldr;
+		
+		protected var myScore;
 		
 		protected var HP:Number = 1;
 		
@@ -57,6 +63,7 @@
 		//initialize object after it's on stage
 		public function buildObject():void {
 		    onStage = true;
+			myScore = new ActorScore(points, this.x, this.y); 
 		    setup();
 			this.addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
 		}
@@ -134,6 +141,10 @@
 		
 		public function setMap(map:Map):void {
 		    myMap = map;
+		}
+		
+		public function getMap() {
+			return myMap;
 		}
 		
 		// the hero will use this to deal damage

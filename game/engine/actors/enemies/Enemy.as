@@ -12,7 +12,6 @@ package engine.actors.enemies {
         protected var deadFlag:Boolean = false;
         protected var dieSound = new enemy_die();
         protected var hitDirection = 0;
-        protected var points:Number = 100;
         protected var scoreboard:Scoreboard = Scoreboard.getInstance();
         
         public function Enemy() {
@@ -53,7 +52,7 @@ package engine.actors.enemies {
 				HP = 0;
 		        dieSound.play(0);
 		        deadFlag = true;
-		        scoreboard.addToScore(points);
+		        scoreboard.addToScore(this, points);
 		    }
 		    return false;
         }

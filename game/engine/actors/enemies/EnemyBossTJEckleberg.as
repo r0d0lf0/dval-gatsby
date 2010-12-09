@@ -33,15 +33,15 @@ package engine.actors.enemies {
 		protected var damagedCounter = 0;
 		protected const damagedDuration = 30;
 		
-		protected var destinationPoint:Point = new Point(256, 40);
+		protected var destinationPoint:Point = new Point(296, 60);
 		protected var destArray = new Array();
 		protected var currentPoint:Point = new Point(0, 0);
 		protected var pointCounter = 0;
-		protected const pointProximity = 20;
+		protected const pointProximity = 25;
 		
 		protected var myHero = null;
 		
-		protected const MAX_VEL = 3; // fastest we're allowed to go by the universe
+		protected const MAX_VEL = 4; // fastest we're allowed to go by the universe
 		protected const INERTIA = .25; // the fastest we're allowed to increase in velocity per frame
 		
 		protected var currentAction = FLYING;
@@ -68,7 +68,7 @@ package engine.actors.enemies {
             loopDir = 1; // loop forward (to the right) by default
             speed = 5; // how many frames should go by before we advance            
 		
-			destArray = new Array( (new Point(this.x, 33)), (new Point(this.x + 128, 33)) );
+			destArray = new Array( (new Point(this.x, 55)), (new Point(this.x + 168, 55)) );
 		
 		    tilesWide = 5;
 		    tilesTall = 2;
@@ -182,10 +182,10 @@ package engine.actors.enemies {
 			var heroVX = (lenX / vectorLength);
 			var heroVY = (lenY / vectorLength);
 			
-			trace("Vectors: X=" + heroVX + " Y=" + heroVY);
-			
-			var newLaser = new LaserWeapon(this, heroVX, heroVY);
-			myMap.spawnActor(newLaser, thisCenter.x, thisCenter.y);
+			var laserLeft = new LaserWeapon(this, heroVX, heroVY);
+			var laserRight = new LaserWeapon(this, heroVX, heroVY);
+			myMap.spawnActor(laserLeft, thisCenter.x - 25, thisCenter.y);
+			myMap.spawnActor(laserRight, thisCenter.x + 25, thisCenter.y);
 			var soundChannel = laserSound.play(0);
 			
 		}
@@ -197,8 +197,8 @@ package engine.actors.enemies {
 			if(Math.abs(destPoint.x - currentPoint.x) <= pointProximity && Math.abs(destPoint.y - currentPoint.y) <= pointProximity) {
 				pointCounter++;
 			}
-			trace(Math.abs(destPoint.x - currentPoint.x) + " and " + Math.abs(destPoint.y - currentPoint.y));
-			if(pointCounter > (destArray.length - 1)) {
+
+            if(pointCounter > (destArray.length - 1)) {
 				pointCounter = 0;
 			}
 		}

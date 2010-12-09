@@ -2,8 +2,16 @@ package engine.maps {
     
     import engine.Map;
     import engine.actors.background.*;
+    import engine.actors.player.Hero;
+    import engine.actors.specials.Door;
     
     public class level2_map1 extends Map {
+        
+        private const fadeLevels = 6;
+        private var currentFadeLevel = 0;
+        private var fadeSpeed = 15;
+        private var fadeCounter = 0;
+        private var fadeEnabled = false;
         
         private var groundPlane = new Level2Ground();
         private var groundSpeed = 9;
@@ -26,9 +34,23 @@ package engine.maps {
             // by children of this class, should they
             // require it
             //skyPlane.x++;
-            moveSky();
-            moveTrees();
-            moveGround();
+            //moveSky();
+            //moveTrees();
+            if(fadeEnabled) {
+                fadeCounter++;
+                if(fadeCounter > fadeSpeed) {
+                    fadeCounter = 0;
+                    currentFadeLevel++;
+                    if(currentFadeLevel > fadeLevels) {
+                        currentFadeLevel = 0;
+                        updateStatus(COMPLETE);
+                    }
+                    skyPlane.setLoop(currentFadeLevel, 0, 0, 0, 0);
+                    treePlane.setLoop(currentFadeLevel, 0, 0, 0, 0);
+                }   
+            } else {
+                moveGround();
+            }
 		}
 		
 		private function moveSky() {
@@ -60,9 +82,9 @@ package engine.maps {
 		    // references to them into appropriate local arrays.  Afterwards, we'll subscribe
 		    // them to each other, and to the map itself
 		    heroHP = scoreboard.getHP();
-		    this.addChild(skyPlane);
-		    this.addChild(treePlane);
-		    treePlane.y = skyPlane.height;
+		    spawnActor(skyPlane);
+		    spawnActor(treePlane);
+		    treePlane.y = 48;
 		    this.addChild(groundPlane);
 		    groundPlane.y = 208 - groundPlane.height;
 		    setChildIndex(skyPlane,0);
@@ -72,6 +94,20 @@ package engine.maps {
     		updateStatus(ACTIVE);
     		prevStatus = ACTIVE;
 			notifyObservers(); // tell our observers that we've completed our load out
+		}
+		
+		override public function notify(subject:*):void {
+		    if(subject is Hero) {
+		        moveMap(subject);
+		        if(heroHP != scoreboard.getHP()) { // if our hero's HP has changed
+		            heroHP = scoreboard.getHP(); // reset our holder for HP
+		            notifyObservers(); // and tell the level about it
+		        }
+		    } else if(subject is Door) {
+		        //updateStatus(COMPLETE); // if we hit the door, then we should move on
+		        updateStatus(PAUSING);
+		        fadeEnabled = true;
+		    }
 		}
         
     }

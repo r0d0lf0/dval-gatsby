@@ -22,7 +22,7 @@
 	    private var myTransform:SoundTransform;
 	    
 		public function Level2():void{
-		    mapList = new Array('level2_map1'); // use this later for dylan-style level loading by converting strings to classes
+		    mapList = new Array('level2_map1', 'level2_map2'); // use this later for dylan-style level loading by converting strings to classes
 			levelNumber = "LEVEL 2";
 			levelName = "TRAIN TO THE CITY";
 			currentScreen = new LevelStart(); // we're just starting, so create a LevelStart screen
@@ -81,6 +81,8 @@
 		    switch(mapIndex) {
 		        case 1:
 		            return new level2_map1();
+		        case 2:
+		            return new level2_map2();
 		    }
 		    return false;
 		}

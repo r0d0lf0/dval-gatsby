@@ -9,8 +9,8 @@ package engine.actors.weapons {
     
     public class LaserWeapon extends Weapon implements IObserver {
         
-		private const laserSpeed:Number = 2;
-        private var shootDistance:int = 50;
+		private const laserSpeed:Number = 5;
+        private var shootDistance:int = 100;
 		private var loopSet = false;
 		
         private var velX:Number = 0;

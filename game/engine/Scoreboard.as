@@ -1,6 +1,9 @@
 package engine {
 	
 	import engine.actors.ActorScore;
+	import engine.actors.specials.ScorePowerup;
+	import flash.media.Sound;
+	import flash.media.SoundChannel;
     
     public class Scoreboard implements ISubject {
         
@@ -10,6 +13,10 @@ package engine {
         public static var HP:int = 3;
         private static var observers:Array = new Array();
 		public static var multiplier = 1;
+		private static var effectsChannel;
+		private static var extraLivesCounter = 0;
+		private static const extraLivesPoints = 10000;
+
         
         public function Scoreboard(pvt:PrivateClass) {
             
@@ -45,7 +52,25 @@ package engine {
 			var myScore = new ActorScore(additionalAmount, giver.x, giver.y);
 			var myMap = giver.getMap();
 			myMap.addChild(myScore);
+			if(checkExtraLife()) {
+			    var myHero = myMap.getHero();
+			    var xtra = new ActorScore('1UP', myHero.x, myHero.y);
+			    myMap.addChild(xtra);
+			}
             notifyObservers();
+        }
+        
+        private function checkExtraLife() {
+            if(Math.floor(Scoreboard.score / extraLivesPoints) > extraLivesCounter) {
+                extraLivesCounter++;
+                addLife();
+                var xtraLifeSound = new extra_life_sound();
+                effectsChannel = xtraLifeSound.play(0);
+                trace(Math.floor(Scoreboard.score / Scoreboard.extraLivesPoints));
+                return true;
+            } else {
+                return false;
+            }
         }
         
         public function setScore(newScore:Number) {

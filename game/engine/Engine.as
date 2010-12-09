@@ -16,9 +16,9 @@
 	    private var currentScreen;
 	    private var currentScreenIndex:Number = 0;
 	    private var playerScore:Number = 0;
-	    private var playerLives:Number = 1;
+	    private const playerLives:Number = 3;
 	    
-	    static private var screenList:Array = new Array('GameOpen','Level1','CutScene1','Level2','Level3','Level4');
+	    static private var screenList:Array = new Array(/*'GameOpen','Level1','CutScene1',*/'Level2','Level3','Level4');
 		
 		public function Engine():void {
 			//check for flash spacetime coordinates
@@ -63,7 +63,6 @@
                         }
                         break;
                     case HERO_DEAD: // if our hero died
-                        trace("hero died");
                         scoreboard.removeLife(); //
                         if(scoreboard.getLives() <= 0) { // if we're out of lives
                             removeChild(currentScreen);
@@ -81,7 +80,7 @@
                     case GAME_OVER: // if the game's over
                         removeChild(currentScreen);
                         currentScreenIndex = 0;
-                        scoreboard.setLives(3);
+                        scoreboard.setLives(playerLives);
 						scoreboard.setScore(0);
                         currentScreen = screenManager.getScreen(screenList[currentScreenIndex]); // create an instance of our first screen
             			addChild(currentScreen); // add it to the stage

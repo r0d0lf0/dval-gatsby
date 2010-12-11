@@ -10,6 +10,7 @@ package engine.actors.background {
         private var playerOffset = 0;
         private var loopPoint = 400;
         private var scrollSpeed = 1;
+        public var followHero = true;
         
         override public function setup() {
             
@@ -40,12 +41,16 @@ package engine.actors.background {
                 if(playerOffset > loopPoint) {
                     playerOffset = playerOffset - loopPoint;
                 }
-                if(subject.x > 128) {
-                    this.x = subject.x - 128;
+                if(followHero) {
+                    if(subject.x > 128) {
+                        this.x = subject.x - 128;
+                    } else {
+                        this.x = 0;
+                    }
+                    this.x -= playerOffset;
                 } else {
-                    this.x = 0;
+                    this.x = -playerOffset;
                 }
-                this.x -= playerOffset;
             } if(subject is Map) {
                 trace("Map!");
             }

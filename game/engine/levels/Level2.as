@@ -18,6 +18,7 @@
 	public class Level2 extends Level {
 	    
 	    private var music:music_level2;
+	    private var bossMusic:boss_music2;
 	    private var musicChannel:SoundChannel;
 	    private var myTransform:SoundTransform;
 	    
@@ -82,6 +83,9 @@
 		        case 1:
 		            return new level2_map1();
 		        case 2:
+		            stopMusic();
+				    bossMusic = new boss_music2();
+				    musicChannel = bossMusic.play(0, 100);
 		            return new level2_map2();
 		    }
 		    return false;

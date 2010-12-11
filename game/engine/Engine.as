@@ -18,7 +18,7 @@
 	    private var playerScore:Number = 0;
 	    private const playerLives:Number = 3;
 	    
-	    static private var screenList:Array = new Array(/*'GameOpen','Level1','CutScene1',*/'Level2','Level3','Level4');
+	    static private var screenList:Array = new Array('GameOpen','Level1','CutScene1','Level2','Level3','Level4');
 		
 		public function Engine():void {
 			//check for flash spacetime coordinates

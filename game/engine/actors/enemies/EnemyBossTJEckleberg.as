@@ -68,7 +68,7 @@ package engine.actors.enemies {
             loopDir = 1; // loop forward (to the right) by default
             speed = 5; // how many frames should go by before we advance            
 		
-			destArray = new Array( (new Point(this.x, 55)), (new Point(this.x + 168, 55)) );
+			destArray = new Array( (new Point(80, 55)), (new Point(196, 55)) );
 		
 		    tilesWide = 5;
 		    tilesTall = 2;

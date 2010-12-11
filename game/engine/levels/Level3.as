@@ -18,7 +18,7 @@ package engine.levels{
 	public class Level3 extends Level {
 	    
 	    private var music:music_level3;
-		private var bossMusic:boss_music;
+		private var bossMusic:boss_music2;
 	    private var musicChannel:SoundChannel;
 	    private var myTransform:SoundTransform;
 	    
@@ -91,7 +91,7 @@ package engine.levels{
 					break;
 				case 4:
 					stopMusic();
-					bossMusic = new boss_music();
+					bossMusic = new boss_music2();
 					musicChannel = bossMusic.play(0, 100);
 					return new level3_map4();
 					break;

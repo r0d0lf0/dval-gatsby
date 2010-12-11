@@ -95,20 +95,6 @@ package engine.maps {
     		prevStatus = ACTIVE;
 			notifyObservers(); // tell our observers that we've completed our load out
 		}
-		
-		override public function notify(subject:*):void {
-		    if(subject is Hero) {
-		        moveMap(subject);
-		        if(heroHP != scoreboard.getHP()) { // if our hero's HP has changed
-		            heroHP = scoreboard.getHP(); // reset our holder for HP
-		            notifyObservers(); // and tell the level about it
-		        }
-		    } else if(subject is Door) {
-		        //updateStatus(COMPLETE); // if we hit the door, then we should move on
-		        updateStatus(PAUSING);
-		        fadeEnabled = true;
-		    }
-		}
         
     }
     

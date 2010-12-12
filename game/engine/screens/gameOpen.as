@@ -118,7 +118,6 @@ package engine.screens{
 		        BUTTON_ENTER = true;
 				prevAction = actionCounter;
 				actionCounter = 99;
-				trace("Enter!");
 		    }
 		}
 		

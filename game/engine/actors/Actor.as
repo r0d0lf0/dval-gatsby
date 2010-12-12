@@ -41,10 +41,10 @@
 		
 		protected var HP:Number = 1;
 		
-		public var collide_left:int = 10; // what pixel do we collide on on the left
-		public var collide_right:int = 22; // what pixel do we collide on on the right
+		public var collide_left:int = 8; // what pixel do we collide on on the left
+		public var collide_right:int = 20; // what pixel do we collide on on the right
 		
-		public var collide_left_ground:int = 10;
+		public var collide_left_ground:int = 9;
 		public var collide_right_ground:int = 20;
 		
 		public function Actor():void {
@@ -93,13 +93,14 @@
 		}
 		
 		public function checkCollision(subject) {
-		    if((subject.x + subject.collide_right) >= this.x && (subject.x + subject.collide_left) <= this.x + this.width) {
+		    if((subject.x + subject.collide_right) >= this.x + collide_left && (subject.x + subject.collide_left) <= this.x + collide_right) {
 		        if((this.y + this.height) >= subject.y && this.y <= (subject.y + subject.height)) {
 		            return true;
 		        }
 		    }
 		    return false;
 		}
+	    
 		
 		public function checkGroundCollision(subject) {
 		    if((subject.x + subject.collide_right_ground) >= this.x && (subject.x + subject.collide_left_ground) <= this.x + this.width) {

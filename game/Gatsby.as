@@ -7,11 +7,11 @@ package {
 	
 	dynamic public class Gatsby extends MovieClip {
 	
-		public var game:Game = new Game();
+		
 		
 		public function Gatsby() {
 			//
-			this.addChild(game);
+            //addChild(game);
 		}
 	}//end class
 }//end package

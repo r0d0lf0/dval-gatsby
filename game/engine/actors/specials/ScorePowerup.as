@@ -20,6 +20,8 @@ package engine.actors.specials {
 		    myName = "Money"; // the generic name of our enemy
             mySkin = "ItemMoneySkin"; // the name of the skin for this enemy
             
+            points = 10;
+            
             tile = 16; // select size
     		tilesWide = 1;
     		tilesTall = 1;

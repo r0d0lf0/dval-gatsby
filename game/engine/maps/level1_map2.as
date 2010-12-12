@@ -53,7 +53,7 @@ package engine.maps {
 			
 			dropEnemy('EnemyWaiter', 1424, 144);
 		
-		    heroHP = scoreboard.getHP();
+		    heroHP = scoreboard.getHeroHP();
     		updateSubscriptions();
     		updateStatus(ACTIVE);
     		prevStatus = ACTIVE;

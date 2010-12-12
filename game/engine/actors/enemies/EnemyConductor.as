@@ -13,6 +13,8 @@ package engine.actors.enemies {
     		
     		myName = "EnemyConductor"; // the generic name of our enemy
             mySkin = "ConductorSkin"; // the name of the skin for this enemy
+            
+            points = 150;
     		
     		startFrame = 0; // the first frame to loop on
             endFrame = 1; // the final frame in the row

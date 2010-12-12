@@ -82,7 +82,6 @@ package engine.maps {
                 if(babyBoss.y < -200) {
                     babyBossFly = false;
                     spawnActor(boss, 64, -70);
-                    setChildIndex(boss,0);
                 }
             }
 		}
@@ -107,7 +106,7 @@ package engine.maps {
 		    // loop through all the child objects attached to this library item, and put
 		    // references to them into appropriate local arrays.  Afterwards, we'll subscribe
 		    // them to each other, and to the map itself
-		    heroHP = scoreboard.getHP();
+		    heroHP = scoreboard.getHeroHP();
 		    skyPlane.followHero = false;
 		    treePlane.followHero = false;
 		    spawnActor(skyPlane);
@@ -124,8 +123,8 @@ package engine.maps {
 		override public function notify(subject:*):void {
 		    if(subject is Hero) {
 		        moveMap(subject);
-		        if(heroHP != scoreboard.getHP()) { // if our hero's HP has changed
-		            heroHP = scoreboard.getHP(); // reset our holder for HP
+		        if(heroHP != scoreboard.getHeroHP()) { // if our hero's HP has changed
+		            heroHP = scoreboard.getHeroHP(); // reset our holder for HP
 		            notifyObservers(); // and tell the level about it
 		        }
 		    }

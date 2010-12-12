@@ -2,6 +2,7 @@ package engine.actors.enemies {
     
     import engine.actors.enemies.Enemy;
 	import engine.actors.player.Hero;
+	import engine.actors.weapons.HatWeapon;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
     
@@ -17,6 +18,11 @@ package engine.actors.enemies {
 		override public function setup() {
 			myName = "EnemyChandelier"; // the generic name of our enemy
 	        mySkin = "ChandelierSkin"; // the name of the skin for this enemy
+	        
+	        collide_left = 0; // what pixel do we collide on on the left
+    		collide_right = 64; // what pixel do we collide on on the right
+	        
+	        points = 100;
 
 			damage = 1;
 		    startFrame = 0; // the first frame to loop on
@@ -29,19 +35,19 @@ package engine.actors.enemies {
 	        speed = 5; // how many frames should go by before we advance
 
 	        goingLeft = false;
+	        deadFlag = false;
 
 	        tilesWide = 3;
 		    tilesTall = 3;	
 		}
 		
-		override public function notify(subject:*):void {
-			if(checkCollision(subject)) { // if we're colliding with the subject
-		        subject.collide(this); // then collide with them
-				if(subject is Hero) {
-					subject.receiveDamage(this);
-				}
+		override public function collide(observer, ...args) {
+            if(observer is Hero && !deadFlag) {
+		        observer.receiveDamage(this); // otherwise, if we've hit the hero, make him regret it
 		    }
+		}
 		
+		override public function notify(subject:*):void {
 			if(subject is Hero) {
 				if((Math.abs(subject.x - this.x) < triggerDistance) && !falling) {
 					falling = true;
@@ -49,10 +55,20 @@ package engine.actors.enemies {
 					var soundChannel = chandelierSound.play(0);
 				}
 			}
+			if(subject is HatWeapon) { // if it's the hero's weapon
+			    if(checkCollision(subject)) {
+			        receiveDamage(subject); // receive damage
+    	            hitDirection = subject.goingLeft; // and determine the direction from whence you were hit
+			    }
+	        }
 		}
 		
 		override public function update():void {
 			this.y += vely;
+			if(!deadFlag) {
+			    notifyObservers();
+			    checkDeath();
+			}
 		}
 	
     }

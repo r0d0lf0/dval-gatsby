@@ -5,6 +5,7 @@ package engine.actors.enemies {
     import engine.IObserver;
     import engine.actors.geoms.*;
 	import engine.actors.player.Hero;
+	import engine.Scoreboard;
 	
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
@@ -16,7 +17,7 @@ package engine.actors.enemies {
 	
 		private var laserSound = new laser_sound();
 		private var roarSound = new tjeckleberg_roar();
-	
+		
 		protected const flyingDuration = 30;
 		protected const damageDuration = 30;
 		protected const shootWarningDuration = 10;
@@ -56,7 +57,7 @@ package engine.actors.enemies {
 			
 			points = 2500;
     		
-    		myName = "EnemyBossTJEckleberg"; // the generic name of our enemy
+    		myName = "TJ ECKLEBERG"; // the generic name of our enemy
             mySkin = "TJEcklebergSkin2"; // the name of the skin for this enemy
     		
     		startFrame = 0; // the first frame to loop on
@@ -135,11 +136,7 @@ package engine.actors.enemies {
 		}
 		
 		override public function notify(subject:*):void {
-		    if(checkCollision(subject)) { // if we're colliding with the subject
-		        subject.collide(this); // then collide with them
-		    }
-		
-			if(subject is Hero) {
+            if(subject is Hero) {
 				moveEyes(subject);
 				if(myHero == null) {
 					myHero = subject;
@@ -160,6 +157,7 @@ package engine.actors.enemies {
 	                    this.velx = -1;
 	                }
 	            }
+	            scoreboard.setBossHP(HP);
 				damagedFlag = 1;	
 			}
         }
@@ -290,6 +288,10 @@ package engine.actors.enemies {
 				frameCount = 0;
 				frameStarted = false;
 				actionCounter++;
+				
+				if(HP <= 1) {
+				    setLoop(currentRow, 1, 1, 0, 0, 5);
+				}
 		    }
 		    animate();
 		

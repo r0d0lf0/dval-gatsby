@@ -8,6 +8,8 @@ package engine.actors.enemies {
     public class EnemyBlacksox extends EnemyWalker {
 		
 		override public function setup() {
+		    
+		    
 		    collide_left = 10; // what pixel do we collide on on the left
     		collide_right = 22; // what pixel do we collide on on the right
     		

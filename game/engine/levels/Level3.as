@@ -17,68 +17,21 @@ package engine.levels{
 	
 	public class Level3 extends Level {
 	    
-	    private var music:music_level3;
-		private var bossMusic:boss_music2;
-	    private var musicChannel:SoundChannel;
-	    private var myTransform:SoundTransform;
-	    
 		public function Level3():void{
 		    mapList = new Array('level3_map1', 'level3_map2', 'level3_map3', 'level3_map4'); // use this later for dylan-style level loading by converting strings to classes
 			levelNumber = "LEVEL 3";
+			stageNumber = 3;
 			levelName = "NEW YORK CITY";
+			bossName = "MEYER WOLF.";
+			bossHP = 5;
+            music = new music_level3();  // create an instance of the music
 			currentScreen = new LevelStart(); // we're just starting, so create a LevelStart screen
 			currentScreen.setLevelName(levelName);  // give it our level name
 			currentScreen.setLevelNumber(levelNumber); // and our level number
 			addChild(currentScreen); // and attach it to the stage
 		}
-		
-		public override function update(evt = null):Boolean {
-		    if(!currentScreen.update()) { // update the current screen to see if it's finished
-		        switch(currentScreen.getStatus()) {
-		            case COMPLETE: // if our map returned COMPLETE
-		                currentMapIndex++; // increment the current map index
-						if(currentScreen is LevelStart) {
-							startMusic();
-						}
-		                if(currentMapIndex < (mapList.length + 1)) { // and if we haven't finished the last map
-		                    removeChild(currentScreen); // remove the current map
-		                    currentScreen = getMap(currentMapIndex);  // get the next one
-		                    addChild(scoreboardDisplay); // add the scoreboard
-                            addChild(currentScreen); // add the new child
-                            currentScreen.y += scoreboardDisplay.height; // move the screen down so that it doesn't cover the scoreboard
-		                    return true; // and return true
-		                } else { // otherwise, we've completed the final map so
-		                    stopMusic(); // stop the music
-		                    updateStatus(COMPLETE);  // set the level exit status to COMPLETE
-		                    return false; // and return false to the Engine
-		                }
-		                break;
-		            case HERO_DEAD: // if the map returns HERO DEAD
-		                updateStatus(HERO_DEAD);  // set the level exit status to HERO DEAD
-		                trace("Hero dead."); // debug that the hero died
-		                stopMusic(); // stop our music
-		                return false; // and return false to the Engine
-		                break;
-		        }
-		    }
-		    // otherwise, if the map returned true
-		    return true;  // then so will the level
-		}
-		
-		private function startMusic() {
-		    music = new music_level3();  // create an instance of the music
-		    musicChannel = music.play(0, 100);  // play it, looping 100 times
-		    myTransform = new SoundTransform(.35, 0);
-		    musicChannel.soundTransform = myTransform;
-		}
-		
-		private function stopMusic() {
-		    if(musicChannel) {
-		        musicChannel.stop();
-		    }
-		}
 
-		private function getMap(mapIndex) {
+		override protected function getMap(mapIndex) {
 		    switch(mapIndex) {
 		        case 1:
 		            return new level3_map1();

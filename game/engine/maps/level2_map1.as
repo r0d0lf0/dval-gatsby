@@ -81,7 +81,7 @@ package engine.maps {
 		    // loop through all the child objects attached to this library item, and put
 		    // references to them into appropriate local arrays.  Afterwards, we'll subscribe
 		    // them to each other, and to the map itself
-		    heroHP = scoreboard.getHP();
+		    heroHP = scoreboard.getHeroHP();
 		    spawnActor(skyPlane);
 		    spawnActor(treePlane);
 		    treePlane.y = 48;

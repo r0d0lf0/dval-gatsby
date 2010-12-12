@@ -17,6 +17,8 @@ package engine.actors.enemies {
 			myName = "EnemyAlligator"; // the generic name of our enemy
 	        mySkin = "AlligatorSkin"; // the name of the skin for this enemy
 
+            points = 100;
+
 			damage = 1;
 		    startFrame = 0; // the first frame to loop on
 	        endFrame = 1; // the final frame in the row
@@ -34,15 +36,6 @@ package engine.actors.enemies {
 			this.y = 240; // put us just below the water line
 		}
 		
-		override public function notify(subject:*):void {
-			if(checkCollision(subject)) { // if we're colliding with the subject
-		        subject.collide(this); // then collide with them
-				if(subject is Hero) {
-					subject.receiveDamage(this);
-				}
-		    }
-		}
-		
 		private function applyPhysics() {
 			vely += gravity;
 			if(vely > 14) {
@@ -51,8 +44,10 @@ package engine.actors.enemies {
 		}
 		
 		private function jump() {
-			this.vely = jumpSpeed;
-			jumping = true;
+		    if(HP) {
+		        this.vely = jumpSpeed;
+    			jumping = true;
+		    }
 		}
 		
 		override public function update():void {
@@ -72,6 +67,15 @@ package engine.actors.enemies {
 					actionCounter = 0; // and reset our frameCounter
 				}
 			}
+			if(!deadFlag) {
+			    checkDeath();
+			    if(deadFlag) {
+			        if(this.vely < 0) {
+			            this.vely = 0;
+			        }
+			    }
+			}
+			notifyObservers();
 		}
 	
     }

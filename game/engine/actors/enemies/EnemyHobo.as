@@ -8,7 +8,7 @@ package engine.actors.enemies {
     public class EnemyHobo extends EnemyWalker {
         
 		override public function setup() {
-			points = 250;
+			points = 500;
 			
 		    collide_left = 10; // what pixel do we collide on on the left
     		collide_right = 22; // what pixel do we collide on on the right

@@ -23,6 +23,8 @@ package engine.actors.enemies {
 		    collide_left = 10; // what pixel do we collide on on the left
     		collide_right = 22; // what pixel do we collide on on the right
     		
+    		points = 250;
+    		
     		myName = "EnemyPitcher"; // the generic name of our enemy
             mySkin = "PitcherSkin"; // the name of the skin for this enemy
     		

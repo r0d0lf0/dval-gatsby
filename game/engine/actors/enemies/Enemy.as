@@ -37,15 +37,12 @@ package engine.actors.enemies {
             mySkin = "GenericEnemySkin";
             myName = "GenericEnemy";
         }
-        
-        // default collision methods, will probably get overwritten
-        override public function checkCollision(subject) {
-            if(Math.abs((subject.x + (.25 * subject.width)) - (this.x + (.25 * this.width))) <= this.width/2) {
-                if(Math.abs(subject.y - this.y) <= 32) {
-                    return true;
-                }
-            }
-        }
+		
+		override public function collide(observer, ...args) {
+            if(observer is Hero && !deadFlag) {
+		        observer.receiveDamage(this); // otherwise, if we've hit the hero, make him regret it
+		    }
+		}
         
         public function checkDeath():Boolean {
             if(HP <= 0 && !deadFlag) {
@@ -59,9 +56,6 @@ package engine.actors.enemies {
 
 		override public function notify(subject):void {
 		    if(checkCollision(subject) && !deadFlag) { // If i'm colliding with something, and I'm alive...
-		        if(subject is Hero) {  // if it's the hero
-		            subject.receiveDamage(this); // damage him
-		        }
 		        if(subject is HatWeapon) { // if it's the hero's weapon
 		            receiveDamage(subject); // receive damage
 		            hitDirection = subject.goingLeft; // and determine the direction from whence you were hit

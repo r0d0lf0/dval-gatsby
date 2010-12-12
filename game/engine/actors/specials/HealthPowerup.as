@@ -10,6 +10,8 @@ package engine.actors.specials {
         public var health = 1;
         private var taken = false;
         
+        protected var scoreboard:Scoreboard = Scoreboard.getInstance();
+        
         public function HealthPowerup() {
             // i construct, therefore, i am.
             trace("powerup!");
@@ -18,6 +20,8 @@ package engine.actors.specials {
         override public function setup() {
 		    myName = "Money"; // the generic name of our enemy
             mySkin = "ItemMartiniSkin"; // the name of the skin for this enemy
+            
+            points = 100;
             
             tile = 16; // select size
     		tilesWide = 1;
@@ -37,6 +41,7 @@ package engine.actors.specials {
             if(!taken && subject is Hero) {
                 if(checkCollision(subject)) {
                     subject.receivePowerup(this);
+                    scoreboard.addToScore(this, points);
                     taken = true;
                     myMap.removeFromMap(this);
                 }   

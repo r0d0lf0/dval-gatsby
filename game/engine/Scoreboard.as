@@ -97,7 +97,12 @@ package engine {
 		}
         
         public function addToScore(giver, amount:Number) {
-			var additionalAmount = amount * Scoreboard.multiplier;
+            var additionalAmount;
+            if(Scoreboard.multiplier > 2) {
+               additionalAmount = amount * (Scoreboard.multiplier * Scoreboard.multiplier);
+            } else {
+               additionalAmount = amount * (Scoreboard.multiplier);
+            }
             Scoreboard.score += additionalAmount;
 			var myScore = new ActorScore(additionalAmount, giver.x, giver.y);
 			var myMap = giver.getMap();

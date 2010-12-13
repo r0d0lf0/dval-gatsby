@@ -6,6 +6,7 @@ package engine.actors.enemies {
     import engine.actors.geoms.*;
 	import engine.actors.player.Hero;
 	import engine.Scoreboard;
+	import engine.actors.Explosion;
 	
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
@@ -17,6 +18,7 @@ package engine.actors.enemies {
 	
 		private var laserSound = new laser_sound();
 		private var roarSound = new tjeckleberg_roar();
+		private var explodeSound = new bullet_sound();
 		
 		protected const flyingDuration = 30;
 		protected const damageDuration = 30;
@@ -42,23 +44,29 @@ package engine.actors.enemies {
 		
 		protected var myHero = null;
 		
-		protected const MAX_VEL = 4; // fastest we're allowed to go by the universe
-		protected const INERTIA = .25; // the fastest we're allowed to increase in velocity per frame
+		protected var maxVel = 4; // fastest we're allowed to go by the universe
+		protected var INERTIA = .25; // the fastest we're allowed to increase in velocity per frame
 		
 		protected var currentAction = FLYING;
+		protected var deathRow = 4;		
+		
+		protected var explosionCounter = 0;
+		protected var explosionMax = 7;
 		
 		override public function setup() {
 		    collide_left = 0; // what pixel do we collide on on the left
-    		collide_right = 64; // what pixel do we collide on on the right
+    		collide_right = 112; // what pixel do we collide on on the right
 
 			walkSpeed = 0;
 			velx = walkSpeed;
 			HP = 5;
 			
+			deathFrame = 0;
+			
 			points = 2500;
     		
     		myName = "TJ ECKLEBERG"; // the generic name of our enemy
-            mySkin = "TJEcklebergSkin2"; // the name of the skin for this enemy
+            mySkin = "TJEcklebergSkinBig"; // the name of the skin for this enemy
     		
     		startFrame = 0; // the first frame to loop on
             endFrame = 0; // the final frame in the row
@@ -70,9 +78,10 @@ package engine.actors.enemies {
             speed = 5; // how many frames should go by before we advance            
 		
 			destArray = new Array( (new Point(80, 55)), (new Point(196, 55)) );
+			// place our explosions
 		
-		    tilesWide = 5;
-		    tilesTall = 2;
+		    tilesWide = 7;
+		    tilesTall = 3;
 		}
 		
 		private function getCurrentFrame() {
@@ -82,7 +91,7 @@ package engine.actors.enemies {
 		override public function killMe():void {
 			HP = 0;
 		    if(myStatus != 'DYING') {
-				setLoop(1, 1, 1, 1, 0, 1); // make us die
+				setLoop(deathRow, 0, 1, 0, 0, 2); // make us die
 	            myStatus = 'DYING';
 	            this.vely = -10;
 	            if(hitDirection == 'LEFT') {
@@ -94,7 +103,18 @@ package engine.actors.enemies {
 		    if(frameCount >= frameDelay) {
 		        applyPhysics();
 		        this.y += vely;
+		        if(vely >= 3) {
+		            vely = 3;
+		        }
 		        animate();
+		        explosionCounter++;
+		        if(explosionCounter >= explosionMax) {
+		            myMap.spawnActor(new Explosion(), (Math.floor(Math.random() * this.width) + this.x - 16), (Math.floor(Math.random() * this.height) + this.y - 16));
+		            explosionCounter = 0;
+		            explosionMax = Math.floor(Math.random() * 5) + 3;
+		            var soundChannel = explodeSound.play(0);
+		        }
+		        
 		        if(this.y > 240) {
 					myStatus = 'DEAD';
 					myMap.updateStatus(COMPLETE);
@@ -137,7 +157,9 @@ package engine.actors.enemies {
 		
 		override public function notify(subject:*):void {
             if(subject is Hero) {
-				moveEyes(subject);
+                if(!deadFlag) {
+                    moveEyes(subject);
+                }
 				if(myHero == null) {
 					myHero = subject;
 				}
@@ -217,19 +239,19 @@ package engine.actors.enemies {
 				vely -= INERTIA;
 			}
 			
-			if(Math.abs(velx) > MAX_VEL) {
+			if(Math.abs(velx) > maxVel) {
 				if(velx < 0) {
-					velx = -MAX_VEL;
+					velx = -maxVel;
 				} else {
-					velx = MAX_VEL;
+					velx = maxVel;
 				}
 			}
 			
-			if(Math.abs(vely) > MAX_VEL) {
+			if(Math.abs(vely) > maxVel) {
 				if(vely < 0) {
-					vely = -MAX_VEL;
+					vely = -maxVel;
 				} else {
-					vely = MAX_VEL;
+					vely = maxVel;
 				}
 			}
 			
@@ -280,7 +302,6 @@ package engine.actors.enemies {
 
 		        this.y += vely; // update our y variable
     			this.x += velx; // update our x variable
-
     			notifyObservers(); // tell everybody where we are now
     			//applyPhysics(); // apply our enviromental variables
 				updateStatus(); // update our status
@@ -290,11 +311,12 @@ package engine.actors.enemies {
 				actionCounter++;
 				
 				if(HP <= 1) {
-				    setLoop(currentRow, 1, 1, 0, 0, 5);
+				    setLoop(currentRow, 1, 1, 1, 0, 5);
+				    maxVel = 6;
+				    INERTIA = .5;
 				}
 		    }
 		    animate();
-		
 		}
         
     }

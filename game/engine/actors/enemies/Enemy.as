@@ -9,10 +9,11 @@ package engine.actors.enemies {
     public class Enemy extends Animatable {
         
         public var damage:Number = 1;
-        protected var deadFlag:Boolean = false;
+        public var deadFlag:Boolean = false;
         protected var dieSound = new enemy_die();
         protected var hitDirection = 0;
         protected var scoreboard:Scoreboard = Scoreboard.getInstance();
+        protected var deathFrame = 1;
         
         public function Enemy() {
 			if (stage != null) {
@@ -50,6 +51,7 @@ package engine.actors.enemies {
 		        dieSound.play(0);
 		        deadFlag = true;
 		        scoreboard.addToScore(this, points);
+		        setLoop(0, deathFrame, deathFrame, deathFrame, 0);
 		    }
 		    return false;
         }
@@ -57,7 +59,6 @@ package engine.actors.enemies {
 		override public function notify(subject):void {
 		    if(checkCollision(subject) && !deadFlag) { // If i'm colliding with something, and I'm alive...
 		        if(subject is HatWeapon) { // if it's the hero's weapon
-		            receiveDamage(subject); // receive damage
 		            hitDirection = subject.goingLeft; // and determine the direction from whence you were hit
 		        }
             }

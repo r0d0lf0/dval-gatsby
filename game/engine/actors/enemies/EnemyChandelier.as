@@ -57,7 +57,6 @@ package engine.actors.enemies {
 			}
 			if(subject is HatWeapon) { // if it's the hero's weapon
 			    if(checkCollision(subject)) {
-			        receiveDamage(subject); // receive damage
     	            hitDirection = subject.goingLeft; // and determine the direction from whence you were hit
 			    }
 	        }

@@ -21,22 +21,18 @@ package engine.actors {
 		private var score = "";
 		private var lifeCounter = 0;
 		private const lifeDuration = 20;
-		private var label1:TextField = new TextField();
+		private var label1Container = new ScorePopupContainer();
 		private var slideTimer:Timer;
-		private var myFont:Font = new ScoreFont(); 
+        private var label1;
 				
 		public function ActorScore(score, x, y):void{
 			super();
 			this.score = score;
-			label1.text = this.score;
-			var myFormat = new TextFormat();
-			myFormat.font = myFont.fontName;
-			myFormat.size = 10;
-			myFormat.color = 0xFFFFFF;
-			label1.setTextFormat(myFormat);
-			this.addChild(label1);
+			label1 = label1Container.getChildByName('ScorePopupField');
+			label1.text = score;
 			label1.x = x;
 			label1.y = y;
+			this.addChild(label1);
 		}
 		
 		override public function setup() {

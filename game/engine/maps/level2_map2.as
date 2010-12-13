@@ -19,7 +19,7 @@ package engine.maps {
         private var babyBossEnabled = false;
         private var babyBossFly = false;
         private var babyBossCounter = 0;
-        private var babyBossDelay = 120;
+        private var babyBossDelay = 150;
         private var babyBossVelY = 5;
         
         private var treePlane = new Level2Trees();
@@ -45,6 +45,9 @@ package engine.maps {
                 if(fadeCounter > fadeSpeed) {
                     fadeCounter = 0;
                     currentFadeLevel++;
+                    if(currentFadeLevel == 5) {
+                        fadeSpeed = 60;
+                    }
                     if(currentFadeLevel > fadeLevels) {
                         currentFadeLevel = 0;
                         removeFromMap(skyPlane);
@@ -62,11 +65,11 @@ package engine.maps {
             } else if(babyBossEnabled) {
                 if(babyBossCounter < babyBossDelay) {
                     babyBossCounter++;
-                    if(babyBossCounter < 30) {
+                    if(babyBossCounter < 60 && babyBossCounter > 50) {
                         babyBoss.alpha = (babyBossCounter % 4 == 1);
-                    } else if(babyBossCounter > 30 && babyBossCounter < 80) {
+                    } else if(babyBossCounter > 60 && babyBossCounter < 110) {
                         babyBoss.alpha = babyBossCounter % 2;
-                    } else if(babyBossCounter >= 80) {
+                    } else if(babyBossCounter >= 110) {
                         babyBoss.alpha = 1;
                     }
                 } else {

@@ -25,7 +25,7 @@ package engine.actors.enemies {
     		
     		myName = "EnemyGangster"; // the generic name of our enemy
             mySkin = "GangsterSkin"; // the name of the skin for this enemy
-    		
+    		deathFrame = 4;
     		startFrame = 0; // the first frame to loop on
             endFrame = 1; // the final frame in the row
             nowFrame = 0; // current frame in row

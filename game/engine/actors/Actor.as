@@ -47,6 +47,8 @@
 		public var collide_left_ground:int = 9;
 		public var collide_right_ground:int = 20;
 		
+		public var goingLeft = 0;
+		
 		public function Actor():void {
 			//Check we exist in Flash spacetime
 			if (stage != null) {
@@ -93,7 +95,26 @@
 		}
 		
 		public function checkCollision(subject) {
-		    if((subject.x + subject.collide_right) >= this.x + collide_left && (subject.x + subject.collide_left) <= this.x + collide_right) {
+		    
+		    var myRight, myLeft, subRight, subLeft;
+		    
+		    if(goingLeft) {
+		        myLeft = this.width - collide_right;
+		        myRight = this.width - collide_left;
+		    } else {
+		        myLeft = collide_left;
+		        myRight = collide_right;
+		    }
+		    
+		    if(subject.goingLeft) {
+		        subLeft = subject.width - subject.collide_right;
+		        subRight = subject.width - subject.collide_left;
+		    } else {
+		        subRight = subject.collide_right;
+		        subLeft = subject.collide_left;
+		    }
+		    
+		    if((subject.x + subRight) >= this.x + myLeft && (subject.x + subLeft) <= this.x + myRight) {
 		        if((this.y + this.height) >= subject.y && this.y <= (subject.y + subject.height)) {
 		            return true;
 		        }

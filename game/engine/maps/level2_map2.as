@@ -85,6 +85,8 @@ package engine.maps {
                 if(babyBoss.y < -200) {
                     babyBossFly = false;
                     spawnActor(boss, 64, -70);
+                    setChildIndex(boss,0);
+                    scoreboard.startTimer();
                 }
             }
 		}
@@ -114,6 +116,7 @@ package engine.maps {
 		    treePlane.followHero = false;
 		    spawnActor(skyPlane);
 		    spawnActor(treePlane);
+		    scoreboard.stopTimer();
 		    treePlane.y = 48;
 		    setChildIndex(skyPlane,0);
 		    setChildIndex(treePlane,0);

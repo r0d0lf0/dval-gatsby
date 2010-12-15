@@ -7,17 +7,22 @@ package engine.screens{
 	import engine.Screen;
 	import flash.text.TextField;
 	
+	import engine.Scoreboard;
+	
 	public class LevelStart extends Screen {
 	    
 	    private var counter:Number = 0;
 	    private var levelNumber = "UNDEFINED";
 	    private var levelName = "UNDEFINED";
 	    
+	    private var scoreboard = Scoreboard.getInstance();
+	    
 	    public function LevelStart() {
 	        trace("GameOpen opened.");
 	        updateStatus(ACTIVE);
 	        level_number_display.text = levelNumber;
 	        level_name_display.text = levelName;
+	        lives_remaining_display.text = "x " + scoreboard.getLives();
 	    }
 	    
 	    public function setLevelNumber(levelNumber:String) {

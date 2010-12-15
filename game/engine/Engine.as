@@ -8,6 +8,10 @@
 	import engine.IObserver;
 	import engine.screens.*;
 	import engine.Screen;
+	
+	import flash.utils.getTimer;
+	import flash.utils.Timer;
+    import flash.events.TimerEvent;
 
 	dynamic public class Engine extends Screen {
 	    
@@ -17,8 +21,13 @@
 	    private var currentScreenIndex:Number = 0;
 	    private var playerScore:Number = 0;
 	    private const playerLives:Number = 3;
+	    private var gameClock;
 	    
-	    static private var screenList:Array = new Array('GameOpen','Level1','CutScene1','Level2','Level3','Level4');
+	    private var fpsDisplayContainer, fpsDisplay;
+	    
+	    private var frameCounter = 0;
+	    
+	    static private var screenList:Array = new Array(/*'BlankLevel','GameOpen',*/'Level1','CutScene1','Level2','Level3','Level4');
 		
 		public function Engine():void {
 			//check for flash spacetime coordinates
@@ -37,15 +46,26 @@
 		//Now we can go about our daily business of adding button handlers.
 		//this is everything we would normally do.
 		public function start():void {
+		    fpsDisplayContainer = new FPSThinger();
+		    addChild(fpsDisplayContainer);
+		    fpsDisplay = fpsDisplayContainer.getChildByName('fpsDisplay');
+		    fpsDisplay.text = "hello";
+		    //trace(fpsDisplay);
 		    screenManager = new ScreenManager(); // create our ScreenManager, basically a factory class
 		    currentScreen = screenManager.getScreen(screenList[0]); // create an instance of our first screen
 			addChild(currentScreen); // add it to the stage
 			this.addEventListener(Event.ENTER_FRAME, update); // attach onEnterFrame to onFrame
-			trace('Engine Started.'); 
+			//gameClock = new Timer(20);
+            //gameClock.addEventListener(TimerEvent.TIMER, update);
+            //gameClock.start();
+			trace('Engine Started.');
 			updateStatus(ACTIVE);
 		}
 			
 		override public function update(evt = null):Boolean{
+		    frameCounter++;
+		    setChildIndex(fpsDisplayContainer, numChildren-1);
+		    fpsDisplay.text = (frameCounter / (getTimer() / 1000));
             if(!currentScreen.update()) {  // if our current screen returns false
                 switch(currentScreen.getStatus()) {  // find out why and react
                     case COMPLETE: // our screen completed successfully

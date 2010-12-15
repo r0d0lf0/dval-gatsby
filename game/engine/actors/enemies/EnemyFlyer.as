@@ -5,7 +5,7 @@ package engine.actors.enemies {
     
     public class EnemyFlyer extends EnemyWalker {
         
-        public var flySpeed = 3;
+        public var flySpeed = 1.5;
         
         public function EnemyFlyer() {
 		    trace("EnemyFlyer");

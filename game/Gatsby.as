@@ -1,5 +1,4 @@
-﻿
-// this is the old start statement
+﻿// this is the old start statement
 package {
 
 	import flash.display.MovieClip;

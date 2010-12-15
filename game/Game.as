@@ -24,7 +24,6 @@
 			buildEnviron();
 		}
 		private function buildEnviron():void{
-			stage.quality = "StageQuality.LOW";
 			engine = new Engine();  // create an engine, it will start automatically when it's added to stage
 			addChild(keymap);
 			addChild(engine);

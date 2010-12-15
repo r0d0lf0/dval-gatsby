@@ -41,6 +41,9 @@
 					case 'CutScene1':
 						return new CutScene1();
 						break;
+					case 'BlankLevel':
+					    return new BlankLevel();
+					    break;
 				}
 				return false;
 		}

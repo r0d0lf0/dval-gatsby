@@ -12,9 +12,9 @@ package engine.actors.weapons {
     public class HatWeapon extends Weapon implements IObserver {
         
         private var returning:Boolean = false;
-        private var throwDistance:int = 15;
+        private var throwDistance:int = 25;
         
-        private var inertia:Number = 4; // amount of inertia to change velocity
+        private var inertia:Number = 2; // amount of inertia to change velocity
         public var velX:Number = 0;
         public var velY:Number = 0;
 		private var scoreboard:Scoreboard = Scoreboard.getInstance();

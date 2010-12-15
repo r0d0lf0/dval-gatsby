@@ -64,6 +64,7 @@
 		
 		//initialize object after it's on stage
 		public function buildObject():void {
+		    //this.cacheAsBitmap = true;
 		    onStage = true;
 			myScore = new ActorScore(points, this.x, this.y); 
 		    setup();

@@ -1,4 +1,5 @@
-﻿// this is the old start statement
+﻿
+// this is the old start statement
 package {
 
 	import flash.display.MovieClip;
@@ -6,11 +7,11 @@ package {
 	
 	dynamic public class Gatsby extends MovieClip {
 	
-		
+		public var game:Game = new Game();
 		
 		public function Gatsby() {
 			//
-            //addChild(game);
+			this.addChild(game);
 		}
 	}//end class
 }//end package

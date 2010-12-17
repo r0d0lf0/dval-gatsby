@@ -3,3 +3,5 @@ glob:game/Gatsby.swf
 glob:game/NewGatsby.old.fla
 glob:game/NewGatsby.old.swf
 glob:game/NewGatsby.swf
+glob:game/AC_RunActiveContent.js
+glob:game/NewGatsby.html

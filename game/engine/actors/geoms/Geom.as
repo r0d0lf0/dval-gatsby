@@ -1,13 +1,9 @@
-package engine.actors.geoms{
+package engine {
     
-    import engine.actors.Actor;
-    
-    dynamic public class Geom extends Actor {
-		
-		public function Geom():void{
-			super();
-		}
-		
-	}
+    public interface IObserver {
+        
+        function notify(subject:ISubject);
+        
+    }
     
 }

@@ -6,9 +6,9 @@ package engine.actors.enemies {
     public class EnemyAlligator extends Enemy {
 	
 		protected var jumping:Boolean = false;
-		protected const jumpSpeed = -13;
+		protected const jumpSpeed = -10;
 		protected var vely = 0;
-		protected var gravity:Number = .4;  //how much the velocity changes on each frameEvent
+		protected var gravity:Number = .8;  //how much the velocity changes on each frameEvent
 		
 		protected const jumpDelay = 60;
 		protected var actionCounter = 0;
@@ -27,7 +27,7 @@ package engine.actors.enemies {
 	        loopType = 0; // 0 loops, 1 bounces
 	        loopRow = 0; // which row are we on
 	        loopDir = 1; // loop forward (to the right) by default
-	        speed = 5; // how many frames should go by before we advance
+	        speed = 10; // 5 replaced // how many frames should go by before we advance
 	        
 	        deathFrame = 2;
 

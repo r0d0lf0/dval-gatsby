@@ -8,7 +8,7 @@ package engine.actors.background {
     public class Level2Trees extends Animatable implements IObserver {
         
         private var playerOffset = 0;
-        private var scrollSpeed = 4;
+        private var scrollSpeed = 2;
         private var loopPoint = 400;
         public var followHero = true;
         
@@ -30,7 +30,7 @@ package engine.actors.background {
             loopType = 0; // 0 loops, 1 bounces
             loopRow = 0; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
-            speed = 5; // how many frames should go by before we advance
+            speed = 10; // 5 replaced // how many frames should go by before we advance
             
             animate();
 		}

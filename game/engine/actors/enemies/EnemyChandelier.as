@@ -9,7 +9,7 @@ package engine.actors.enemies {
     public class EnemyChandelier extends Enemy {
 	
 		protected var falling = false;
-		protected const fallSpeed = 4;
+		protected const fallSpeed = 2;
 		protected const triggerDistance = 30;
 		protected var vely = 0;
 		
@@ -32,7 +32,7 @@ package engine.actors.enemies {
 	        loopType = 0; // 0 loops, 1 bounces
 	        loopRow = 0; // which row are we on
 	        loopDir = 1; // loop forward (to the right) by default
-	        speed = 5; // how many frames should go by before we advance
+	        speed = 10; // 5 replaced // how many frames should go by before we advance
 
 	        goingLeft = false;
 	        deadFlag = false;

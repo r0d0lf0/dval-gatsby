@@ -57,7 +57,7 @@
         public var loopType = 1; // 0 loops, 1 bounces
         public var loopRow = 0; // which row are we on
         public var loopDir = 1; // loop forward (to the right) by default
-        public var speed = 5; // how many frames should go by before we advance
+        public var speed = 10; // how many frames should go by before we advance
         protected var frameCounter = 0;
         
     
@@ -163,7 +163,7 @@
 		    }
 		}
 		
-		public function setLoop(loopRow, startFrame, endFrame, loopFrame, loopType, speed = 5) {
+		public function setLoop(loopRow, startFrame, endFrame, loopFrame, loopType, speed = 10) {
 		    this.loopRow = loopRow;
 		    this.startFrame = startFrame;
 		    this.endFrame = endFrame;

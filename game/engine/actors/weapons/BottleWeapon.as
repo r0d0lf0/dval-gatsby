@@ -10,7 +10,7 @@ package engine.actors.weapons {
     public class BottleWeapon extends Weapon implements IObserver {
         
         private var throwDistance:int = 60;
-        private var throwHeight = -14;
+        private var throwHeight = -19;
         private var velX:Number = 0;
         private var velY:Number = 0;
         private var gravity = 1;
@@ -92,8 +92,20 @@ package engine.actors.weapons {
 		    if(velY > MAX_VEL_Y) {
 		        velY = MAX_VEL_Y;
 		    }
-		    this.x += velX;
-		    this.y += velY;
+	        this.y += velY / 2; // update our y variable
+			this.x += velX / 2; // update our x variable
+			
+			if(velX > 0) {
+			    this.x = Math.ceil(this.x);
+			} else {
+			    this.x = Math.floor(this.x);
+			}
+			
+			if(velY > 0) {
+			    this.y = Math.ceil(this.y);
+			} else {
+			    this.y = Math.floor(this.y);
+			}
 		    notifyObservers();
 		}
 		

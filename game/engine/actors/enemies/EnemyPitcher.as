@@ -35,7 +35,7 @@ package engine.actors.enemies {
             loopType = 0; // 0 loops, 1 bounces
             loopRow = 0; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
-            speed = 5; // how many frames should go by before we advance
+            speed = 10; // 5 replaced // how many frames should go by before we advance
 			walkSpeed = 1;
 			goingLeft = 1;
 		}
@@ -77,7 +77,19 @@ package engine.actors.enemies {
 			
 			if(frameCount >= frameDelay) { 
 				if(currentStatus == WALKING) { // if we're walking
-					this.x += velx; // update our x variable
+					this.x += velx / 2; // update our x variable
+    			
+    			if(velx > 0) {
+    			    this.x = Math.ceil(this.x);
+    			} else {
+    			    this.x = Math.floor(this.x);
+    			}
+    			
+    			if(vely > 0) {
+    			    this.y = Math.ceil(this.y);
+    			} else {
+    			    this.y = Math.floor(this.y);
+    			}
 				} else if(currentStatus == SHOOTING) { 		// otherwise, if we're shooting
 					if(actionCounter >= shootDelay) {	// and we've waiting enough time between shots
 							throwBall(); // then shoot the gun
@@ -89,7 +101,7 @@ package engine.actors.enemies {
     			frameStarted = true;
 				statusSet = false;
 
-		        this.y += vely; // update our y variable
+		        this.y += vely / 2; // update our y variable
     			
     			notifyObservers(); // tell everybody where we are now
     			applyPhysics(); // apply our enviromental variables

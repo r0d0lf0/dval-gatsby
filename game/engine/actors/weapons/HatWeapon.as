@@ -12,9 +12,9 @@ package engine.actors.weapons {
     public class HatWeapon extends Weapon implements IObserver {
         
         private var returning:Boolean = false;
-        private var throwDistance:int = 15;
+        private var throwDistance:int = 30;
         
-        private var inertia:Number = 4; // amount of inertia to change velocity
+        private var inertia:Number = 2.5; // amount of inertia to change velocity
         public var velX:Number = 0;
         public var velY:Number = 0;
 		private var scoreboard:Scoreboard = Scoreboard.getInstance();
@@ -44,7 +44,7 @@ package engine.actors.weapons {
             loopType = 1; // 0 loops, 1 bounces
             loopRow = 0; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
-            speed = 2; // how many frames should go by before we advance
+            speed = 5; // how many frames should go by before we advance
     		
 		}
 				
@@ -120,9 +120,22 @@ package engine.actors.weapons {
 		    } else {
 		        frameCount++;
 		    }
-		    this.x += velX;
-		    this.y += velY
 		    
+		    this.y += velY / 2; // update our y variable
+            this.x += velX / 2; // update our x variable
+			/*
+			if(velX > 0) {
+			    this.x = Math.ceil(this.x);
+			} else {
+			    this.x = Math.floor(this.x);
+			}
+			
+			if(velY > 0) {
+			    this.y = Math.ceil(this.y);
+			} else {
+			    this.y = Math.floor(this.y);
+			}
+		    */
 		    notifyObservers();
 		    
 		}

@@ -6,12 +6,12 @@ package engine.actors.enemies {
     
     public class EnemyDrunk extends EnemyWalker {
         
-        protected var stumbleDurationMax:Number = 50;
-        protected var stumbleDurationMin:Number = 5;
+        protected var stumbleDurationMax:Number = 100;
+        protected var stumbleDurationMin:Number = 10;
         protected var stumbleDuration:Number = 8;
         protected var actionDuration:Number = 5;
         protected var actionCounter:Number = 0;
-        protected var drinkDuration:Number = 50;
+        protected var drinkDuration:Number = 100;
         protected const STUMBLING = 1;
         protected const DRINKING = 2;
         protected var currentStatus = STUMBLING;
@@ -38,7 +38,7 @@ package engine.actors.enemies {
             loopType = 0; // 0 loops, 1 bounces
             loopRow = 0; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
-            speed = 5; // how many frames should go by before we advance
+            speed = 10; // 5 replaced // how many frames should go by before we advance
             
             velx = 0;
 		}
@@ -48,8 +48,20 @@ package engine.actors.enemies {
     			frameStarted = true;
 				statusSet = false;
 
-		        this.y += vely; // update our y variable
-    			this.x += velx; // update our x variable
+		        this.y += vely / 2; // update our y variable
+    			this.x += velx / 2; // update our x variable
+    			
+    			if(velx > 0) {
+    			    this.x = Math.ceil(this.x);
+    			} else {
+    			    this.x = Math.floor(this.x);
+    			}
+    			
+    			if(vely > 0) {
+    			    this.y = Math.ceil(this.y);
+    			} else {
+    			    this.y = Math.floor(this.y);
+    			}
     			
     			notifyObservers(); // tell everybody where we are now
     			applyPhysics(); // apply our enviromental variables

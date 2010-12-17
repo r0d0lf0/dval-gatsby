@@ -20,7 +20,7 @@ package engine.actors.weapons {
         }
         
 		override public function setup() {
-		    flySpeed = 1.5;
+		    flySpeed = 2;
 		    damage = 1;
 		    
 		    myName = "BaseballWeapon";
@@ -39,6 +39,7 @@ package engine.actors.weapons {
             loopRow = 0; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
             speed = 3; // how many frames should go by before we advance
+			flySpeed = 3;
     		if(goingLeft) {
     		    velX = -flySpeed;
     		} else {

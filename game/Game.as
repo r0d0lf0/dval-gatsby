@@ -10,7 +10,7 @@
 	
 		//public var scrnManager:ScreenManager = new ScreenManager();
 		private var engine:Engine;
-		private var keymap:KeyMap = new KeyMap();
+		private var keymap:KeyMap = KeyMap.getInstance();
 		public function Game():void{
 			
 			if(stage){
@@ -21,9 +21,10 @@
 		}
 		
 		private function initBuild(evt:Event):void{
-			buildEnviron()
+			buildEnviron();
 		}
 		private function buildEnviron():void{
+			stage.quality = "StageQuality.LOW";
 			engine = new Engine();  // create an engine, it will start automatically when it's added to stage
 			addChild(keymap);
 			addChild(engine);

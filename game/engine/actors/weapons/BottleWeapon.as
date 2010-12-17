@@ -22,7 +22,7 @@ package engine.actors.weapons {
         }
         
 		override public function setup() {
-		    flySpeed = 1;
+		    flySpeed = 2;
 		    velY = throwHeight;
 		    damage = 1;
 		    

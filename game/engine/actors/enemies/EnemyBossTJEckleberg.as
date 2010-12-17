@@ -59,7 +59,7 @@ package engine.actors.enemies {
 
 			walkSpeed = 0;
 			velx = walkSpeed;
-			HP = 2;
+			HP = 5;
 			
 			deathFrame = 0;
 			
@@ -75,7 +75,7 @@ package engine.actors.enemies {
             loopType = 0; // 0 loops, 1 bounces
             loopRow = 0; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
-            speed = 10; // 5 replaced // how many frames should go by before we advance            
+            speed = 5; // how many frames should go by before we advance            
 		
 			destArray = new Array( (new Point(80, 55)), (new Point(196, 55)) );
 			// place our explosions
@@ -109,9 +109,7 @@ package engine.actors.enemies {
 		        animate();
 		        explosionCounter++;
 		        if(explosionCounter >= explosionMax) {
-		            var myExplosion = new Explosion();
-		            myMap.spawnActor(myExplosion, (Math.floor(Math.random() * this.width) + this.x - 16), (Math.floor(Math.random() * this.height) + this.y - 16));
-		            myMap.setChildIndex(myExplosion,0);
+		            myMap.spawnActor(new Explosion(), (Math.floor(Math.random() * this.width) + this.x - 16), (Math.floor(Math.random() * this.height) + this.y - 16));
 		            explosionCounter = 0;
 		            explosionMax = Math.floor(Math.random() * 5) + 3;
 		            var soundChannel = explodeSound.play(0);

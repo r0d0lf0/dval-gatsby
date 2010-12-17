@@ -1,48 +1,52 @@
 package engine.actors.specials {
     
-    import engine.actors.Actor;
-    import engine.actors.player.Hero;
-    import engine.Scoreboard;
+    import engine.actors.Animatable;
     import engine.IObserver;
-    import engine.ISubject;
+    import engine.Scoreboard;
+    import engine.actors.player.Hero;
     
-    public class HealthPowerup extends Actor implements IObserver, ISubject {
+    public class HealthPowerup extends Animatable {
         
-        private var scoreboard:Scoreboard;
-        private var observers:Array = new Array();
+        public var health = 1;
+        private var taken = false;
+        
+        protected var scoreboard:Scoreboard = Scoreboard.getInstance();
         
         public function HealthPowerup() {
             // i construct, therefore, i am.
-            scoreboard = Scoreboard.getInstance();
+            trace("powerup!");
         }
         
-        public function notify(subject):void {
-            if(subject is Hero) {
+        override public function setup() {
+		    myName = "Money"; // the generic name of our enemy
+            mySkin = "ItemMartiniSkin"; // the name of the skin for this enemy
+            
+            points = 100;
+            
+            tile = 16; // select size
+    		tilesWide = 1;
+    		tilesTall = 1;
+		    
+		    startFrame = 0; // the first frame to loop on
+            endFrame = 1; // the final frame in the row
+            nowFrame = 0; // current frame in row
+            loopFrame = 0; // frame at which to loop
+            loopType = 0; // 0 loops, 1 bounces
+            loopRow = 0; // which row are we on
+            loopDir = 1; // loop forward (to the right) by default
+            speed = 5; // how many frames should go by before we advance
+		}
+        
+        override public function notify(subject:*):void {
+            if(!taken && subject is Hero) {
                 if(checkCollision(subject)) {
-                    scoreboard.addHP(1);
-                    trace("Health Collision!");
-                }
+                    subject.receivePowerup(this);
+                    scoreboard.addToScore(this, points);
+                    taken = true;
+                    myMap.removeFromMap(this);
+                }   
             }
         }
-        
-        public function addObserver(observer):void {
-		    observers.push(observer);
-		}
-		
-		public function removeObserver(observer):void {
-		    for (var ob:int=0; ob<observers.length; ob++) {
-                if(observers[ob] == observer) {
-                    observers.splice (ob,1); break;
-                    break;
-                }
-            }
-		}
-		
-		public function notifyObservers():void {
-		    for(var ob=0; ob<observers.length; ob++) {
-		        observers[ob].notify(this);
-		    }
-		}
         
     }
     

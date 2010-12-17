@@ -60,7 +60,7 @@
             <project_file path="./game/engine/IMap.as" filetype="as" />
             <project_file path="./game/engine/Level.as" filetype="as" />
             <project_file path="./game/engine/Map.as" filetype="as" />
-            <project_file path="./game/engine/ScoreboardDisplay.as" filetype="as" />
+            <project_file path="./game/engine/Scoreboard.as" filetype="as" />
             <project_file path="./game/engine/scrnStart.as" filetype="as" />
             <project_file path="./game/engine/SplashScreen.as" filetype="as" />
             <project_file path="./game/engine/EngineOld.as" filetype="as" />

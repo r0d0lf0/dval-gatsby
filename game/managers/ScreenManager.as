@@ -23,27 +23,10 @@
 				var newScreen = new ClassReference();
 				return newScreen;*/
 				switch(screen) {
-				    case 'GameOpen':
-				        return new GameOpen();
-				        break;
+				    case 'gameOpen':
+				        return new gameOpen();
 				    case 'Level1':
 				        return new Level1();
-				        break;
-				    case 'Level2':
-				        return new Level2();
-				        break;
-				    case 'Level3':
-				        return new Level3();
-				        break;
-					case 'Level4':
-						return new Level4();
-						break;
-					case 'CutScene1':
-						return new CutScene1();
-						break;
-					case 'BlankLevel':
-					    return new BlankLevel();
-					    break;
 				}
 				return false;
 		}

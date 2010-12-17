@@ -9,7 +9,7 @@ package engine.actors {
        
        	// MAX_VEL_Y has to be less than the height of most shallow platform.
 		// otherwise you will fall through the ground
-		protected const MAX_VEL_Y:Number = 6; // so min platform height should be 22.
+		protected const MAX_VEL_Y:Number = 8; // so min platform height should be 22.
 		protected const MAX_VEL_X:Number = 3;
 		protected var walkSpeed:Number = 1;
 		
@@ -20,8 +20,8 @@ package engine.actors {
         protected var scoreboard = Scoreboard.getInstance();
 		
 		//CHANGE THESE
-		public var jumpVelocity:uint = 10; //exponential. 20 jumps 3x higher than 10
-		public var Xspeed:Number = 2;
+		public var jumpVelocity:uint = 13; //exponential. 20 jumps 3x higher than 10
+		public var Xspeed:Number = 4;
 		
 		//
 		public var fric:Number = 1;  //frictional coefficient of go
@@ -211,8 +211,21 @@ package engine.actors {
     			frameStarted = true;
 				statusSet = false;
 
-		        this.y += vely; // update our y variable
-    			this.x += velx; // update our x variable
+		        this.y += vely / 2; // update our y variable
+    			this.x += velx / 2; // update our x variable
+    			
+    			if(velx > 0) {
+    			    this.x = Math.ceil(this.x);
+    			} else {
+    			    this.x = Math.floor(this.x);
+    			}
+    			
+    			if(vely > 0) {
+    			    this.y = Math.ceil(this.y);
+    			} else {
+    			    this.y = Math.floor(this.y);
+    			}
+    			
     			
     			notifyObservers(); // tell everybody where we are now
     			applyPhysics(); // apply our enviromental variables

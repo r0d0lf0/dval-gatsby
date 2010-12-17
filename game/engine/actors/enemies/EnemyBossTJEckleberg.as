@@ -75,7 +75,7 @@ package engine.actors.enemies {
             loopType = 0; // 0 loops, 1 bounces
             loopRow = 0; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
-            speed = 5; // how many frames should go by before we advance            
+            speed = 10; // 5 replaced // how many frames should go by before we advance            
 		
 			destArray = new Array( (new Point(80, 55)), (new Point(196, 55)) );
 			// place our explosions
@@ -300,8 +300,22 @@ package engine.actors.enemies {
     			frameStarted = true;
 				statusSet = false;
 
-		        this.y += vely; // update our y variable
-    			this.x += velx; // update our x variable
+		        this.y += vely / 2; // update our y variable
+    			this.x += velx / 2; // update our x variable
+    			
+    			if(velx > 0) {
+    			    this.x = Math.ceil(this.x);
+    			} else {
+    			    this.x = Math.floor(this.x);
+    			}
+    			
+    			if(vely > 0) {
+    			    this.y = Math.ceil(this.y);
+    			} else {
+    			    this.y = Math.floor(this.y);
+    			}
+    			
+    			
     			notifyObservers(); // tell everybody where we are now
     			//applyPhysics(); // apply our enviromental variables
 				updateStatus(); // update our status

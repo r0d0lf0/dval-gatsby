@@ -33,7 +33,7 @@ package engine.actors.enemies {
             loopType = 0; // 0 loops, 1 bounces
             loopRow = 0; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
-            speed = 5; // how many frames should go by before we advance            
+            speed = 10; // 5 replaced // how many frames should go by before we advance            
 		}
 		
 		override public function killMe():void {
@@ -78,7 +78,7 @@ package engine.actors.enemies {
     			frameStarted = true;
 				statusSet = false;
 
-		        this.y += vely; // update our y variable
+		        this.y += vely / 2; // update our y variable
     			
     			notifyObservers(); // tell everybody where we are now
     			applyPhysics(); // apply our enviromental variables

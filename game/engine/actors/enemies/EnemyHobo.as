@@ -23,7 +23,7 @@ package engine.actors.enemies {
             loopType = 0; // 0 loops, 1 bounces
             loopRow = 0; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
-            speed = 10; // 5 replaced // how many frames should go by before we advance
+            speed = 5; // how many frames should go by before we advance
 
 			goingLeft = true;
 			velx *= -1;

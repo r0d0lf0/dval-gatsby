@@ -4,18 +4,18 @@ package engine.screens{
 	import engine.Map;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import engine.IScreen;
+	import engine.Screen;
 	import flash.text.TextField;
 	
-	public class LevelStart extends MovieClip implements IScreen {
+	public class LevelStart extends Screen {
 	    
-	    private var status:String = "UNINITIALIZED";
 	    private var counter:Number = 0;
 	    private var levelNumber = "UNDEFINED";
 	    private var levelName = "UNDEFINED";
+	    
 	    public function LevelStart() {
 	        trace("GameOpen opened.");
-	        status = 'ACTIVE';
+	        updateStatus(ACTIVE);
 	        level_number_display.text = levelNumber;
 	        level_name_display.text = levelName;
 	    }
@@ -30,24 +30,15 @@ package engine.screens{
 	        level_name_display.text = levelName;
 	    }
 	    
-	    public function update():Boolean{
-			//if spacebar
+	    override public function update(evt = null):Boolean{
 			counter++;
 			if(counter > 120) {
-			    status = 'COMPLETE';
+			    updateStatus(COMPLETE);
 			    return false;
 			} else {
 			    return true;
 			}
 			
-		}
-		
-		public function getStatus():String {
-		    return status;
-		}
-		
-		public function restart():void {
-		    
 		}
 	    
 	}

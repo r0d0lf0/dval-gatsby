@@ -1,71 +1,27 @@
 package engine.actors.enemies {
     
-    import engine.IObserver;
-    import engine.ISubject;
-    import engine.actors.player.Hero;
-    import engine.actors.geoms.*;
     import engine.actors.enemies.EnemyWalker;
+    import engine.ISubject;
+    import engine.IObserver;
+    import engine.actors.geoms.*;
     
-    public class EnemyWaiter extends EnemyWalker implements ISubject, IObserver {
-        
-        private var observers:Array = new Array();
-        private var speed:Number = 1;
-        
-        private var frameCount:int = 0;
-        private var frameDelay:int = 0;
-        
-        private var groundCollide:Boolean;
-        
-        public function EnemyWaiter() {
-            super();
-        }
-        
-        public function addObserver(observer):void {
-		    observers.push(observer);
-		}
+    public class EnemyWaiter extends EnemyWalker {
 		
-		public function removeObserver(observer):void {
-		    for (var ob:int=0; ob<observers.length; ob++) {
-                if(observers[ob] == observer) {
-                    observers.splice (ob,1); break;
-                    break;
-                }
-            }
-		}
-		
-		public function notifyObservers():void {
-		    for(var ob=0; ob<observers.length; ob++) {
-		        observers[ob].notify(this);
-		    }
-		}
-		
-		override public function notify(subject):void {
-		    if(checkCollision(subject)) {
-                subject.receiveDamage(1);
-            }
-		}
-		
-		public function collide(subject) {
-		    if(subject is Cloud) {
-		        if(!groundCollide) {
-    		        groundCollide = true;
-    		    }
-		    }
-		}
-		
-		public function update():void {
-		    groundCollide = false;
-		    if(frameCount >= frameDelay) {
-		        this.x += speed;
-		        frameCount = 0;
-		    } else {
-		        frameCount++;
-		    }
-		    
-		    notifyObservers();
-		    if(!groundCollide) {
-		        speed *= -1;
-		    }
+		override public function setup() {
+		    collide_left = 12; // what pixel do we collide on on the left
+    		collide_right = 24; // what pixel do we collide on on the right
+    		
+    		myName = "EnemyWaiter"; // the generic name of our enemy
+            mySkin = "WaiterSkin"; // the name of the skin for this enemy
+    		
+    		startFrame = 0; // the first frame to loop on
+            endFrame = 1; // the final frame in the row
+            nowFrame = 0; // current frame in row
+            loopFrame = 0; // frame at which to loop
+            loopType = 0; // 0 loops, 1 bounces
+            loopRow = 0; // which row are we on
+            loopDir = 1; // loop forward (to the right) by default
+            speed = 5; // how many frames should go by before we advance            
 		}
         
     }

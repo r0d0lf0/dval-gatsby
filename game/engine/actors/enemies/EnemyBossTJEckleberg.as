@@ -20,9 +20,9 @@ package engine.actors.enemies {
 		private var roarSound = new tjeckleberg_roar();
 		private var explodeSound = new bullet_sound();
 		
-		protected const flyingDuration = 30;
-		protected const damageDuration = 30;
-		protected const shootWarningDuration = 10;
+		protected const flyingDuration = 60;
+		protected const damageDuration = 60;
+		protected const shootWarningDuration = 15;
 		protected const shootDuration = 0;
 	
 		protected var actionDelay = flyingDuration;
@@ -34,7 +34,7 @@ package engine.actors.enemies {
 		
 		protected var damagedFlag = 0;
 		protected var damagedCounter = 0;
-		protected const damagedDuration = 30;
+		protected const damagedDuration = 60;
 		
 		protected var destinationPoint:Point = new Point(296, 60);
 		protected var destArray = new Array();
@@ -42,16 +42,19 @@ package engine.actors.enemies {
 		protected var pointCounter = 0;
 		protected const pointProximity = 25;
 		
+		protected var prevVelx = 0;
+		protected var prevVely = 0;
+		
 		protected var myHero = null;
 		
-		protected var maxVel = 4; // fastest we're allowed to go by the universe
-		protected var INERTIA = .25; // the fastest we're allowed to increase in velocity per frame
+		protected var maxVel = 5; // fastest we're allowed to go by the universe
+		protected var INERTIA = .20; // the fastest we're allowed to increase in velocity per frame
 		
 		protected var currentAction = FLYING;
 		protected var deathRow = 4;		
 		
 		protected var explosionCounter = 0;
-		protected var explosionMax = 7;
+		protected var explosionMax = 14;
 		
 		override public function setup() {
 		    collide_left = 0; // what pixel do we collide on on the left
@@ -93,7 +96,7 @@ package engine.actors.enemies {
 		    if(myStatus != 'DYING') {
 				setLoop(deathRow, 0, 1, 0, 0, 2); // make us die
 	            myStatus = 'DYING';
-	            this.vely = -10;
+	            this.vely = -4;
 	            if(hitDirection == 'LEFT') {
 	                this.velx = 3;
 	            } else if(hitDirection == 'RIGHT')  {
@@ -103,13 +106,14 @@ package engine.actors.enemies {
 		    if(frameCount >= frameDelay) {
 		        applyPhysics();
 		        this.y += vely;
-		        if(vely >= 3) {
-		            vely = 3;
+		        if(vely >= 2) {
+		            vely = 2;
 		        }
 		        animate();
 		        explosionCounter++;
 		        if(explosionCounter >= explosionMax) {
-		            myMap.spawnActor(new Explosion(), (Math.floor(Math.random() * this.width) + this.x - 16), (Math.floor(Math.random() * this.height) + this.y - 16));
+		            var myExplosion = new Explosion();
+		            myMap.spawnActor(myExplosion, (Math.floor(Math.random() * this.width) + this.x - 16), (Math.floor(Math.random() * this.height) + this.y - 16));
 		            explosionCounter = 0;
 		            explosionMax = Math.floor(Math.random() * 5) + 3;
 		            var soundChannel = explodeSound.play(0);
@@ -133,22 +137,22 @@ package engine.actors.enemies {
 			if(heroDelta > 64) {
 				if(currentRow != 0) {
 					currentRow = 0;
-					setLoop(currentRow, 0, damagedFlag, 0, 0, 1);
+					setLoop(currentRow, 0, damagedFlag, 0, 0, 2);
 				}
 			} else if(heroDelta > 0 && heroDelta < 64) {
 				if(currentRow != 1) {
 					currentRow = 1;
-					setLoop(currentRow, 0, damagedFlag, 0, 0, 1);
+					setLoop(currentRow, 0, damagedFlag, 0, 0, 2);
 				}
 			} else if(heroDelta > -64 && heroDelta < 0) {
 				if(currentRow != 2) {
 					currentRow = 2;
-					setLoop(currentRow, 0, damagedFlag, 0, 0, 1);
+					setLoop(currentRow, 0, damagedFlag, 0, 0, 2);
 				}
 			} else if(heroDelta < -64) {
 				if(currentRow != 3) {
 					currentRow = 3;
-					setLoop(currentRow, 0, damagedFlag, 0, 0, 1);
+					setLoop(currentRow, 0, damagedFlag, 0, 0, 2);
 				}
 			}
 			
@@ -157,7 +161,7 @@ package engine.actors.enemies {
 		
 		override public function notify(subject:*):void {
             if(subject is Hero) {
-                if(!deadFlag) {
+                if(!deadFlag && INERTIA != 0) {
                     moveEyes(subject);
                 }
 				if(myHero == null) {
@@ -264,17 +268,27 @@ package engine.actors.enemies {
 		override public function moveMe():void {
 			updatePoints();
 			flyToPoint(destArray[pointCounter]);
+			frameCount++;
 			if(frameCount >= frameDelay) { 
 				if(actionCounter >= actionDelay) { // if we've waited long enough for our current action
 					if(currentAction == FLYING) { // and we're flying
 						actionDelay = shootWarningDuration; // set our delay value
 						currentAction = SHOOT_WARNING; // switch us to shoot warning mode
-						setLoop(currentRow, 0, 1, 0, 0, 1); // set our animation to do what it does
+						setLoop(currentRow, 0, 1, 0, 0, 3); // set our animation to do what it does
+						prevVelx = velx;
+						prevVely = vely;
+						velx = 0;
+						vely = 0;
+						INERTIA = 0;
 					} else if(currentAction == SHOOT_WARNING) { // otherwise, if we're shoot warning, then we're done
-						setLoop(currentRow, 0, 0, 0, 0, 0); // set us back to normal animation
+					    INERTIA = .2;
+					    velx = prevVelx;
+					    vely = prevVely;
+						setLoop(currentRow, 0, 0, 0, 0, 10); // set us back to normal animation
 						actionDelay = shootDuration; // set our pause duration to shoot
 						currentAction = SHOOTING; // and set us to ready to shoot
 					} else if(currentAction == SHOOTING) { // otherwise, if we're ready to shoot
+					    this.velx = walkSpeed;
 						if(myHero != null) { // if we've got a hero
 							shootLaser(myHero); // shoot a laser beam at him
 						}

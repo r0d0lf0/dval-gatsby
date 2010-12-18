@@ -37,7 +37,7 @@ package engine.screens{
 	    
 	    override public function update(evt = null):Boolean{
 			counter++;
-			if(counter > 120) {
+			if(counter > 240) {
 			    updateStatus(COMPLETE);
 			    return false;
 			} else {

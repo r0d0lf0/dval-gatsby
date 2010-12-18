@@ -39,8 +39,11 @@ package engine.actors.enemies {
             loopRow = 0; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
             speed = 10; // 5 replaced // how many frames should go by before we advance
+            walkSpeed = 1;
             
             velx = 0;
+            
+            frameDelay = 2;
 		}
 		
 		public override function moveMe():void {

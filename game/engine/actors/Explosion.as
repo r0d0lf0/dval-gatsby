@@ -38,6 +38,7 @@ package engine.actors {
 		override public function update():void {
             animate();
             totalFrameCounter++;
+            this.alpha = int(this.alpha == 0);
             if(totalFrameCounter >= frameKill) {
                 myMap.removeFromMap(this);
             }

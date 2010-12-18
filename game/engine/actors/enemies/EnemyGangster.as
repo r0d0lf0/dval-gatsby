@@ -14,8 +14,8 @@ package engine.actors.enemies {
 		protected var currentStatus = WALKING;
 		
 		protected var actionCounter:Number = 0; // holder var for how many frames go by between actions
-		protected const walkDuration = 60; // how long we spend walking
-		protected const shootDelay = 20; // how long we wait between bullets
+		protected const walkDuration = 90; // how long we spend walking
+		protected const shootDelay = 30; // how long we wait between bullets
 		protected const bulletsMax = 3; // how many bullets we're allowed to fire
 		protected var bulletCounter:Number = 0; // how many bullets have we fired 
 		
@@ -36,6 +36,8 @@ package engine.actors.enemies {
             speed = 10; // 5 replaced // how many frames should go by before we advance
 			walkSpeed = 1;
 			goingLeft = 1;
+			
+			frameDelay = 2;
 		}
 		
 		private function fireGun() {
@@ -68,11 +70,12 @@ package engine.actors.enemies {
 				velx = walkSpeed;
 			}
 			
+			frameCount++;
 			if(frameCount >= frameDelay) { 
 				if(currentStatus == WALKING) { // if we're walking
 					if(actionCounter >= walkDuration) { // and we've been walking too long
 						currentStatus = SHOOTING; // start shooting
-						setLoop(0, 2, 3, 2, 0, 2); // set our shooting animation
+						setLoop(0, 2, 3, 2, 0, 3); // set our shooting animation
 						actionCounter = 0; // and reset our timer
 					} else { // otherwise
 						this.x += velx / 2; // update our x variable
@@ -100,7 +103,7 @@ package engine.actors.enemies {
 						}
 					} else { // if we're out of bullets
 						currentStatus = WALKING; // make us start walking
-						setLoop(0, 0, 1, 0, 0, 5); // and set up our walking animation
+						setLoop(0, 0, 1, 0, 0, 10); // and set up our walking animation
 						bulletCounter = 0; // and reset our bullet counter
 					}
 				}

@@ -9,6 +9,7 @@ package engine.actors.specials {
         
         public function SewerWater() {
             // i construct, therefore, i am.
+            alwaysOn = true;
         }
         
         override public function setup() {

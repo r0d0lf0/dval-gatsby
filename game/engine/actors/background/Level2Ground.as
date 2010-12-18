@@ -8,7 +8,7 @@ package engine.actors.background {
     public class Level2Ground extends Actor implements IObserver {
         
         private var playerOffset = 0;
-        private var speed = 4;
+        private var speed = 3;
         private var loopPoint = 320;
         
         public function Level2Ground() {

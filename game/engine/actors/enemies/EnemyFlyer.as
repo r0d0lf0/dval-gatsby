@@ -5,7 +5,7 @@ package engine.actors.enemies {
     
     public class EnemyFlyer extends EnemyWalker {
         
-        public var flySpeed = 3;
+        public var flySpeed = 2;
         
         public function EnemyFlyer() {
 		    trace("EnemyFlyer");
@@ -19,23 +19,12 @@ package engine.actors.enemies {
         
         public override function moveMe():void {
             velx = -flySpeed;
+            frameCount++;
 		    if(frameCount >= frameDelay) { 
     			frameStarted = true;
 				statusSet = false;
 
     			this.x += velx / 2; // update our x variable
-    			
-    			if(velx > 0) {
-    			    this.x = Math.ceil(this.x);
-    			} else {
-    			    this.x = Math.floor(this.x);
-    			}
-    			
-    			if(vely > 0) {
-    			    this.y = Math.ceil(this.y);
-    			} else {
-    			    this.y = Math.floor(this.y);
-    			}
     			
     			notifyObservers(); // tell everybody where we are now
     			updateStatus(); // update our status

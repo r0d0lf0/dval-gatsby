@@ -9,7 +9,7 @@ package engine.maps {
         
         private const fadeLevels = 6;
         private var currentFadeLevel = 0;
-        private var fadeSpeed = 15;
+        private var fadeSpeed = 30;
         private var fadeCounter = 0;
         private var fadeEnabled = true;
         
@@ -19,8 +19,8 @@ package engine.maps {
         private var babyBossEnabled = false;
         private var babyBossFly = false;
         private var babyBossCounter = 0;
-        private var babyBossDelay = 150;
-        private var babyBossVelY = 5;
+        private var babyBossDelay = 200;
+        private var babyBossVelY = 3;
         
         private var treePlane = new Level2Trees();
         private var treeSpeed = 4;
@@ -32,6 +32,8 @@ package engine.maps {
         private var skyLoop = 400;
 		private var skySpeed = 1;
 		private var skyCounter = 0;
+		
+		private var traincar;
 		
 		override public function customUpdate():void {
 		    // this will be replaced later
@@ -69,7 +71,7 @@ package engine.maps {
                         babyBoss.alpha = (babyBossCounter % 4 == 1);
                     } else if(babyBossCounter > 60 && babyBossCounter < 110) {
                         babyBoss.alpha = babyBossCounter % 2;
-                    } else if(babyBossCounter >= 110) {
+                    } else if(babyBossCounter >= 150) {
                         babyBoss.alpha = 1;
                     }
                 } else {
@@ -123,12 +125,14 @@ package engine.maps {
     		updateSubscriptions();
     		updateStatus(ACTIVE);
     		prevStatus = ACTIVE;
+    		traincar = getChildByName("traincar");
 			notifyObservers(); // tell our observers that we've completed our load out
 		}
 		
 		override public function notify(subject:*):void {
 		    if(subject is Hero) {
 		        moveMap(subject);
+		        setChildIndex(traincar,numChildren - 1);
 		        if(heroHP != scoreboard.getHeroHP()) { // if our hero's HP has changed
 		            heroHP = scoreboard.getHeroHP(); // reset our holder for HP
 		            notifyObservers(); // and tell the level about it

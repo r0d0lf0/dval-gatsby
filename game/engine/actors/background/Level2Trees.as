@@ -8,7 +8,7 @@ package engine.actors.background {
     public class Level2Trees extends Animatable implements IObserver {
         
         private var playerOffset = 0;
-        private var scrollSpeed = 2;
+        private var scrollSpeed = 3;
         private var loopPoint = 400;
         public var followHero = true;
         

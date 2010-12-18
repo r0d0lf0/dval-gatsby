@@ -9,7 +9,7 @@ package engine.actors.weapons {
     
     public class BottleWeapon extends Weapon implements IObserver {
         
-        private var throwDistance:int = 60;
+        private var throwDistance:int = 120;
         private var throwHeight = -19;
         private var velX:Number = 0;
         private var velY:Number = 0;

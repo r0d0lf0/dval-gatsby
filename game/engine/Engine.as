@@ -50,7 +50,7 @@
                 switch(currentScreen.getStatus()) {  // find out why and react
                     case COMPLETE: // our screen completed successfully
                         currentScreen.alpha = 0;
-                        removeChild(currentScreen) // remove the current screen from the stage
+                        removeChild(currentScreen); // remove the current screen from the stage
                         currentScreenIndex++; // increment our index
                         if(currentScreenIndex >= screenList.length) {  // if we're out of screens
                             // game's over.  restart

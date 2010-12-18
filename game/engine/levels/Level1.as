@@ -15,7 +15,7 @@
 	public class Level1 extends Level {
 	    
 		public function Level1():void{
-		    mapList = new Array('level1_map1', 'level1_map2', 'level1_map3'); // use this later for dylan-style level loading by converting strings to classes
+		    mapList = new Array('level1_map3'); // use this later for dylan-style level loading by converting strings to classes
 			levelNumber = "LEVEL 1";
 			stageNumber = 1;
 			levelName = "GATSBY'S PARTY";
@@ -30,7 +30,7 @@
 		override protected function getMap(mapIndex) {
 		    switch(mapIndex) {
 		        case 1:
-		            return new level1_map1();
+		            return new level1_map3();
 		        case 2:
 		            return new level1_map2();
 		        case 3:

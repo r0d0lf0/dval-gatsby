@@ -32,7 +32,7 @@ package engine {
 
         
         public function Scoreboard(pvt:PrivateClass) {
-            timerTimer = new Timer(600);
+            timerTimer = new Timer(850);
             timerTimer.addEventListener(TimerEvent.TIMER, this.timerTick);
             startTimer();
         }
@@ -97,12 +97,7 @@ package engine {
 		}
         
         public function addToScore(giver, amount:Number) {
-            var additionalAmount;
-            if(Scoreboard.multiplier > 2) {
-               additionalAmount = amount * (Scoreboard.multiplier * Scoreboard.multiplier);
-            } else {
-               additionalAmount = amount * (Scoreboard.multiplier);
-            }
+            var additionalAmount = amount * (Math.pow(2, Scoreboard.multiplier - 1));
             Scoreboard.score += additionalAmount;
 			var myScore = new ActorScore(additionalAmount, giver.x, giver.y);
 			var myMap = giver.getMap();

@@ -20,12 +20,12 @@ package engine.actors {
         protected var scoreboard = Scoreboard.getInstance();
 		
 		//CHANGE THESE
-		public var jumpVelocity:uint = 13; //exponential. 20 jumps 3x higher than 10
-		public var Xspeed:Number = 4;
+		public var jumpVelocity:uint = 10; //exponential. 20 jumps 3x higher than 10
+		public var Xspeed:Number = 2;
 		
 		//
 		public var fric:Number = 1;  //frictional coefficient of go
-		public var gravity:Number = 1;  //how much the velocity changes on each frameEvent
+		public var gravity:Number = .5;  //how much the velocity changes on each frameEvent
 		
 		protected var jumpCount:Number = 0;
 		protected var jumpPressed:Boolean = false;
@@ -269,7 +269,7 @@ package engine.actors {
 	                this.velx = -3;
 	            }
 				notifyObservers();
-	            this.vely = -10;
+	            this.vely = -5;
 	        }
 		    if(frameCount >= frameDelay) {
 		        applyPhysics();

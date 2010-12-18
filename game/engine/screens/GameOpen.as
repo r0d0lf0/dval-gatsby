@@ -160,7 +160,7 @@ package engine.screens{
 			if(!timerFlag || BUTTON_ENTER) {
 				if(actionCounter == 1) {
 					if(background_coney.y > 0) {
-						background_coney.y -= 3;
+						background_coney.y -= 1;
 					}
 					if(background_coney.y <= 0) {
 						background_coney.y = 0;

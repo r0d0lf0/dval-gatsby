@@ -63,6 +63,7 @@ package engine.actors.enemies {
 		}
 		
 		override public function moveMe():void {
+		    frameCount++;
 			if(frameCount >= frameDelay) { 
 				if(actionCounter >= actionDelay) { // if we've waited long enough
 					if(currentAction == JUMPING) { // and we're jumping

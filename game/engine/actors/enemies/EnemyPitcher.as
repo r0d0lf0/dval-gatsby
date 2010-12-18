@@ -74,7 +74,7 @@ package engine.actors.enemies {
 				walkSpeed = 0;
 				currentStatus = SHOOTING;
 			}
-			
+			frameCount++;
 			if(frameCount >= frameDelay) { 
 				if(currentStatus == WALKING) { // if we're walking
 					this.x += velx / 2; // update our x variable

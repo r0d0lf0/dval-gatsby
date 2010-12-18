@@ -27,6 +27,7 @@ package engine.actors.enemies {
 
 			goingLeft = true;
 			velx *= -1;
+			frameDelay = 0;
 		}
 		
 		

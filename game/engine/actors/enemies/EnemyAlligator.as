@@ -6,11 +6,11 @@ package engine.actors.enemies {
     public class EnemyAlligator extends Enemy {
 	
 		protected var jumping:Boolean = false;
-		protected const jumpSpeed = -10;
+		protected const jumpSpeed = -14;
 		protected var vely = 0;
-		protected var gravity:Number = .8;  //how much the velocity changes on each frameEvent
+		protected var gravity:Number = .25;  //how much the velocity changes on each frameEvent
 		
-		protected const jumpDelay = 60;
+		protected const jumpDelay = 120;
 		protected var actionCounter = 0;
 
 		override public function setup() {
@@ -56,7 +56,7 @@ package engine.actors.enemies {
 			animate();
 			if(jumping) { // if we're jumping
 				applyPhysics(); // apply physics
-				this.y += vely; // and move us
+				this.y += vely / 2; // and move us
 				if(this.y > 240) { // if we're below the screen
 					vely = 0; // then stop us from falling
 					this.y = 240; // position us just off screen

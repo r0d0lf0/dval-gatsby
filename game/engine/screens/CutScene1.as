@@ -36,6 +36,7 @@ package engine.screens{
 			total_frames = childMovie.totalFrames;
 	        this.addChild(childMovie);
 			movieLoaded = true;
+			stage.frameRate = 30;
 		}
 		
 		public function onProgressHandler(mProgress:ProgressEvent)
@@ -48,6 +49,7 @@ package engine.screens{
 			my_counter++;
 			if(childMovie.currentFrame >= total_frames && movieLoaded) {
 				updateStatus(COMPLETE);
+				stage.frameRate = 60;
 				return false;
 			} else {
 				return true;				

@@ -105,8 +105,9 @@
     						if(currentScreen is LevelStart) {
     							startMusic();
     							scoreboard.setTimeLimit(300);
+    							scoreboard.startTimer();
     							scoreboard.setHeroHP(3);
-    							scoreboard.setCurrentBoss(bossName);
+    							scoreboard.setCurrentBoss('ENEMY');
     							scoreboard.setBossHP(bossHP);
     							scoreboard.setCurrentLevel(stageNumber);
     							scoreboard.setBossHP(bossHP);

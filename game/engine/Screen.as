@@ -4,6 +4,9 @@ package engine{
     import engine.IObserver;
     import engine.ISubject;
     
+	import flash.utils.Timer;
+    import flash.events.TimerEvent;
+    
 	public dynamic class Screen extends MovieClip implements ISubject, IObserver {
         
         public static const DEFAULT = 1;
@@ -17,11 +20,30 @@ package engine{
         public var status = DEFAULT; // default status, i sort of forget what this is for
 		public var prevStatus = DEFAULT; // holder for previous status
 		
+		protected var pausedFlag = true;
+		
 		public var observers:Array = new Array(); // this is the array of objects subscribed to this map
         
         public function Screen() {
             
         }
+        
+        protected function pause(duration):void {
+		    pausedFlag = true;
+		    var myTimer:Timer = new Timer(duration,1);
+			myTimer.addEventListener(TimerEvent.TIMER, timerListener);
+			myTimer.start();
+			myTimer.addEventListener(TimerEvent.TIMER_COMPLETE, timerDone);
+			
+			function timerListener (e:TimerEvent):void{
+				pausedFlag = false;
+			}
+
+			function timerDone(e:TimerEvent):void{
+				
+			}
+			
+		}
         
         public function getStatus() {
 		    return status;

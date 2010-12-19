@@ -6,8 +6,8 @@ package engine.actors.npc {
     public class NPCGatsby extends NPC {
        
        override public function setup() {
-           collide_left = 10; // what pixel do we collide on on the left
-   	       collide_right = 22; // what pixel do we collide on on the right
+           collide_left = 0; // what pixel do we collide on on the left
+   	       collide_right = 24; // what pixel do we collide on on the right
    		
    		   myName = "Gatsby"; // the generic name of our enemy
            mySkin = "GatsbySkin"; // the name of the skin for this enemy

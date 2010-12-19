@@ -12,6 +12,9 @@
 	import flash.media.SoundChannel;
 	import flash.media.SoundTransform;
 	
+	import flash.utils.Timer;
+    import flash.events.TimerEvent;
+	
 	dynamic public class Level extends Screen {
 	
 	    protected var stageNumber = 1;
@@ -34,6 +37,9 @@
 	    protected var bossMusic;
 	    protected var musicChannel:SoundChannel;
 	    protected var myTransform:SoundTransform;
+		
+		protected var scoringComplete = false;
+		protected var scoringStatus = 0;
 		
  		public function Level():void{
  		    music = new music_level1();  // create an instance of the music
@@ -70,7 +76,18 @@
 	        scoreboard.setBossHP(bossHP);
 	        scoreboard.setCurrentLevel(stageNumber);
 	        
-	        updateStatus(ACTIVE);
+	        
+	        var startTimer:Timer = new Timer(1000,1);
+			startTimer.addEventListener(TimerEvent.TIMER, timerListener);
+			startTimer.start();
+			
+			function timerListener (e:TimerEvent):void{
+				addChild(currentScreen); // and attach it to the stage
+				updateStatus(ACTIVE);
+				startTimer.stop();
+				pausedFlag = false;
+			}
+			
 		}
 		
 		private function loadScreen(screen:MovieClip) {
@@ -79,40 +96,74 @@
 		}
 		
 		override public function update(evt = null):Boolean {
-		    if(!currentScreen.update()) { // update the current screen to see if it's finished
-		        switch(currentScreen.getStatus()) {
-		            case COMPLETE: // if our map returned COMPLETE
-		                currentMapIndex++; // increment the current map index
-		                scoreboard.setCurrentMap(currentMapIndex);
-						if(currentScreen is LevelStart) {
-							startMusic();
-							scoreboard.setTimeLimit(300);
-							scoreboard.setHeroHP(3);
-							scoreboard.setCurrentBoss(bossName);
-							scoreboard.setBossHP(bossHP);
-							scoreboard.setCurrentLevel(stageNumber);
-							scoreboard.setBossHP(bossHP);
-						}
-		                if(currentMapIndex < (mapList.length + 1)) { // and if we haven't finished the last map
-		                    removeChild(currentScreen); // remove the current map
-		                    currentScreen = getMap(currentMapIndex);  // get the next one
-		                    addChild(scoreboardDisplay); // add the scoreboard
-                            addChild(currentScreen); // add the new child
-                            currentScreen.y += scoreboardDisplay.height; // move the screen down so that it doesn't cover the scoreboard
-		                    return true; // and return true
-		                } else { // otherwise, we've completed the final map so
-		                    stopMusic(); // stop the music
-		                    updateStatus(COMPLETE);  // set the level exit status to COMPLETE
-		                    return false; // and return false to the Engine
-		                }
-		                break;
-		            case HERO_DEAD: // if the map returns HERO DEAD
-		                updateStatus(HERO_DEAD);  // set the level exit status to HERO DEAD
-		                trace("Hero dead."); // debug that the hero died
-		                stopMusic(); // stop our music
-		                return false; // and return false to the Engine
-		                break;
-		        }
+		    if(!pausedFlag) {
+		        if(!currentScreen.update()) { // update the current screen to see if it's finished
+    		        switch(currentScreen.getStatus()) {
+    		            case COMPLETE: // if our map returned COMPLETE
+    		                currentMapIndex++; // increment the current map index
+    		                scoreboard.setCurrentMap(currentMapIndex);
+    						if(currentScreen is LevelStart) {
+    							startMusic();
+    							scoreboard.setTimeLimit(300);
+    							scoreboard.setHeroHP(3);
+    							scoreboard.setCurrentBoss(bossName);
+    							scoreboard.setBossHP(bossHP);
+    							scoreboard.setCurrentLevel(stageNumber);
+    							scoreboard.setBossHP(bossHP);
+    						}
+    		                if(currentMapIndex < (mapList.length + 1)) { // and if we haven't finished the last map
+    		                    removeChild(currentScreen); // remove the current map
+    		                    currentScreen = getMap(currentMapIndex);  // get the next one
+    		                    addChild(scoreboardDisplay); // add the scoreboard
+                                addChild(currentScreen); // add the new child
+                                currentScreen.y += scoreboardDisplay.height; // move the screen down so that it doesn't cover the scoreboard
+    		                    return true; // and return true
+    		                } else if(!scoringComplete){ // otherwise, we've completed the final map but we're not do
+    		                    currentMapIndex--;
+    		                    switch(scoringStatus) {
+    		                        case 0:
+    		                            stopMusic(); // stop the music
+    		                            scoreboard.stopTimer(); // stop the timer
+    		                            var success_music = new extra_life_sound(); // get us some success music
+    		                            musicChannel = success_music.play(0); // and play that noise
+    		                            musicChannel.addEventListener(Event.SOUND_COMPLETE, this.soundComplete); // let us know when you're done
+
+            		                    scoringStatus = 1;
+            		                    break;
+            		                case 1:
+            		                    break; // this is advanced by the sound finishing
+            		                case 2:
+            		                    pause(1000);
+            		                    scoringStatus++;
+            		                case 3:
+            		                    if(scoreboard.getCurrentTime() > 0) {
+            		                        scoreboard.timeToPoints();
+            		                    } else {
+    		                                scoringStatus++;
+            		                    }
+            		                    break;
+            		                case 4:
+            		                    pause(1000);
+            		                    scoringStatus++;
+            		                    break;
+            		                case 5:
+            		                    scoringComplete = true;
+            		                    break;
+            		            }
+    		                    return true; // and return false to the Engine
+    		                } else {
+    		                    updateStatus(COMPLETE);  // set the level exit status to COMPLETE
+    		                    return false;
+    		                }
+    		                break;
+    		            case HERO_DEAD: // if the map returns HERO DEAD
+    		                updateStatus(HERO_DEAD);  // set the level exit status to HERO DEAD
+    		                trace("Hero dead."); // debug that the hero died
+    		                stopMusic(); // stop our music
+    		                return false; // and return false to the Engine
+    		                break;
+    		        }
+    		    }
 		    }
 		    // otherwise, if the map returned true
 		    return true;  // then so will the level
@@ -121,6 +172,11 @@
 		protected function getMap(mapIndex) {
 		    return 1; // this will get overwritten
 		}
+		
+		public function soundComplete(e) {
+            scoringStatus++; // when we're done, move us along
+            musicChannel.removeEventListener(Event.SOUND_COMPLETE, soundComplete);
+        }
 		
 		public function getMapIndex() {
 			return currentMapIndex - 1;

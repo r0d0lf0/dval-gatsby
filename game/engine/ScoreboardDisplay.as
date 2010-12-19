@@ -32,12 +32,14 @@ package engine{
             heroHealth = new HealthBar(3);
             heroHealth.x = 120;
             heroHealth.y = 12;
+            heroHealth.setHealth(scoreboard.getHeroHP());
             addChild(heroHealth);
             
             // setup our boss healthbar
             bossHealth = new HealthBar(5);
             bossHealth.x = 120;
             bossHealth.y = 20;
+            bossHealth.setHealth(scoreboard.getBossHP());
             addChild(bossHealth);
             
             updateScoreboardDisplay();

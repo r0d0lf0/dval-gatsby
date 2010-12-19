@@ -41,6 +41,8 @@ package engine.screens{
 				
 		private var actionCounter = 0;
 		
+		private var activeFlag = true;
+		
 		private static var BUTTON_ENTER = false;
 		
 		private var prevAction = 0;
@@ -105,6 +107,11 @@ package engine.screens{
 				actionCounter++;
 			}
 	    }
+	    
+	    public function disconnectFromKeyboard() {
+	        stage.removeEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler); // and subscribe him to the keyboard
+	        stage.removeEventListener(KeyboardEvent.KEY_UP, this.keyUpHandler); // in both its forms
+	    }
 	
 		private function getMovieFromLibrary(mcIName:String){
 			var tMC:Class = getDefinitionByName(mcIName) as Class;
@@ -142,146 +149,149 @@ package engine.screens{
 		}
 	    
 	    override public function update(evt = null):Boolean{
-			interlaceCounter++;
-			var myTimer = new Timer(2000,1);
-			
-			eyesArray[0].alpha = interlaceCounter % 2;
-			titleArray[0].alpha = interlaceCounter % 2;
-			
-			function timerListener (e:TimerEvent):void{
+	        if(activeFlag) {
+	            interlaceCounter++;
+    			var myTimer = new Timer(2000,1);
 
-			}
+    			eyesArray[0].alpha = interlaceCounter % 2;
+    			titleArray[0].alpha = interlaceCounter % 2;
 
-			function timerDone(e:TimerEvent):void{
-					actionCounter++;
-					timerFlag = false;
-			}
-		
-			if(!timerFlag || BUTTON_ENTER) {
-				if(actionCounter == 1) {
-					if(background_coney.y > 0) {
-						background_coney.y -= 1;
-					}
-					if(background_coney.y <= 0) {
-						background_coney.y = 0;
-						myTimer = new Timer(1000,1);
-						myTimer.addEventListener(TimerEvent.TIMER, timerListener);
-						myTimer.addEventListener(TimerEvent.TIMER_COMPLETE, timerDone);
-						myTimer.start(); // actionCounter 3
-						timerFlag = true;
-					}
-				} else if(actionCounter == 2) {
+    			function timerListener (e:TimerEvent):void{
 
-					startMusic();
+    			}
 
-					myTimer = new Timer(2000,1);
-					myTimer.addEventListener(TimerEvent.TIMER, timerListener);
-					myTimer.addEventListener(TimerEvent.TIMER_COMPLETE, timerDone);
-					myTimer.start(); // actionCounter 3
+    			function timerDone(e:TimerEvent):void{
+    					actionCounter++;
+    					timerFlag = false;
+    			}
+
+    			if(!timerFlag || BUTTON_ENTER) {
+    				if(actionCounter == 1) {
+    					if(background_coney.y > 0) {
+    						background_coney.y -= 1;
+    					}
+    					if(background_coney.y <= 0) {
+    						background_coney.y = 0;
+    						myTimer = new Timer(1000,1);
+    						myTimer.addEventListener(TimerEvent.TIMER, timerListener);
+    						myTimer.addEventListener(TimerEvent.TIMER_COMPLETE, timerDone);
+    						myTimer.start(); // actionCounter 3
+    						timerFlag = true;
+    					}
+    				} else if(actionCounter == 2) {
+
+    					startMusic();
+
+    					myTimer = new Timer(2000,1);
+    					myTimer.addEventListener(TimerEvent.TIMER, timerListener);
+    					myTimer.addEventListener(TimerEvent.TIMER_COMPLETE, timerDone);
+    					myTimer.start(); // actionCounter 3
 
 
-					timerFlag = true;
-				} else if(actionCounter == 3) {
-					eyesArray[0].x = 8;
-					eyesArray[0].y = 80;
-					this.addChild(eyesArray[0]);
-					timerFlag = true; // let the timer pick this next one up
-					myTimer = new Timer(1000,1);
-					myTimer.addEventListener(TimerEvent.TIMER, timerListener);
-					myTimer.addEventListener(TimerEvent.TIMER_COMPLETE, timerDone);
-					myTimer.start(); // actionCounter 3
-				} else if(actionCounter == 4) {
-					eyesArray[1].x = 8;
-					eyesArray[1].y = 80;
-					this.addChild(eyesArray[1]);
-					timerFlag = true; // let the timer pick this next one up
-					myTimer = new Timer(1000,1);
-					myTimer.addEventListener(TimerEvent.TIMER, timerListener);
-					myTimer.addEventListener(TimerEvent.TIMER_COMPLETE, timerDone);
-					myTimer.start(); // actionCounter 3
-				} else if(actionCounter == 5) {
-					titleArray[0].x = 40;
-					titleArray[0].y = 8;
-					this.addChild(titleArray[0]);
-					timerFlag = true;
-					myTimer = new Timer(500,1);
-					myTimer.addEventListener(TimerEvent.TIMER, timerListener);
-					myTimer.addEventListener(TimerEvent.TIMER_COMPLETE, timerDone);
-					myTimer.start(); // actionCounter 3
-				} else if(actionCounter == 6) {
-					titleArray[1].x = 40;
-					titleArray[1].y = 8;
-					this.addChild(titleArray[1]);
-					timerFlag = true;
-					myTimer = new Timer(1000,1);
-					myTimer.addEventListener(TimerEvent.TIMER, timerListener);
-					myTimer.addEventListener(TimerEvent.TIMER_COMPLETE, timerDone);
-					myTimer.start(); // actionCounter 3
-				} else if(actionCounter == 7) {
-					PressStart.x = 80;
-					PressStart.y = 120;
-					setChildIndex(PressStart,numChildren - 1);
-					actionCounter++;
-					timerFlag = true;
-				} else if(actionCounter == 99) {
-					BUTTON_ENTER = false;
-					if(prevAction < 2) { // coney's not in place yet
-						background_coney.y = 0; // move it to the top
-						startMusic();
-					}
-					if(prevAction < 3) {
-						eyesArray[0].x = 8;
-						eyesArray[0].y = 80;
-						this.addChild(eyesArray[0]);
-					}
-					if(prevAction < 4) {
-						eyesArray[1].x = 8;
-						eyesArray[1].y = 80;
-						this.addChild(eyesArray[1]);
-					}
-					if(prevAction < 5) {
-						titleArray[0].x = 40;
-						titleArray[0].y = 8;
-						this.addChild(titleArray[0]);
-					}
-					if(prevAction < 6) {
-						titleArray[1].x = 40;
-						titleArray[1].y = 8;
-						this.addChild(titleArray[1]);
-					}
-					if(prevAction < 7) {
-						PressStart.x = 80;
-						PressStart.y = 120;
-						setChildIndex(PressStart,numChildren - 1);
-					}
-					if(prevAction == 99 || prevAction == 8) {
-						stopMusic();
-						start_sound = new press_start_sound();  // create an instance of the music
-						musicChannel = start_sound.play(0, 0);  // play it, looping 100 times
-						myTimer = new Timer(200,12);
-						function endTimerListener() {
-							actionCounter++;
-							PressStart.alpha = actionCounter % 2;
-						}
-						
-						function endTimerDone() {
-							updateStatus(COMPLETE);
-							trace("complete!");
-						}
-						myTimer.addEventListener(TimerEvent.TIMER, endTimerListener);
-						myTimer.addEventListener(TimerEvent.TIMER_COMPLETE, endTimerDone);
-						myTimer.start(); // actionCounter 3
-					}
-					timerFlag = true;
-				}
-				trace(actionCounter);
-			}
-			if(getStatus() != COMPLETE) {
+    					timerFlag = true;
+    				} else if(actionCounter == 3) {
+    					eyesArray[0].x = 8;
+    					eyesArray[0].y = 80;
+    					this.addChild(eyesArray[0]);
+    					timerFlag = true; // let the timer pick this next one up
+    					myTimer = new Timer(1000,1);
+    					myTimer.addEventListener(TimerEvent.TIMER, timerListener);
+    					myTimer.addEventListener(TimerEvent.TIMER_COMPLETE, timerDone);
+    					myTimer.start(); // actionCounter 3
+    				} else if(actionCounter == 4) {
+    					eyesArray[1].x = 8;
+    					eyesArray[1].y = 80;
+    					this.addChild(eyesArray[1]);
+    					timerFlag = true; // let the timer pick this next one up
+    					myTimer = new Timer(1000,1);
+    					myTimer.addEventListener(TimerEvent.TIMER, timerListener);
+    					myTimer.addEventListener(TimerEvent.TIMER_COMPLETE, timerDone);
+    					myTimer.start(); // actionCounter 3
+    				} else if(actionCounter == 5) {
+    					titleArray[0].x = 40;
+    					titleArray[0].y = 8;
+    					this.addChild(titleArray[0]);
+    					timerFlag = true;
+    					myTimer = new Timer(500,1);
+    					myTimer.addEventListener(TimerEvent.TIMER, timerListener);
+    					myTimer.addEventListener(TimerEvent.TIMER_COMPLETE, timerDone);
+    					myTimer.start(); // actionCounter 3
+    				} else if(actionCounter == 6) {
+    					titleArray[1].x = 40;
+    					titleArray[1].y = 8;
+    					this.addChild(titleArray[1]);
+    					timerFlag = true;
+    					myTimer = new Timer(1000,1);
+    					myTimer.addEventListener(TimerEvent.TIMER, timerListener);
+    					myTimer.addEventListener(TimerEvent.TIMER_COMPLETE, timerDone);
+    					myTimer.start(); // actionCounter 3
+    				} else if(actionCounter == 7) {
+    					PressStart.x = 80;
+    					PressStart.y = 120;
+    					setChildIndex(PressStart,numChildren - 1);
+    					actionCounter++;
+    					timerFlag = true;
+    				} else if(actionCounter == 99) {
+    					BUTTON_ENTER = false;
+    					if(prevAction < 2) { // coney's not in place yet
+    						background_coney.y = 0; // move it to the top
+    						startMusic();
+    					}
+    					if(prevAction < 3) {
+    						eyesArray[0].x = 8;
+    						eyesArray[0].y = 80;
+    						this.addChild(eyesArray[0]);
+    					}
+    					if(prevAction < 4) {
+    						eyesArray[1].x = 8;
+    						eyesArray[1].y = 80;
+    						this.addChild(eyesArray[1]);
+    					}
+    					if(prevAction < 5) {
+    						titleArray[0].x = 40;
+    						titleArray[0].y = 8;
+    						this.addChild(titleArray[0]);
+    					}
+    					if(prevAction < 6) {
+    						titleArray[1].x = 40;
+    						titleArray[1].y = 8;
+    						this.addChild(titleArray[1]);
+    					}
+    					if(prevAction < 7) {
+    						PressStart.x = 80;
+    						PressStart.y = 120;
+    						setChildIndex(PressStart,numChildren - 1);
+    					}
+    					if(prevAction == 99 || prevAction == 8) {
+    						stopMusic();
+    						start_sound = new press_start_sound();  // create an instance of the music
+    						musicChannel = start_sound.play(0, 0);  // play it, looping 100 times
+    						myTimer = new Timer(200,12);
+    						function endTimerListener() {
+    							actionCounter++;
+    							PressStart.alpha = actionCounter % 2;
+    						}
+
+    						function endTimerDone() {
+    							updateStatus(COMPLETE);
+    							activeFlag = false;
+    							disconnectFromKeyboard();
+    							trace("complete!");
+    						}
+    						myTimer.addEventListener(TimerEvent.TIMER, endTimerListener);
+    						myTimer.addEventListener(TimerEvent.TIMER_COMPLETE, endTimerDone);
+    						myTimer.start(); // actionCounter 3
+    					}
+    					timerFlag = true;
+    				}
+    				trace(actionCounter);
+    			}
+	        }	
+	        if(getStatus() != COMPLETE) {
 				return true;
 			} else {
 				return false;
-			}
-			
+			}		
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿package engine{
 
 	import flash.display.MovieClip;
-	import flash.events.Event;
+	import flash.events.*;
 	import engine.ScoreboardDisplay;
 	import engine.Scoreboard;
 	import managers.ScreenManager;
@@ -18,7 +18,7 @@
 	    private var playerScore:Number = 0;
 	    private const playerLives:Number = 3;
 	    
-	    static private var screenList:Array = new Array(/*'GameOpen',*/'Level1','CutScene1','Level2','Level3','Level4');
+	    static private var screenList:Array = new Array('GameOpen','Level1','CutScene1','Level2','Level3','Level4','GameEnding');
 		
 		public function Engine():void {
 			//check for flash spacetime coordinates

@@ -53,6 +53,14 @@ package engine {
             notifyObservers();
         }
         
+        public function timeToPoints() {
+            if(timer > 0) {
+                timer--;
+                Scoreboard.score += 10;
+                notifyObservers();
+            }
+        }
+        
         public function setTimeLimit(limit) {
             Scoreboard.timeLimit = limit;
             Scoreboard.timer = limit;

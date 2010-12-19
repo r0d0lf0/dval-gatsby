@@ -28,7 +28,6 @@ package engine.levels{
 			currentScreen = new LevelStart(); // we're just starting, so create a LevelStart screen
 			currentScreen.setLevelName(levelName);  // give it our level name
 			currentScreen.setLevelNumber(levelNumber); // and our level number
-			addChild(currentScreen); // and attach it to the stage
 		}
 
 		override protected function getMap(mapIndex) {

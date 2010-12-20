@@ -17,7 +17,7 @@ package engine.actors {
     
     public class DialogBox extends Actor implements IKeyboard {
         
-        public var BUTTON_ENTER = false;
+        public var BUTTON_SHIFT = false;
         
         private var messageArray = new Array();
         private var letterDelay = 0;
@@ -80,14 +80,14 @@ package engine.actors {
         }
         
         public function keyUpHandler(evt):void {
-		    if(evt.keyCode == Keyboard.ENTER) {
-		        BUTTON_ENTER = false;
+		    if(evt.keyCode == Keyboard.SHIFT) {
+		        BUTTON_SHIFT = false;
 		    }
 		}
 		
 		public function keyDownHandler(evt):void {
-		    if(evt.keyCode == Keyboard.ENTER && BUTTON_ENTER == false) { // if someone's hitting enter anew
-		        BUTTON_ENTER = true; // mark our holder as pressed
+		    if(evt.keyCode == Keyboard.SHIFT && BUTTON_SHIFT == false) { // if someone's hitting enter anew
+		        BUTTON_SHIFT = true; // mark our holder as pressed
 		        if(typingFlag) { // if we're typing and arent' at teh end yet
 		            textCounter = messageArray[currentMessage].length; // jump to the end of the message
 		        } else if(currentMessage < (messageArray.length - 1)) { // otherwise, if there are more messages

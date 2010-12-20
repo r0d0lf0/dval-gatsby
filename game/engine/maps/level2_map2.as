@@ -21,6 +21,7 @@ package engine.maps {
         private var babyBossCounter = 0;
         private var babyBossDelay = 200;
         private var babyBossVelY = 3;
+        private var babyBossSpeed = 0;
         
         private var treePlane = new Level2Trees();
         private var treeSpeed = 4;
@@ -79,11 +80,12 @@ package engine.maps {
                     babyBossEnabled = false;
                 }
             } else if(babyBossFly) {
-                babyBossVelY -= 1;
+                babyBossVelY -= .5;
                 if(babyBossVelY < -8) {
                     babyBossVelY = -8;
                 }
-                babyBoss.y += babyBossVelY;
+                babyBossSpeed = Math.floor(babyBossVelY);
+                babyBoss.y += babyBossSpeed;
                 if(babyBoss.y < -200) {
                     babyBossFly = false;
                     spawnActor(boss, 64, -70);

@@ -47,14 +47,14 @@ package engine.actors.enemies {
 		
 		protected var myHero = null;
 		
-		protected var maxVel = 5; // fastest we're allowed to go by the universe
-		protected var INERTIA = .20; // the fastest we're allowed to increase in velocity per frame
+		protected var maxVel = 4; // fastest we're allowed to go by the universe
+		protected var INERTIA = .25; // the fastest we're allowed to increase in velocity per frame
 		
 		protected var currentAction = FLYING;
 		protected var deathRow = 4;		
 		
 		protected var explosionCounter = 0;
-		protected var explosionMax = 14;
+		protected var explosionMax = 8;
 		
 		override public function setup() {
 		    collide_left = 0; // what pixel do we collide on on the left
@@ -106,8 +106,8 @@ package engine.actors.enemies {
 		    if(frameCount >= frameDelay) {
 		        applyPhysics();
 		        this.y += vely;
-		        if(vely >= 2) {
-		            vely = 2;
+		        if(vely >= 1) {
+		            vely = 1;
 		        }
 		        animate();
 		        explosionCounter++;
@@ -115,8 +115,7 @@ package engine.actors.enemies {
 		            var myExplosion = new Explosion();
 		            myMap.spawnActor(myExplosion, (Math.floor(Math.random() * this.width) + this.x - 16), (Math.floor(Math.random() * this.height) + this.y - 16));
 		            explosionCounter = 0;
-		            explosionMax = Math.floor(Math.random() * 5) + 3;
-		            var soundChannel = explodeSound.play(0);
+		            explosionMax = Math.floor(Math.random() * 3) + 8;
 		        }
 		        
 		        if(this.y > 240) {
@@ -275,15 +274,7 @@ package engine.actors.enemies {
 						actionDelay = shootWarningDuration; // set our delay value
 						currentAction = SHOOT_WARNING; // switch us to shoot warning mode
 						setLoop(currentRow, 0, 1, 0, 0, 3); // set our animation to do what it does
-						prevVelx = velx;
-						prevVely = vely;
-						velx = 0;
-						vely = 0;
-						INERTIA = 0;
 					} else if(currentAction == SHOOT_WARNING) { // otherwise, if we're shoot warning, then we're done
-					    INERTIA = .2;
-					    velx = prevVelx;
-					    vely = prevVely;
 						setLoop(currentRow, 0, 0, 0, 0, 10); // set us back to normal animation
 						actionDelay = shootDuration; // set our pause duration to shoot
 						currentAction = SHOOTING; // and set us to ready to shoot
@@ -340,8 +331,8 @@ package engine.actors.enemies {
 				
 				if(HP <= 1) {
 				    setLoop(currentRow, 1, 1, 1, 0, 5);
-				    maxVel = 6;
-				    INERTIA = .5;
+				    maxVel = 7;
+				    INERTIA = .3;
 				}
 		    }
 		    animate();

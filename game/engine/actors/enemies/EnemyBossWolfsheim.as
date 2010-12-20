@@ -4,14 +4,18 @@ package engine.actors.enemies {
     import engine.ISubject;
     import engine.IObserver;
     import engine.actors.geoms.*;
+    import engine.actors.Explosion;
     
     public class EnemyBossWolfsheim extends EnemyWalker {
 	
-		protected const actionDelay = 60;
+		protected var actionDelay = 60;
 		protected var actionCounter = 0;
 		protected const JUMPING = 1;
 		protected const POINTING = 2;
 		protected var currentAction = JUMPING;
+		protected var explodeStarted = false;
+		protected var explodedYet = false;
+		protected var explosionCounter = 0;
 		
 		override public function setup() {
 		    collide_left = 10; // what pixel do we collide on on the left
@@ -39,9 +43,10 @@ package engine.actors.enemies {
 		override public function killMe():void {
 			HP = 0;
 		    if(myStatus != 'DYING') {
-				setLoop(2, 0, 1, 0, 0, 1); // make us die
+				setLoop(2, 0, 1, 0, 0, 2); // make us die
 	            myStatus = 'DYING';
-	            this.vely = -10;
+	            gravity = 0;
+	            this.vely = -1;
 	            if(hitDirection == 'LEFT') {
 	                this.velx = 3;
 	            } else if(hitDirection == 'RIGHT')  {
@@ -49,14 +54,28 @@ package engine.actors.enemies {
 	            }
 	        }
 		    if(frameCount >= frameDelay) {
-		        applyPhysics();
-		        this.y += vely;
-		        animate();
-		        if(this.y > 240) {
-					myStatus = 'DEAD';
-					myMap.updateStatus(COMPLETE);
-		            myMap.removeFromMap(this);
-		        }
+		        //applyPhysics();
+		        if(!explodeStarted) {
+		            this.y += vely;
+    		        if(this.y < 50) {
+    		            explodeStarted = true;
+    		        }
+    		    } else if(!explodedYet) {
+    		        actionDelay = 20;
+    		        actionCounter++;
+    		        if(actionCounter >= actionDelay) {
+    		            var myExplosion = new Explosion();
+    		            actionCounter = 0;
+    		            explosionCounter++;
+    		            myMap.spawnActor(myExplosion, (Math.floor(Math.random() * this.width) + this.x - 16), (Math.floor(Math.random() * this.height) + this.y - 16));
+    		        }
+    		        if(explosionCounter >= 12) {
+    		            myStatus = 'DEAD';
+    					myMap.updateStatus(COMPLETE);
+    		            myMap.removeFromMap(this);
+    		        }   
+    		    }
+                animate();
 		    } else {
 		        frameCount++;
 		    }

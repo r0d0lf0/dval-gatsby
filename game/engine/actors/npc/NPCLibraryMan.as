@@ -36,7 +36,7 @@ package engine.actors.npc {
                dialogBox.setText(new Array(
                    'IT\'S A BONA-FIDE PIECE OF\nPRINTED MATTER. IT FOOLED\nME. THIS FELLA\'S A REGULAR\nBELASCO. IT\'S A TRIUMPH.',
                    'WHAT THOROUGHNESS! WHAT\nREALISM! KNEW WHEN TO STOP,\nTOO-DIDN\'T CUT THE PAGES.\nBUT WHAT DO YOU WANT?',
-                   'WHAT DO YOU EXPECT?\n\nLOOK FOR GATSBY IN THE GARDEN.'
+                   'WHAT DO YOU EXPECT?\n\nLOOK FOR GATSBY IN THE\nGARDEN.'
                    ));                             
                triggeredYet = true;
            }

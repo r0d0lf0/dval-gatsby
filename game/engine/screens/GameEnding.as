@@ -8,13 +8,14 @@ package engine.screens{
 	import flash.utils.getDefinitionByName;
 	import engine.IKeyboard;
 	import flash.ui.Keyboard;
+    import engine.actors.specials.EndingFadeout;
 
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
 	import flash.media.SoundTransform;
 	
 	import flash.utils.Timer;
-    import flash.events.TimerEvent;
+    import flash.events.*;
 	
 	import flash.text.TextField;
 	import flash.text.TextFormat;
@@ -24,7 +25,8 @@ package engine.screens{
 
         private var frameCounter = 0;
 
-		private var music:music_credits;
+		private var music1:gold_hat_requiem_music = new gold_hat_requiem_music();
+		private var music2:credits_music = new credits_music();
 		private var start_sound:press_start_sound;
 		private var castle_sound:castle_crumble_sound;
 	    private var musicChannel:SoundChannel;
@@ -74,19 +76,20 @@ package engine.screens{
 			trace("GameOpen opened.");
 			ending_castle_background = getChildByName('ending_castle_background');
 			ending_castle_foreground = getChildByName('ending_castle_foreground');
-			ending_background = getChildByName('ending_background');
+			ending_background = getChildByName('ending_fadeout');
 			credits_text = getChildByName("credits_text");
 			credits_text.height = 8000;
-			credits_text.htmlText = "And as I sat there brooding on the old, unknown world, I thought of Gatsby's wonder when he first picked out the green light at the end of Daisy's dock. He had come a long way to this blue lawn, and his dream must have seemed so close that he could hardly fail to grasp it. He did not know that it was already behind him, somewhere back in that vast obscurity beyond the city, where the dark fields of the republic rolled on under the night.";
- 			credits_text.htmlText += "<br /><br />Gatsby believed in the green light, the orgastic future that year by year recedes before us. It eluded us then, but that's no matter -- tomorrow we will run faster, stretch out our arms farther... And one fine morning --";
-            credits_text.htmlText += "<br /><br /><br /><br />So we beat on, boats against the current, borne back ceaselessly into the past.";
+			//credits_text.htmlText = "And as I sat there brooding on the old, unknown world, I thought of Gatsby's wonder when he first picked out the green light at the end of Daisy's dock. He had come a long way to this blue lawn, and his dream must have seemed so close that he could hardly fail to grasp it. He did not know that it was already behind him, somewhere back in that vast obscurity beyond the city, where the dark fields of the republic rolled on under the night.";
+ 			credits_text.htmlText = "GATSBY BELIEVED IN THE GREEN LIGHT, THE ORGASTIC FUTURE THAT YEAR BY YEAR RECEDES BEFORE US. IT ELUDED US THEN, BUT THAT'S NO MATTER -- TOMORROW WE WILL RUN FASTER, STRETCH OUT OUR ARMS FARTHER... AND ONE FINE MORNING --";
+            credits_text.htmlText += "<br /><br /><br /><br />SO WE BEAT ON, BOATS AGAINST THE CURRENT, BORNE BACK CEASELESSLY INTO THE PAST.";
+            credits_text.htmlText += "<br /><br />CONGRATURATION!";
             credits_text.htmlText += "<br /><br /><br /><br /><br /><br /><br /><br /><br />";
-            credits_text.htmlText += "<br /><br />Created By:<br />Charlie Hoey &<br />Peter Smith";
-            credits_text.htmlText += "<br /><br />Programmed By:<br />Charlie Hoey &<br />Dylan Valentine";
-            credits_text.htmlText += "<br /><br />Music & Artwork by:<br />Peter Smith";
-            credits_text.htmlText += "<br /><br />Beta Test Team:<br />Julia Rose Roberts<br />Marc Allan Goodman<br />Elizabeth Hoey<br />Jule Maurer";
-            credits_text.htmlText += "<br /><br />Based on the novel by<br />F. Scott Fitzgerald";
-            credits_text.htmlText += "<br /><br /><br /><a href='http://goo.gl/A7MTE'>Download the source!</a>";
+            credits_text.htmlText += "<br /><br />CREATED BY:<br />CHARLIE HOEY &<br />PETER SMITH";
+            credits_text.htmlText += "<br /><br />PROGRAMMED BY:<br />CHARLIE HOEY &<br />DYLAN VALENTINE";
+            credits_text.htmlText += "<br /><br />MUSIC & ARTWORK BY:<br />PETER SMITH";
+            credits_text.htmlText += "<br /><br />BETA TEST TEAM:<BR />JULIA ROSE ROBERTS<BR />MARC ALLAN GOODMAN<BR />ELIZABETH HOEY<BR />JULE MAURER<br />MOLLY KLEINMAN";
+            credits_text.htmlText += "<br /><br />BASED ON THE NOVEL BY<br />F. SCOTT FITZGERALD";
+            credits_text.htmlText += "<br /><br /><br /><a href='http://goo.gl/A7MTE'>DOWNLOAD THE SOURCE!</a>";
             
 	        updateStatus(ACTIVE);
 	        pause(2000);
@@ -118,16 +121,21 @@ package engine.screens{
 		}
 	
 		private function startMusic() {
-		    music = new music_credits();  // create an instance of the music
-		    musicChannel = music.play(0, 6);  // play it, looping 100 times
-//		    myTransform = new SoundTransform(.35, 0);
-//		    musicChannel.soundTransform = myTransform;
+		    musicChannel = music1.play(0);  // play it once
+            musicChannel.addEventListener(Event.SOUND_COMPLETE, this.soundComplete); // let us know when you're done
+            //		    myTransform = new SoundTransform(.35, 0);
+            //		    musicChannel.soundTransform = myTransform;
 		}
 		
 		private function stopMusic() {
 		    if(musicChannel) {
 		        musicChannel.stop();
 		    }
+		}
+		
+		public function soundComplete(e) {
+		    musicChannel = music2.play(0);
+		    musicChannel.removeEventListener(Event.SOUND_COMPLETE, this.soundComplete);
 		}
 	    
 	    override public function update(evt = null):Boolean{
@@ -155,7 +163,7 @@ package engine.screens{
             
 	                fadeOutCounter++;
 	                if(fadeOutCounter < fadeOutDuration) {
-	                    ending_background.alpha = fadeOutCounter % 2;
+	                    ending_background.setLoop(Math.floor(fadeOutCounter / 7.5), 0, 0, 0, 0);
 	                } else {
 	                    ending_background.alpha = 0;
 	                    fadeOutFinished = true;

@@ -22,7 +22,7 @@
 			levelNumber = "LEVEL 2";
 			stageNumber = 2;
 			levelName = "TRAIN TO THE CITY";
-			bossName = "TJ ECKLEBERG";
+			bossName = "ENEMY";
 			bossHP = 5;
 			music = new music_level2();
 			currentScreen = new LevelStart(); // we're just starting, so create a LevelStart screen

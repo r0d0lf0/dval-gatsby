@@ -7,10 +7,12 @@ package engine.actors {
         
         protected var totalFrameCounter = 0;
         protected var frameKill = 15;
+        private var explodeSound = new bullet_sound();
         
         public function Explosion() {
             // i construct, therefore, i am.
             trace("Explosion!");
+            
         }
         
         override public function setup() {
@@ -31,7 +33,7 @@ package engine.actors {
             loopRow = 0; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
             speed = 3; // how many frames should go by before we advance
-            
+            var soundChannel = explodeSound.play(0);
             goingLeft = false;
 		}
 		

@@ -9,7 +9,7 @@ package engine.actors {
        
        	// MAX_VEL_Y has to be less than the height of most shallow platform.
 		// otherwise you will fall through the ground
-		protected const MAX_VEL_Y:Number = 8; // so min platform height should be 22.
+		protected const MAX_VEL_Y:Number = 6; // so min platform height should be 22.
 		protected const MAX_VEL_X:Number = 3;
 		protected var walkSpeed:Number = 1;
 		
@@ -269,7 +269,8 @@ package engine.actors {
 	                this.velx = -3;
 	            }
 				notifyObservers();
-	            this.vely = -5;
+	            this.vely = -4;
+	            gravity = .25;
 	        }
 		    if(frameCount >= frameDelay) {
 		        applyPhysics();

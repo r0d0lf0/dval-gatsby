@@ -6,18 +6,25 @@ package engine.actors.enemies {
     import engine.actors.geoms.*;
 	import engine.actors.weapons.BaseballWeapon;
 	import engine.actors.player.Hero;
+	
+	import flash.media.Sound;
+	import flash.media.SoundChannel;
     
     public class EnemyPitcher extends EnemyWalker {
 	
 		protected const WALKING = 1;
 		protected const SHOOTING = 2;
+		protected const WAITING = 3;
 		protected var currentStatus = WALKING;
 		
 		protected var actionCounter:Number = 0; // holder var for how many frames go by between actions
 		protected const walkDuration = 60; // how long we spend walking
-		protected var shootDelay = Math.floor((Math.random() * 60) + 75); // how long we wait between bullets
+		protected var shootDelay = 180; // how long we wait between bullets
 		protected const baseballsMax = 1; // how many bullets we're allowed to fire
 		protected var baseballCounter:Number = 0; // how many bullets have we fired 
+		
+		protected var effectsChannel;
+		protected var throw_sound;
 		
 		override public function setup() {
 		    collide_left = 10; // what pixel do we collide on on the left
@@ -36,8 +43,10 @@ package engine.actors.enemies {
             loopRow = 0; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
             speed = 10; // 5 replaced // how many frames should go by before we advance
-			walkSpeed = 1;
 			goingLeft = 1;
+			
+			effectsChannel = new SoundChannel();
+			throw_sound = new baseball_sound();
 		}
 		
 		private function throwBall() {
@@ -45,6 +54,7 @@ package engine.actors.enemies {
 			if(!goingLeft) {
 				multiplier = 1;
 			}
+			effectsChannel = throw_sound.play(0);
 		    myMap.spawnActor(new BaseballWeapon(this), this.x + (multiplier * this.width), this.y + 4);
 		}
 		
@@ -70,33 +80,44 @@ package engine.actors.enemies {
 				velx = walkSpeed;
 			}
 			
-			if(this.x == 228 || this.x == 0 && currentStatus != SHOOTING) {
+			if((this.x == 228 || this.x == 0) && currentStatus == WALKING) {
 				walkSpeed = 0;
 				currentStatus = SHOOTING;
 			}
+			
 			frameCount++;
 			if(frameCount >= frameDelay) { 
+			    
 				if(currentStatus == WALKING) { // if we're walking
 					this.x += velx / 2; // update our x variable
     			
-    			if(velx > 0) {
-    			    this.x = Math.ceil(this.x);
-    			} else {
-    			    this.x = Math.floor(this.x);
-    			}
+        			if(velx > 0) {
+        			    this.x = Math.ceil(this.x);
+        			} else {
+        			    this.x = Math.floor(this.x);
+        			}
     			
-    			if(vely > 0) {
-    			    this.y = Math.ceil(this.y);
-    			} else {
-    			    this.y = Math.floor(this.y);
-    			}
+        			if(vely > 0) {
+        			    this.y = Math.ceil(this.y);
+        			} else {
+        			    this.y = Math.floor(this.y);
+        			}
 				} else if(currentStatus == SHOOTING) { 		// otherwise, if we're shooting
+				    setLoop(0, 2, 2, 2, 0, 30); // set us to our windup stance
 					if(actionCounter >= shootDelay) {	// and we've waiting enough time between shots
 							throwBall(); // then shoot the gun
 							baseballCounter++; // increment our bullet counter
 							actionCounter = 0; // and reset our action counter
-							setLoop(0, 2, 3, 2, 0, 30);	
+							setLoop(0, 3, 3, 3, 0, 30);	
+							trace("shooting");
+							currentStatus = WAITING;
 					}
+				} else if(currentStatus == WAITING) {
+				    if(actionCounter >= shootDelay / 2) {
+				        currentStatus = SHOOTING;
+				        actionCounter = 0;
+				        trace("waiting");
+				    }
 				}
     			frameStarted = true;
 				statusSet = false;

@@ -26,6 +26,9 @@
 				    case 'GameOpen':
 				        return new GameOpen();
 				        break;
+				    case 'GameOver':
+				        return new GameOver();
+				        break;
 				    case 'Level1':
 				        return new Level1();
 				        break;
@@ -41,6 +44,9 @@
 					case 'CutScene1':
 						return new CutScene1();
 						break;
+					case 'CutScene3':
+					    return new CutScene3();
+					    break;
 					case 'GameEnding':
 					    return new GameEnding();
 					    break;

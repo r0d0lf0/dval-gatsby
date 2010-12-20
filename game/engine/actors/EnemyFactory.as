@@ -5,11 +5,13 @@ package engine.actors {
     import flash.events.TimerEvent;
 	import engine.actors.enemies.EnemyBlacksox;
 	import engine.actors.enemies.EnemyPitcher;
+	import engine.Scoreboard;
     
     public class EnemyFactory extends Actor {
                 
 		protected var spawnCount = 0;
-		protected const spawnMax = 10;
+		protected var deathCount = 0;
+		protected const spawnMax = 4;
 		protected const simultaneousSpawnMax = 3;
 		protected const simultaneousPitcherMax = 1;
 		protected const spawnDelay = 45;
@@ -22,9 +24,11 @@ package engine.actors {
 		protected const EMPTY = 20;
 		protected const DEAD = 30;
 		protected var spawnStatus = ACTIVE;
+		protected var scoreboard = Scoreboard.getInstance();
+		protected var initialBossHP;
 
         public function EnemyFactory() {    
-
+            initialBossHP = scoreboard.getBossHP();
         }
         
         // this should get the enterFrame tick like everything else
@@ -43,6 +47,7 @@ package engine.actors {
 					if(this.x > 256) { // if it's on the right side of the map
 						currentEnemy.reverseDirection(); // send it off towards our hero
 					}
+
 					actionCounter = 0; // reset our action counter
 					spawnCount++; // and increment our spawn count
 				} else { // otherwise, if we haven't waited long enough
@@ -61,6 +66,13 @@ package engine.actors {
 					if(subject.getHP() <= 0) { // and it's dead
 						subject.removeObserver(this); // then unsubscribe from it
 						removeEnemy(subject); // remove it from our current roster
+						deathCount++;
+						if(deathCount % 2) {
+						    scoreboard.setBossHP(scoreboard.getBossHP() - 1);
+						    trace("healthDown " + scoreboard.getBossHP());
+						} else {
+						    trace("spawnCount = " + spawnCount);
+						}
 						if(subject is EnemyPitcher) { // and if it's a pitcher
 							pitcherCount--; // adjust our pitcher count accordingly
 						}

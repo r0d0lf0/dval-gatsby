@@ -41,6 +41,8 @@
 		protected var scoringComplete = false;
 		protected var scoringStatus = 0;
 		
+		protected var timeConversionStarted = false;
+		
  		public function Level():void{
  		    music = new music_level1();  // create an instance of the music
 			if(stage){
@@ -107,7 +109,7 @@
     							scoreboard.setTimeLimit(300);
     							scoreboard.startTimer();
     							scoreboard.setHeroHP(3);
-    							scoreboard.setCurrentBoss('ENEMY');
+    							scoreboard.setCurrentBoss(bossName);
     							scoreboard.setBossHP(bossHP);
     							scoreboard.setCurrentLevel(stageNumber);
     							scoreboard.setBossHP(bossHP);
@@ -125,10 +127,9 @@
     		                        case 0:
     		                            stopMusic(); // stop the music
     		                            scoreboard.stopTimer(); // stop the timer
-    		                            var success_music = new extra_life_sound(); // get us some success music
+    		                            var success_music = new fanfare_music(); // get us some success music
     		                            musicChannel = success_music.play(0); // and play that noise
     		                            musicChannel.addEventListener(Event.SOUND_COMPLETE, this.soundComplete); // let us know when you're done
-
             		                    scoringStatus = 1;
             		                    break;
             		                case 1:
@@ -137,7 +138,12 @@
             		                    pause(1000);
             		                    scoringStatus++;
             		                case 3:
+            		                    if(!timeConversionStarted) {
+            		                        var score_sound = new score_count_sound();
+            		                        musicChannel = score_sound.play(0, 1000);
+            		                    }
             		                    if(scoreboard.getCurrentTime() > 0) {
+            		                        timeConversionStarted = true;
             		                        scoreboard.timeToPoints();
             		                    } else {
     		                                scoringStatus++;
@@ -145,6 +151,7 @@
             		                    break;
             		                case 4:
             		                    pause(1000);
+            		                    musicChannel.stop();
             		                    scoringStatus++;
             		                    break;
             		                case 5:

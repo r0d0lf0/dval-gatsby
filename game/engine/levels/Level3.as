@@ -22,7 +22,7 @@ package engine.levels{
 			levelNumber = "LEVEL 3";
 			stageNumber = 3;
 			levelName = "NEW YORK CITY";
-			bossName = "MEYER WOLF.";
+			bossName = "ENEMY";
 			bossHP = 5;
             music = new music_level3();  // create an instance of the music
 			currentScreen = new LevelStart(); // we're just starting, so create a LevelStart screen

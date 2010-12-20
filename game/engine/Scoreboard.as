@@ -176,7 +176,7 @@ package engine {
         }
         
         public function removeLife() {
-            //Scoreboard.lives--;
+            Scoreboard.lives--;
             notifyObservers();
         }
         

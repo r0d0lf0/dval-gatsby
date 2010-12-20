@@ -57,6 +57,7 @@ package engine.maps {
 					enemyFactories.push(subject); // add it to our dead factories list
 					trace("Factory empty!"); // and send up a flare
 					if(enemyFactories.length >= factoryCount) { // if all our factories are empty
+					    scoreboard.setBossHP(0);
 						EnemyBoss.killMe(); // kill the boss
 					}
 				}				

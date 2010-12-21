@@ -88,6 +88,13 @@
 			//reset array pointer (necessary so we can read array from beginning)
 			aBytes.position = 0;
 			displayData.setPixels(aPaste,aBytes);
+			if(display != null) {
+			    try {
+    			    removeChild(display);
+    			} catch (error:TypeError){
+
+    			}
+			}
 			//adjust bitmap positio in sprite
 			display = new Bitmap(displayData);
 			//plop it on stage for all to see

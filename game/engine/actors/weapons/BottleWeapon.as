@@ -11,8 +11,8 @@ package engine.actors.weapons {
         
         private var throwDistance:int = 120;
         private var throwHeight = -19;
-        private var velX:Number = 0;
-        private var velY:Number = 0;
+        private var velx:Number = 0;
+        private var vely:Number = 0;
         private var gravity = 1;
         private const MAX_VEL_Y = 8;
         private const MAX_VEL_X = 5;
@@ -23,7 +23,7 @@ package engine.actors.weapons {
         
 		override public function setup() {
 		    flySpeed = 2;
-		    velY = throwHeight;
+		    vely = throwHeight;
 		    damage = 1;
 		    
 		    myName = "BottleWeapon";
@@ -55,20 +55,20 @@ package engine.actors.weapons {
 		}
 		
 		public function throwBottle(goingLeft) {
-		    this.velY = throwHeight;
+		    this.vely = throwHeight;
 		    frameCount = 0;
 		    frameDelay = throwDistance;
 		    if(goingLeft) {
-    		    velX = -flySpeed;
+    		    velx = -flySpeed;
     		} else {
-    		    velX = flySpeed;
+    		    velx = flySpeed;
     		}
 		}
 		
 		public function applyPhysics():void {
 		    // velocitize y (gravity)
-			if (this.velY < MAX_VEL_Y) {
-			    this.velY += this.gravity;
+			if (this.vely < MAX_VEL_Y) {
+			    this.vely += this.gravity;
             }
 			
 			// check map bounds
@@ -86,22 +86,22 @@ package engine.actors.weapons {
 		        frameCount++;
 		    }
 		    applyPhysics();
-		    if(velX > MAX_VEL_X) {
-		        velX = MAX_VEL_X;
+		    if(velx > MAX_VEL_X) {
+		        velx = MAX_VEL_X;
 		    }
-		    if(velY > MAX_VEL_Y) {
-		        velY = MAX_VEL_Y;
+		    if(vely > MAX_VEL_Y) {
+		        vely = MAX_VEL_Y;
 		    }
-	        this.y += velY / 2; // update our y variable
-			this.x += velX / 2; // update our x variable
+	        this.y += vely / 2; // update our y variable
+			this.x += velx / 2; // update our x variable
 			
-			if(velX > 0) {
+			if(velx > 0) {
 			    this.x = Math.ceil(this.x);
 			} else {
 			    this.x = Math.floor(this.x);
 			}
 			
-			if(velY > 0) {
+			if(vely > 0) {
 			    this.y = Math.ceil(this.y);
 			} else {
 			    this.y = Math.floor(this.y);

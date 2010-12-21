@@ -14,11 +14,13 @@ package engine.actors.weapons{
 	    public var damage:Number = 1;
 	    public var lifeSpan:Number = 2000;
 	    public var isDead:Boolean = false;
-	    private var lifeTimer:Timer;
+	    protected var lifeTimer:Timer;
 	    
-        private var mySpeed = 1;
-	    private var vecx = 1;
-	    private var vecy = 1;
+        public var mySpeed = 1;
+	    public var vecx = 1;
+	    public var vecy = 1;
+	    public var velx = 1;
+	    public var vely = 1;
 		
         public function Projectile(owner) {
             super();
@@ -47,7 +49,7 @@ package engine.actors.weapons{
             animate();
 		}
 		
-		private function startLifeTimer() {
+		public function startLifeTimer() {
 		    lifeTimer = new Timer(lifeSpan,1);
             lifeTimer.addEventListener(TimerEvent.TIMER, this.killMe);
 			lifeTimer.start();
@@ -58,13 +60,12 @@ package engine.actors.weapons{
 		}
 		
 		public function killMe(e) {
+		    trace("killing me");
+		    HP = 0;
 		    isDead = true;
 		    lifeTimer.stop();
 		    lifeTimer.removeEventListener(TimerEvent.TIMER, this.killMe);
-		    myMap.removeFromMap(this);
 		}
-		
-		
 		
 		override public function notify(subject):void {
 		    if(subject is Enemy || subject is EnemyWalker) {
@@ -76,10 +77,12 @@ package engine.actors.weapons{
 		}
 		
 		override public function update():void {
-		    this.x += (mySpeed * vecx);
-			this.y += (mySpeed * vecy);
+		    velx = mySpeed * vecx;
+		    vely = mySpeed * vecy;
+		    this.x += velx;
+			this.y += vely;
 		    notifyObservers();
-			//animate();
+			animate();
 		}
 		
 	}//end class

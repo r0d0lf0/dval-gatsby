@@ -16,8 +16,8 @@ package engine.actors.weapons {
         private var throwDistance:int = 15;
         
         private var inertia:Number = 1.5; // amount of inertia to change velocity
-        public var velX:Number = 0;
-        public var velY:Number = 0;
+        public var velx:Number = 0;
+        public var vely:Number = 0;
 		private var scoreboard:Scoreboard = Scoreboard.getInstance();
 
 		private var successiveHits = 0;
@@ -77,16 +77,16 @@ package engine.actors.weapons {
 		        frameCount++;
 		    }
 		    
-		    this.y += velY / 2; // update our y variable
-            this.x += velX / 2; // update our x variable
+		    this.y += vely / 2; // update our y variable
+            this.x += velx / 2; // update our x variable
 			/*
-			if(velX > 0) {
+			if(velx > 0) {
 			    this.x = Math.ceil(this.x);
 			} else {
 			    this.x = Math.floor(this.x);
 			}
 			
-			if(velY > 0) {
+			if(vely > 0) {
 			    this.y = Math.ceil(this.y);
 			} else {
 			    this.y = Math.floor(this.y);

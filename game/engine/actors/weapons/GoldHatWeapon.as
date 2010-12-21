@@ -8,21 +8,20 @@ package engine.actors.weapons {
     import engine.actors.geoms.*;
     import flash.events.Event;
     import engine.actors.Animatable;
-	import flash.geom.Point;
     
-    public class HatWeapon extends Weapon implements IObserver {
+    public class GoldHatWeapon extends Weapon implements IObserver {
         
         private var returning:Boolean = false;
-        private var throwDistance:int = 15;
+        private var throwDistance:int = 30;
         
-        private var inertia:Number = 1.5; // amount of inertia to change velocity
+        private var inertia:Number = 2.5; // amount of inertia to change velocity
         public var velX:Number = 0;
         public var velY:Number = 0;
 		private var scoreboard:Scoreboard = Scoreboard.getInstance();
 
 		private var successiveHits = 0;
         
-        public function HatWeapon(owner) {
+        public function GoldHatWeapon(owner) {
             super(owner);
         }
 		
@@ -30,8 +29,8 @@ package engine.actors.weapons {
 		    
 		    damage = 1;
 		    
-		    myName = "HatWeapon";
-            mySkin = "HatWeaponSkin";
+		    myName = "GoldHatWeapon";
+            mySkin = "GoldHatWeaponSkin";
 		    
 		    tilesWide = 1;
     		tilesTall = 1;
@@ -56,10 +55,55 @@ package engine.actors.weapons {
 						successiveHits++;
 						scoreboard.setMultiplier(successiveHits);
 						subject.receiveDamage(this);
-						myMap.removeFromMap(this);
+			            if(!returning) {
+			                returning = true;
+			                velX = -velX;
+			            }
 					}
+		        } else if(subject is Hero && returning) {
+					successiveHits = 0;
+					scoreboard.setMultiplier(1);
+					myMap.removeFromMap(this);
 		        }
             }
+		}
+		
+		public function throwHat(goingLeft) {
+		    frameCount = 0;
+		    frameDelay = throwDistance;
+		    if(goingLeft) {
+    		    velX = -flySpeed;
+    		} else {
+    		    velX = flySpeed;
+    		}
+            velY = 0;
+    		returning = false;
+		}
+		
+		private function flyBack() {
+		    if(owner.x >= this.x) {
+		        velX += inertia;
+		    } else {
+		        velX -= inertia;
+		    }
+
+		    if(velX >= flySpeed) {
+		       velX = flySpeed; 
+		    } else if(velX <= -flySpeed) {
+		       velX = -flySpeed;
+		    }
+		    
+		    if(owner.y >= this.y) {
+		        velY += inertia;
+		    } else {
+		        velY -= inertia;
+		    }
+
+		    if(velY >= flySpeed) {
+		       velY = flySpeed; 
+		    } else if(velY <= -flySpeed) {
+		       velY = -flySpeed;
+		    }
 		}
 		
 		override public function update():void {
@@ -68,9 +112,9 @@ package engine.actors.weapons {
 		    if(frameCount >= frameDelay) {
 		        frameCount = 0;
 		        if(!returning) {
-		            myMap.removeFromMap(this);
+		            returning = true;
     		    } else {
-    		        myMap.removeFromMap(this);
+    		        flyBack();
     		    }
     		    frameDelay = 2;
 		    } else {

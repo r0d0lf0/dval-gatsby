@@ -13,8 +13,8 @@ package engine.actors.weapons {
         private var shootDistance:int = 100;
 		private var loopSet = false;
 		
-        private var velX:Number = 0;
-        private var velY:Number = 0;
+        private var velx:Number = 0;
+        private var vely:Number = 0;
 
 		private var vecX:Number = 1;
 		private var vecY:Number = 1;
@@ -48,10 +48,10 @@ package engine.actors.weapons {
             loopDir = 1; // loop forward (to the right) by default
             speed = 1; // how many frames should go by before we advance (maybe this should be animationSpeed)
 
-			//this.velX = laserSpeed * vecX;
-			//this.velY = laserSpeed * vecY;
-			this.velX = 0;
-			this.velY = laserSpeed; 
+			//this.velx = laserSpeed * vecX;
+			//this.vely = laserSpeed * vecY;
+			this.velx = 0;
+			this.vely = laserSpeed; 
 			animate();
 		}
 		
@@ -76,8 +76,8 @@ package engine.actors.weapons {
 		    } else {
 		        frameCount++;
 		    }
-		    this.x += velX;
-			this.y += velY;
+		    this.x += velx;
+			this.y += vely;
 		    notifyObservers();
 			animate();   
 		}

@@ -15,8 +15,8 @@ package engine.actors.weapons {
         private var throwDistance:int = 30;
         
         private var inertia:Number = 2.5; // amount of inertia to change velocity
-        public var velX:Number = 0;
-        public var velY:Number = 0;
+        public var velx:Number = 0;
+        public var vely:Number = 0;
 		private var scoreboard:Scoreboard = Scoreboard.getInstance();
 
 		private var successiveHits = 0;
@@ -57,7 +57,7 @@ package engine.actors.weapons {
 						subject.receiveDamage(this);
 			            if(!returning) {
 			                returning = true;
-			                velX = -velX;
+			                velx = -velx;
 			            }
 					}
 		        } else if(subject is Hero && returning) {
@@ -72,37 +72,37 @@ package engine.actors.weapons {
 		    frameCount = 0;
 		    frameDelay = throwDistance;
 		    if(goingLeft) {
-    		    velX = -flySpeed;
+    		    velx = -flySpeed;
     		} else {
-    		    velX = flySpeed;
+    		    velx = flySpeed;
     		}
-            velY = 0;
+            vely = 0;
     		returning = false;
 		}
 		
 		private function flyBack() {
 		    if(owner.x >= this.x) {
-		        velX += inertia;
+		        velx += inertia;
 		    } else {
-		        velX -= inertia;
+		        velx -= inertia;
 		    }
 
-		    if(velX >= flySpeed) {
-		       velX = flySpeed; 
-		    } else if(velX <= -flySpeed) {
-		       velX = -flySpeed;
+		    if(velx >= flySpeed) {
+		       velx = flySpeed; 
+		    } else if(velx <= -flySpeed) {
+		       velx = -flySpeed;
 		    }
 		    
 		    if(owner.y >= this.y) {
-		        velY += inertia;
+		        vely += inertia;
 		    } else {
-		        velY -= inertia;
+		        vely -= inertia;
 		    }
 
-		    if(velY >= flySpeed) {
-		       velY = flySpeed; 
-		    } else if(velY <= -flySpeed) {
-		       velY = -flySpeed;
+		    if(vely >= flySpeed) {
+		       vely = flySpeed; 
+		    } else if(vely <= -flySpeed) {
+		       vely = -flySpeed;
 		    }
 		}
 		
@@ -121,16 +121,16 @@ package engine.actors.weapons {
 		        frameCount++;
 		    }
 		    
-		    this.y += velY / 2; // update our y variable
-            this.x += velX / 2; // update our x variable
+		    this.y += vely / 2; // update our y variable
+            this.x += velx / 2; // update our x variable
 			/*
-			if(velX > 0) {
+			if(velx > 0) {
 			    this.x = Math.ceil(this.x);
 			} else {
 			    this.x = Math.floor(this.x);
 			}
 			
-			if(velY > 0) {
+			if(vely > 0) {
 			    this.y = Math.ceil(this.y);
 			} else {
 			    this.y = Math.floor(this.y);

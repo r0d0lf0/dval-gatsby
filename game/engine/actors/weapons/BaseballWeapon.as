@@ -10,8 +10,8 @@ package engine.actors.weapons {
     public class BaseballWeapon extends Weapon implements IObserver {
         
         private var throwDistance:int = 30;
-        private var velX:Number = 0;
-        private var velY:Number = 0;
+        private var velx:Number = 0;
+        private var vely:Number = 0;
         private const MAX_VEL_X = 5;
         
         public function BaseballWeapon(owner) {
@@ -41,9 +41,9 @@ package engine.actors.weapons {
             speed = 3; // how many frames should go by before we advance
 			flySpeed = 3;
     		if(goingLeft) {
-    		    velX = -flySpeed;
+    		    velx = -flySpeed;
     		} else {
-    		    velX = flySpeed;
+    		    velx = flySpeed;
     		}
 			animate();
 		}
@@ -69,10 +69,10 @@ package engine.actors.weapons {
 		    } else {
 		        frameCount++;
 		    }
-		    if(velX > MAX_VEL_X) {
-		        velX = MAX_VEL_X;
+		    if(velx > MAX_VEL_X) {
+		        velx = MAX_VEL_X;
 		    }
-		    this.x += velX;
+		    this.x += velx;
 		    notifyObservers();
 			animate();   
 		}

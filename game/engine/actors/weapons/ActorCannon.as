@@ -15,9 +15,13 @@ package engine.actors.weapons {
         private var owner;
         protected var ammoType:String = "Projectile";
         public var shotsArray = new Array();
-        public var shotsMax = 20;
+        public var shotsMax = 1;
         public var shotAvailable = true;
-        public var shotDelay = 1000;
+        public var shotDelay = 100;
+        
+        public var vecx = 1;
+        public var vecy = 0;
+        
         private var shotTimer:Timer;
         
         public function ActorCannon() {
@@ -28,7 +32,7 @@ package engine.actors.weapons {
         
         public function shotReset(e) {
             shotAvailable = true;
-        }
+        }        
         
         public function fire() {
             if(shotsArray.length < shotsMax && shotAvailable) {
@@ -43,23 +47,29 @@ package engine.actors.weapons {
         }
         
         private function getProjectile() {
-            return new Projectile(this);
+            var tempProjectile = new HatProjectile(this);
+            tempProjectile.vecx = vecx;
+            tempProjectile.vecy = vecy;
+            tempProjectile.lifeSpan = 300;
+            return tempProjectile;
         }
         
-        private function cleanupAmmo() {
+        protected function cleanupAmmo() {
             for(var i = 0; i < shotsArray.length; i++) {
-                if(shotsArray[i].isDead()) {
+                if(shotsArray[i].isDead) {
                     myMap.removeFromMap(shotsArray[i])
                     removeAmmo(shotsArray[i]);
                 }
             }
         }
         
-        private function removeAmmo(ammo) {
-		    for (var i:int=0; i<shotsArray.length; i++) {
-                if(shotsArray[i] == ammo) {
-                    shotsArray.splice (i,1);
-                    break;
+        protected function removeAmmo(ammo) {
+            if(shotsArray.length > 0) {
+                for (var i:int=0; i<shotsArray.length; i++) {
+                    if(shotsArray[i] == ammo) {
+                        shotsArray.splice (i,1);
+                        break;
+                    }
                 }
             }
         }
@@ -72,7 +82,7 @@ package engine.actors.weapons {
 		}
         
         override public function update():void {
-
+            cleanupAmmo();
         }
         
         

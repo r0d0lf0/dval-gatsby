@@ -176,7 +176,7 @@ package engine.actors.enemies {
 			    HP -= attacker.damage;
 	            if(HP <= 0) {
 	                HP = 0;
-	                if(attacker.velX > 0) {
+	                if(attacker.velx > 0) {
 	                    this.velx = 1;
 	                } else {
 	                    this.velx = -1;

@@ -122,7 +122,7 @@
                                 currentScreen.y += scoreboardDisplay.height; // move the screen down so that it doesn't cover the scoreboard
     		                    return true; // and return true
     		                } else if(!scoringComplete){ // otherwise, we've completed the final map but we're not do
-    		                    currentMapIndex--;
+    		                    scoreboard.setCurrentMap(currentMapIndex - 1);
     		                    switch(scoringStatus) {
     		                        case 0:
     		                            stopMusic(); // stop the music
@@ -131,6 +131,7 @@
     		                            musicChannel = success_music.play(0); // and play that noise
     		                            musicChannel.addEventListener(Event.SOUND_COMPLETE, this.soundComplete); // let us know when you're done
             		                    scoringStatus = 1;
+            		                    
             		                    break;
             		                case 1:
             		                    break; // this is advanced by the sound finishing

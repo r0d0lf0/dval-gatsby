@@ -16,7 +16,7 @@ package engine.actors.enemies {
     		myName = "EnemyBlacksox"; // the generic name of our enemy
             mySkin = "BlacksoxSkin"; // the name of the skin for this enemy
     		
-			walkSpeed = 2;
+			walkSpeed = 3;
 			velx = walkSpeed;
 
     		startFrame = 0; // the first frame to loop on

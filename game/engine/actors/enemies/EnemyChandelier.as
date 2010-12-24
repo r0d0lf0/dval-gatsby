@@ -2,7 +2,7 @@ package engine.actors.enemies {
     
     import engine.actors.enemies.Enemy;
 	import engine.actors.player.Hero;
-	import engine.actors.weapons.HatWeapon;
+	import engine.actors.weapons.HatProjectile;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
     
@@ -19,15 +19,15 @@ package engine.actors.enemies {
 			myName = "EnemyChandelier"; // the generic name of our enemy
 	        mySkin = "ChandelierSkin"; // the name of the skin for this enemy
 	        
-	        collide_left = 0; // what pixel do we collide on on the left
-    		collide_right = 64; // what pixel do we collide on on the right
+	        collide_left = 14; // what pixel do we collide on on the left
+    		collide_right = 50; // what pixel do we collide on on the right
 	        
-	        points = 100;
+	        points = 250;
 
 			damage = 1;
 		    startFrame = 0; // the first frame to loop on
-	        endFrame = 1; // the final frame in the row
-	        nowFrame = 1; // current frame in row
+	        endFrame = 2; // the final frame in the row
+	        nowFrame = 0; // current frame in row
 	        loopFrame = 0; // frame at which to loop
 	        loopType = 0; // 0 loops, 1 bounces
 	        loopRow = 0; // which row are we on
@@ -55,7 +55,7 @@ package engine.actors.enemies {
 					var soundChannel = chandelierSound.play(0);
 				}
 			}
-			if(subject is HatWeapon) { // if it's the hero's weapon
+			if(subject is HatProjectile) { // if it's the hero's weapon
 			    if(checkCollision(subject)) {
     	            hitDirection = subject.goingLeft; // and determine the direction from whence you were hit
 			    }
@@ -68,6 +68,7 @@ package engine.actors.enemies {
 			    notifyObservers();
 			    checkDeath();
 			}
+			animate();
 		}
 	
     }

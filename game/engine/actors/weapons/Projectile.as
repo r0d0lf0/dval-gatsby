@@ -25,6 +25,7 @@ package engine.actors.weapons{
         public function Projectile(owner) {
             super();
             this.owner = owner;
+
         }
         
 		override public function setup() {    

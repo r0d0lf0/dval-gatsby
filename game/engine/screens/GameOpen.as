@@ -37,6 +37,8 @@ package engine.screens{
 		private var titleArray = new Array();
 		private var titleCounter = 0;
 		
+		private var green_light;
+		
 		private var interlaceCounter = 0;
 				
 		private var actionCounter = 0;
@@ -68,6 +70,8 @@ package engine.screens{
 			// get everything we need from the library
 			background_coney = getMovieFromLibrary("background_coney");
 			
+			green_light = getMovieFromLibrary("GreenLight");
+			
 			eyesArray.push(getMovieFromLibrary("eyes_half"));
 			eyesArray.push(getMovieFromLibrary("eyes_full"));
 			
@@ -86,6 +90,11 @@ package engine.screens{
 			// setup our coney background
 			background_coney.y = 147;
 			this.addChild(background_coney);
+			
+			// setup our green light
+			green_light.x = 168;
+			green_light.y = 106;
+			background_coney.addChild(green_light);
 			
 			//  grab our keyboard
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler); // and subscribe him to the keyboard
@@ -137,7 +146,7 @@ package engine.screens{
 	
 		private function startMusic() {
 		    music = new gold_hat();  // create an instance of the music
-		    musicChannel = music.play(0, 100);  // play it, looping 100 times
+		    musicChannel = music.play(0);  // play it, looping 100 times
 //		    myTransform = new SoundTransform(.35, 0);
 //		    musicChannel.soundTransform = myTransform;
 		}
@@ -150,6 +159,7 @@ package engine.screens{
 	    
 	    override public function update(evt = null):Boolean{
 	        if(activeFlag) {
+	            green_light.update();
 	            interlaceCounter++;
     			var myTimer = new Timer(2000,1);
 

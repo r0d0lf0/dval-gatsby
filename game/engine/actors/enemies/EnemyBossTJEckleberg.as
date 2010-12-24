@@ -48,7 +48,7 @@ package engine.actors.enemies {
 		protected var myHero = null;
 		
 		protected var maxVel = 4; // fastest we're allowed to go by the universe
-		protected var INERTIA = .25; // the fastest we're allowed to increase in velocity per frame
+		protected var INERTIA = .17; // the fastest we're allowed to increase in velocity per frame
 		
 		protected var currentAction = FLYING;
 		protected var deathRow = 4;		
@@ -331,8 +331,8 @@ package engine.actors.enemies {
 				
 				if(HP <= 1) {
 				    setLoop(currentRow, 1, 1, 1, 0, 5);
-				    maxVel = 7;
-				    INERTIA = .3;
+				    maxVel = 5;
+				    INERTIA = .2;
 				}
 		    }
 		    animate();

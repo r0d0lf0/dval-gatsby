@@ -53,6 +53,7 @@ package engine.screens{
 	    private var gatsbyMove = false;
 	    
 	    public var movieOver = false;
+	    private var keyboardAdded = false;
 	    
 	    
 	    public function CutScene2() {
@@ -69,11 +70,13 @@ package engine.screens{
 		    if(evt.keyCode == Keyboard.SHIFT && BUTTON_SHIFT == false) { // if someone's hitting enter anew
                 killFlag = true;
                 BUTTON_SHIFT = true;
+                movieOver = true;
 		    }
 		}
 	
 		public function startLoad()
 		{
+		    
             green_background = new Bitmap(new cutscene2_background(0, 0));
             green_background.x = 68;
             green_background.y = 70;
@@ -115,6 +118,12 @@ package engine.screens{
 	
 	    override public function update(evt = null):Boolean{
 	        my_counter++;
+	        
+	        if(!keyboardAdded) {
+	            stage.addEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler); // and subscribe him to the keyboard
+    	        stage.addEventListener(KeyboardEvent.KEY_UP, this.keyUpHandler); // in both its forms
+    	        keyboardAdded = true;
+	        }
 	        
 	        if(Math.floor(my_counter / 5) >= 1) {
 	            if(green_background.y > -40) {
@@ -173,6 +182,7 @@ package engine.screens{
 	        }
 	        
 	        if(movieOver) {
+	            SoundMixer.stopAll();
 	            updateStatus(COMPLETE);
 	            return false;
 	        } else {

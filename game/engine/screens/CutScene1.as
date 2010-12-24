@@ -68,26 +68,30 @@ package engine.screens{
 	
 	    
 	    override public function update(evt = null):Boolean{
-			my_counter++;
-			if(killFlag) {
-			    updateStatus(COMPLETE);
-			    stage.removeEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler); // and subscribe him to the keyboard
-    	        stage.removeEventListener(KeyboardEvent.KEY_UP, this.keyUpHandler); // in both its forms
-                childMovie.stop();
-			    SoundMixer.stopAll();
-			    stage.frameRate = 60;
-			    return false;
-			} else if(childMovie.currentFrame >= total_frames && movieLoaded) {
-				updateStatus(COMPLETE);
-				stage.removeEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler); // and subscribe him to the keyboard
-    	        stage.removeEventListener(KeyboardEvent.KEY_UP, this.keyUpHandler); // in both its forms
-				childMovie.stop();
-			    SoundMixer.stopAll();
-			    stage.frameRate = 60;
-				return false;
-			} else {
-				return true;				
-            }
+	        if(stage.frameRate == 30) {
+	            my_counter++;
+    			if(killFlag) {
+    			    updateStatus(COMPLETE);
+    			    stage.removeEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler); // and subscribe him to the keyboard
+        	        stage.removeEventListener(KeyboardEvent.KEY_UP, this.keyUpHandler); // in both its forms
+                    childMovie.stop();
+    			    SoundMixer.stopAll();
+    			    stage.frameRate = 60;
+    			    return false;
+    			} else if(childMovie.currentFrame >= total_frames && movieLoaded) {
+    				updateStatus(COMPLETE);
+    				stage.removeEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler); // and subscribe him to the keyboard
+        	        stage.removeEventListener(KeyboardEvent.KEY_UP, this.keyUpHandler); // in both its forms
+    				childMovie.stop();
+    			    SoundMixer.stopAll();
+    			    stage.frameRate = 60;
+    				return false;
+    			} else {
+    				return true;				
+                }
+	        } else {
+	            return true;
+	        }
         }
         
     }

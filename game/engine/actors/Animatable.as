@@ -99,7 +99,7 @@
 			//adjust bitmap positio in sprite
 			display = new Bitmap(displayData);
 			if(!skinSetFlag) {
-			    this.y -= tilesTall * 16;
+			    this.y -= tilesTall * tile;
 			}
 			//plop it on stage for all to see
 			this.addChild(display);

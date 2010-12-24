@@ -5,7 +5,7 @@ package engine.actors.weapons {
 	import engine.Scoreboard;
     import engine.actors.player.Hero;
 	import flash.utils.getDefinitionByName;
-	import engine.actors.weapons.Projectile;
+	import engine.actors.weapons.*;
 	
 	import flash.utils.Timer;
     import flash.events.TimerEvent;
@@ -17,7 +17,7 @@ package engine.actors.weapons {
         public var shotsArray = new Array();
         public var shotsMax = 1;
         public var shotAvailable = true;
-        public var shotDelay = 100;
+        public var shotDelay = 200;
         
         public var vecx = 1;
         public var vecy = 0;
@@ -36,7 +36,6 @@ package engine.actors.weapons {
         
         public function fire() {
             if(shotsArray.length < shotsMax && shotAvailable) {
-                trace("fire!");
                 var newProjectile = getProjectile();
                 shotsArray.push(newProjectile);
                 myMap.spawnActor(newProjectile, this.x, this.y);
@@ -47,11 +46,26 @@ package engine.actors.weapons {
         }
         
         private function getProjectile() {
-            var tempProjectile = new HatProjectile(this);
+            var tempProjectile;
+            switch(ammoType) {
+                case "HatProjectile":
+                    tempProjectile = new HatProjectile(this);
+                    break;
+                case "GoldHatProjectile":
+                    tempProjectile = new GoldHatProjectile(this);
+                    break;
+                default:
+                    tempProjectile = new Projectile(this);
+                    break;
+            }
             tempProjectile.vecx = vecx;
             tempProjectile.vecy = vecy;
             tempProjectile.lifeSpan = 300;
             return tempProjectile;
+        }
+        
+        public function setOwner(owner) {
+            this.owner = owner;
         }
         
         protected function cleanupAmmo() {
@@ -61,6 +75,10 @@ package engine.actors.weapons {
                     removeAmmo(shotsArray[i]);
                 }
             }
+        }
+        
+        public function setAmmoType(ammoType:String) {
+            this.ammoType = ammoType;
         }
         
         protected function removeAmmo(ammo) {
@@ -83,6 +101,14 @@ package engine.actors.weapons {
         
         override public function update():void {
             cleanupAmmo();
+            if(owner != null) {
+                if(owner.goingLeft) {
+                    vecx = -1;
+                } else {
+                    vecx = 1;
+                }
+            }
+            
         }
         
         

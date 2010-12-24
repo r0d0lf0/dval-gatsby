@@ -16,7 +16,7 @@ package engine.actors.weapons{
 	    public var isDead:Boolean = false;
 	    protected var lifeTimer:Timer;
 	    
-        public var mySpeed = 1;
+        public var mySpeed = 4;
 	    public var vecx = 1;
 	    public var vecy = 1;
 	    public var velx = 1;
@@ -60,7 +60,6 @@ package engine.actors.weapons{
 		}
 		
 		public function killMe(e) {
-		    trace("killing me");
 		    HP = 0;
 		    isDead = true;
 		    lifeTimer.stop();
@@ -76,7 +75,12 @@ package engine.actors.weapons{
 		    }
 		}
 		
+		public function moveMe() {
+		    // this will get overwritten later, if necessary
+		}
+		
 		override public function update():void {
+		    moveMe();
 		    velx = mySpeed * vecx;
 		    vely = mySpeed * vecy;
 		    this.x += velx;

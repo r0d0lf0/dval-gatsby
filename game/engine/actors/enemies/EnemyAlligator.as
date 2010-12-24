@@ -2,7 +2,9 @@ package engine.actors.enemies {
     
     import engine.actors.enemies.Enemy;
 	import engine.actors.player.Hero;
-    
+    import flash.media.Sound;
+	import flash.media.SoundChannel;
+	
     public class EnemyAlligator extends Enemy {
 	
 		protected var jumping:Boolean = false;
@@ -10,8 +12,11 @@ package engine.actors.enemies {
 		protected var vely = 0;
 		protected var gravity:Number = .25;  //how much the velocity changes on each frameEvent
 		
-		protected const jumpDelay = 120;
+		protected const jumpDelay = 60;
 		protected var actionCounter = 0;
+		protected var splash_sound;
+		protected var effectsChannel;
+		protected var soundPlayed = false;
 
 		override public function setup() {
 			myName = "EnemyAlligator"; // the generic name of our enemy
@@ -36,6 +41,7 @@ package engine.actors.enemies {
 	        tilesWide = 1;
 		    tilesTall = 3;
 			this.y = 240; // put us just below the water line
+			splash_sound = new sewer_splash_sound();
 		}
 		
 		private function applyPhysics() {
@@ -55,6 +61,11 @@ package engine.actors.enemies {
 		override public function update():void {
 			animate();
 			if(jumping) { // if we're jumping
+			    if(!soundPlayed) {
+			        effectsChannel = splash_sound.play(0);
+			        soundPlayed = true;
+			    }
+			    
 				applyPhysics(); // apply physics
 				this.y += vely / 2; // and move us
 				if(this.y > 240) { // if we're below the screen
@@ -65,6 +76,7 @@ package engine.actors.enemies {
 			} else { // if we're not jumping
 				actionCounter++; // increment our frame counter
 				if(actionCounter >= jumpDelay) { // if we've waiting long enough
+				    soundPlayed = false;
 					jump(); // then jump
 					actionCounter = 0; // and reset our frameCounter
 				}

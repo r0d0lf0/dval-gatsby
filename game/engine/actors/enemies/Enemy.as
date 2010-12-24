@@ -3,7 +3,7 @@ package engine.actors.enemies {
     import engine.actors.Animatable;
     import flash.events.Event;
     import engine.actors.player.Hero;
-    import engine.actors.weapons.HatWeapon;
+    import engine.actors.weapons.HatProjectile;
     import engine.Scoreboard;
     
     public class Enemy extends Animatable {
@@ -58,7 +58,7 @@ package engine.actors.enemies {
 
 		override public function notify(subject):void {
 		    if(checkCollision(subject) && !deadFlag) { // If i'm colliding with something, and I'm alive...
-		        if(subject is HatWeapon) { // if it's the hero's weapon
+		        if(subject is HatProjectile) { // if it's the hero's weapon
 		            hitDirection = subject.goingLeft; // and determine the direction from whence you were hit
 		        }
             }

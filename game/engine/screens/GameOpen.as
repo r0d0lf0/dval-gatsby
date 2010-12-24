@@ -7,7 +7,7 @@ package engine.screens{
 	import engine.Screen; 
 	import flash.utils.getDefinitionByName;
 	import engine.IKeyboard;
-	import flash.ui.Keyboard;
+	import flash.ui.Keyboard;;
 
 	import flash.media.Sound;
 	import flash.media.SoundChannel;

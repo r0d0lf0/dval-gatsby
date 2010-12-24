@@ -14,6 +14,7 @@ package engine {
         public static var score:int = 0;
         public static var lives:int = 3;
         public static var heroHP:int = 3;
+        public static var heroPowerupMode = "Default";
         public static var bossHP:int = 5;
         public static var coins:int = 0;
         public static var currentLevel:int = 0;
@@ -39,6 +40,14 @@ package engine {
         
         public function startTimer() {
 			timerTimer.start();
+        }
+        
+        public function setHeroPowerupMode(newMode) {
+            heroPowerupMode = newMode;
+        }
+        
+        public function getHeroPowerupMode() {
+            return heroPowerupMode;
         }
         
         public function stopTimer() {

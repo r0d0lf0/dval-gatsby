@@ -55,11 +55,12 @@
         public var nowFrame = 0; // current frame in row
         public var loopFrame = 0; // frame at which to loop
         public var loopType = 1; // 0 loops, 1 bounces
+        public var loopRowOffset = 0; // this is good i hope
         public var loopRow = 0; // which row are we on
         public var loopDir = 1; // loop forward (to the right) by default
         public var speed = 10; // how many frames should go by before we advance
         protected var frameCounter = 0;
-        
+        private var skinSetFlag = false;
     
 		public function Animatable():void{
             // nothing to see here
@@ -97,9 +98,12 @@
 			}
 			//adjust bitmap positio in sprite
 			display = new Bitmap(displayData);
+			if(!skinSetFlag) {
+			    this.y -= tilesTall * 16;
+			}
 			//plop it on stage for all to see
 			this.addChild(display);
-		    this.y -= this.height;
+			skinSetFlag = true;
 		}
 		
 		//status is which anim we are playing
@@ -129,7 +133,7 @@
 		}
 		
 		private function getCurrentFrame() {
-		    return getRectangle(loopRow + goingLeft, nowFrame);
+		    return getRectangle((loopRow + loopRowOffset) + goingLeft, nowFrame);
 		}
 		
 		public function getRectangle(row, frame) {

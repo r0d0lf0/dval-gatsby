@@ -19,7 +19,7 @@ package engine.actors.enemies {
 		
 		protected var actionCounter:Number = 0; // holder var for how many frames go by between actions
 		protected const walkDuration = 60; // how long we spend walking
-		protected var shootDelay = 180; // how long we wait between bullets
+		protected var shootDelay = 120; // how long we wait between bullets
 		protected const baseballsMax = 1; // how many bullets we're allowed to fire
 		protected var baseballCounter:Number = 0; // how many bullets have we fired 
 		

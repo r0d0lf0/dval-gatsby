@@ -30,6 +30,8 @@ package engine {
 		private static const extraLivesCoins = 100;
 		
 		private static var Hero, Boss;
+		private static var get_gold_hat = new get_gold_hat_sound();
+		private static var lose_gold_hat = new lose_gold_hat_sound();
 
         
         public function Scoreboard(pvt:PrivateClass) {
@@ -43,7 +45,13 @@ package engine {
         }
         
         public function setHeroPowerupMode(newMode) {
-            heroPowerupMode = newMode;
+            if(newMode != heroPowerupMode) {
+                heroPowerupMode = newMode;
+                if(newMode == "Default") {
+                    effectsChannel = lose_gold_hat.play(0);
+                }
+            }
+            
         }
         
         public function getHeroPowerupMode() {

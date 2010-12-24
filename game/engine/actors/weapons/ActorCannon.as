@@ -31,12 +31,13 @@ package engine.actors.weapons {
         }
         
         public function shotReset(e) {
-            shotAvailable = true;
+            //shotAvailable = true;
         }        
         
         public function fire() {
             if(shotsArray.length < shotsMax && shotAvailable) {
                 var newProjectile = getProjectile();
+                newProjectile.setOwner(this);
                 shotsArray.push(newProjectile);
                 myMap.spawnActor(newProjectile, this.x, this.y);
                 shotAvailable = false;
@@ -53,6 +54,9 @@ package engine.actors.weapons {
                     break;
                 case "GoldHatProjectile":
                     tempProjectile = new GoldHatProjectile(this);
+                    break;
+                case "Trash":
+                    tempProjectile = new TrashProjectile(this);
                     break;
                 default:
                     tempProjectile = new Projectile(this);
@@ -71,6 +75,7 @@ package engine.actors.weapons {
         protected function cleanupAmmo() {
             for(var i = 0; i < shotsArray.length; i++) {
                 if(shotsArray[i].isDead) {
+                    shotAvailable = true;
                     myMap.removeFromMap(shotsArray[i])
                     removeAmmo(shotsArray[i]);
                 }
@@ -93,7 +98,7 @@ package engine.actors.weapons {
         }
         
         override public function notify(subject:*):void {
-		    if(subject is Hero) {
+		    if(subject == owner) {
 		        this.x = subject.x;
 		        this.y = subject.y;
 		    }
@@ -101,7 +106,7 @@ package engine.actors.weapons {
         
         override public function update():void {
             cleanupAmmo();
-            if(owner != null) {
+            if(owner != null && vecx != 0) {
                 if(owner.goingLeft) {
                     vecx = -1;
                 } else {

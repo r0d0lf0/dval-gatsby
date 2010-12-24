@@ -44,6 +44,9 @@
 					case 'CutScene1':
 						return new CutScene1();
 						break;
+					case 'CutScene2':
+					    return new CutScene2();
+					    break;
 					case 'CutScene3':
 					    return new CutScene3();
 					    break;

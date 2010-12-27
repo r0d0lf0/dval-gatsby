@@ -88,7 +88,12 @@
 			aBytes = animData.getPixels(aCopy);
 			//reset array pointer (necessary so we can read array from beginning)
 			aBytes.position = 0;
-			displayData.setPixels(aPaste,aBytes);
+			try {
+			    displayData.setPixels(aPaste,aBytes);
+			} catch(error:Error) {
+			    trace("some sort of problem drawing a sprite");
+			}
+			
 			if(display != null) {
 			    try {
     			    removeChild(display);

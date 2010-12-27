@@ -1,9 +1,10 @@
 ﻿package engine{
 	
 	import flash.display.MovieClip;
-	import controls.KeyMap;
 	import flash.events.*;
 	import flash.events.Event;
+	import flash.ui.Keyboard;
+	import flash.events.KeyboardEvent;
 	import engine.screens.*;
 	import engine.Screen;
 	import engine.ScoreboardDisplay;
@@ -11,6 +12,7 @@
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
 	import flash.media.SoundTransform;
+	import controls.KeyMap;
 	
 	import flash.utils.Timer;
     import flash.events.TimerEvent;
@@ -30,18 +32,20 @@
 		
 		protected var scoreboardDisplay:ScoreboardDisplay;
 		protected var scoreboard:Scoreboard;
-	    
-	    protected var myKeys:KeyMap = KeyMap.getInstance();
-		
+
 		protected var music;
 	    protected var bossMusic;
 	    protected var musicChannel:SoundChannel;
 	    protected var myTransform:SoundTransform;
+	    
+	    protected var BUTTON_ENTER = false;
 		
 		protected var scoringComplete = false;
 		protected var scoringStatus = 0;
 		
 		protected var timeConversionStarted = false;
+		
+		protected var pausePoint;
 		
  		public function Level():void{
  		    music = new music_level1();  // create an instance of the music
@@ -54,13 +58,27 @@
 		
 		private function initBuild(evt:Event):void{
 		    removeEventListener(Event.ADDED_TO_STAGE, initBuild);
+		    addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+		    addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
 			buildLevel();
+		}
+		
+		public function keyDownHandler(evt):void {
+		    // here's where we handle keyboard changes
+		    if(evt.keyCode == Keyboard.ENTER) {
+		        BUTTON_ENTER = true;
+		    }
+		}
+		
+		public function keyUpHandler(evt):void {
+		    // here's where we handle keyboard changes
+		    if(evt.keyCode == Keyboard.ENTER) {
+                BUTTON_ENTER = false;
+		    }
 		}
 		
 		protected function startMusic() {
 		    musicChannel = music.play(0, 100);  // play it, looping 100 times
-		    myTransform = new SoundTransform(.35, 0);
-		    musicChannel.soundTransform = myTransform;
 		}
 		
 		protected function stopMusic() {
@@ -92,12 +110,26 @@
 			
 		}
 		
-		private function loadScreen(screen:MovieClip) {
-		    myKeys.addSubscriber(screen);
-		    this.addChild(screen);
+		public function pauseGame() {
+		    pausedFlag = true;
+		    pausePoint = musicChannel.position;
+		    musicChannel.stop;
+		}
+		
+		public function unPauseGame() {
+		    pausedFlag = false;
+		    musicChannel = music.play(pausePoint, 100);
 		}
 		
 		override public function update(evt = null):Boolean {
+		    if(BUTTON_ENTER) {
+		        if(pausedFlag) {
+		            unPauseGame();
+		        } else {
+		            pauseGame();
+		        }
+		        BUTTON_ENTER = false;
+		    }
 		    if(!pausedFlag) {
 		        if(!currentScreen.update()) { // update the current screen to see if it's finished
     		        switch(currentScreen.getStatus()) {
@@ -122,7 +154,7 @@
                                 currentScreen.y += scoreboardDisplay.height; // move the screen down so that it doesn't cover the scoreboard
     		                    return true; // and return true
     		                } else if(!scoringComplete){ // otherwise, we've completed the final map but we're not do
-    		                    scoreboard.setCurrentMap(currentMapIndex - 1);
+    		                    scoreboard.setCurrentMap(mapList.length);
     		                    switch(scoringStatus) {
     		                        case 0:
     		                            stopMusic(); // stop the music
@@ -131,7 +163,6 @@
     		                            musicChannel = success_music.play(0); // and play that noise
     		                            musicChannel.addEventListener(Event.SOUND_COMPLETE, this.soundComplete); // let us know when you're done
             		                    scoringStatus = 1;
-            		                    
             		                    break;
             		                case 1:
             		                    break; // this is advanced by the sound finishing

@@ -32,7 +32,7 @@ package engine.actors {
 		protected var attackFlag:Boolean = false;
 		protected var duckFlag:Boolean = false;
 		protected var standFlag:Boolean = false;
-		protected var stuckTo = false; // what surface are we currently stuck to
+		public var stuckTo = false; // what surface are we currently stuck to
 		protected var hitDirection:String; // what direction were we hit from
 		
 		protected var frameStarted:Boolean = false;
@@ -206,6 +206,10 @@ package engine.actors {
 			}
 		}
 		
+		protected function customUpdate() {
+		    // this will get overwritten later
+		}
+		
 		public function moveMe():void {
 		    if(frameCount >= frameDelay) { 
     			frameStarted = true;
@@ -236,6 +240,7 @@ package engine.actors {
 		        frameCount++;
 		    }
 		    animate();
+		    customUpdate();
 		}
 	    
 	    public function setAction(myAction) {

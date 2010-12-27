@@ -6,6 +6,8 @@ package engine.actors.enemies {
     import engine.actors.geoms.*;
     
     public class EnemyConductor extends EnemyWalker {
+        
+        private var myHero;
 		
 		override public function setup() {
 		    collide_left = 10; // what pixel do we collide on on the left
@@ -25,6 +27,28 @@ package engine.actors.enemies {
             loopDir = 1; // loop forward (to the right) by default
             speed = 10; // 5 replaced // how many frames should go by before we advance            
 		}
+        
+        override protected function customUpdate() {
+            if(myHero == null || myHero == false) {
+                myHero = myMap.getHero();
+            } else {
+                if(myHero.stuckTo == this.stuckTo) {
+                    trace("hello!");
+                    if(velx > 0) {
+                        velx = 6;
+                    } else {
+                        velx = -6;
+                    }
+                } else {
+                    trace("goodbye!");
+                    if(velx > 0) {
+                        velx = 1;
+                    } else {
+                        velx = -1;
+                    }
+                }
+            }
+        }
         
     }
     

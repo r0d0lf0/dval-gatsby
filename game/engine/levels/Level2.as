@@ -33,7 +33,7 @@
 		override protected function getMap(mapIndex) {
 		    switch(mapIndex) {
 		        case 1:
-		            return new level2_map2();
+		            return new level2_map1();
 		        case 2:
 		            stopMusic();
 				    bossMusic = new boss_music2();

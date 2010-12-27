@@ -18,6 +18,7 @@ package engine.actors {
     public class DialogBox extends Actor implements IKeyboard {
         
         public var BUTTON_SHIFT = false;
+        public var BUTTON_SPACE = false;
         
         private var messageArray = new Array();
         private var letterDelay = 0;
@@ -80,32 +81,37 @@ package engine.actors {
         }
         
         public function keyUpHandler(evt):void {
-		    if(evt.keyCode == Keyboard.SHIFT) {
+		    if(evt.keyCode == Keyboard.SHIFT || evt.keyCode == Keyboard.SPACE) {
 		        BUTTON_SHIFT = false;
 		    }
 		}
 		
 		public function keyDownHandler(evt):void {
-		    if(evt.keyCode == Keyboard.SHIFT && BUTTON_SHIFT == false) { // if someone's hitting enter anew
+		    if(evt.keyCode == Keyboard.SHIFT || evt.keyCode == Keyboard.SPACE) { // if someone's hitting enter anew
 		        BUTTON_SHIFT = true; // mark our holder as pressed
-		        if(typingFlag) { // if we're typing and arent' at teh end yet
-		            textCounter = messageArray[currentMessage].length; // jump to the end of the message
-		        } else if(currentMessage < (messageArray.length - 1)) { // otherwise, if there are more messages
-		            currentMessage++; // get the next message
-		            typeText(); // and start typing
-		        } else { // if we're not typing, and we're at the last message
-		            if(exitFunction == CONTINUE) {
-		                myMap.unPauseMap(this); // unpause the game
-		            } else if(exitFunction == EXIT) {
-		                myMap.unPauseMap(this);
-		                myMap.updateStatus(COMPLETE);
-		            } 
-		        }
 		    }
 		}
         
         // this should get the enterFrame tick like everything else
-        override public function update():void {
+        override public function update():void {            
+		    if(BUTTON_SHIFT) {
+		        if(typingFlag) { // if we're typing and arent' at teh end yet
+    	            textCounter = messageArray[currentMessage].length; // jump to the end of the message
+    	        } else if(currentMessage < (messageArray.length - 1)) { // otherwise, if there are more messages
+    	            currentMessage++; // get the next message
+    	            typeText(); // and start typing
+    	        } else { // if we're not typing, and we're at the last message
+    	            if(exitFunction == CONTINUE) {
+    	                myMap.unPauseMap(this); // unpause the game
+    	            } else if(exitFunction == EXIT) {
+    	                myMap.unPauseMap(this);
+    	                myMap.updateStatus(COMPLETE);
+    	            } 
+    	        }
+    	        BUTTON_SHIFT = false;
+		    }
+
+            
             if(typingFlag) { // if we're typing
                 if(frameCounter >= letterDelay) { // and we're on the right frame
                     if(textArea.text.length < messageArray[currentMessage].length) { // and we have typed less than the length of our message

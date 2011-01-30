@@ -69,7 +69,7 @@
 		    setup();
 			this.addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
 		}
-		
+	
 		public function getStatus() {
 			return myStatus;
 		}
@@ -81,6 +81,7 @@
 		//clean up and free resources
 		public function onRemove(evt:Event):void{
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+			onStage = false;
 		}
 		
 		public function getHP() {

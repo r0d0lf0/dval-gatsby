@@ -13,7 +13,7 @@ package engine.actors.weapons {
     public class ActorCannon extends Actor implements IObserver {
         
         private var owner;
-        protected var ammoType:String = "Projectile";
+        protected var ammoType:String = "HatProjectile";
         public var shotsArray = new Array();
         public var shotsMax = 1;
         public var shotAvailable = true;
@@ -35,7 +35,7 @@ package engine.actors.weapons {
         }     
         
         public function fire() {
-            if(shotsArray.length < shotsMax && shotAvailable) {
+            if(shotsArray.length < shotsMax && shotAvailable && onStage == true && myMap != null) {
                 var newProjectile = getProjectile();
                 newProjectile.setOwner(this);
                 shotsArray.push(newProjectile);

@@ -9,14 +9,14 @@ package engine.actors.weapons {
     
     public class BaseballWeapon extends Weapon implements IObserver {
         
-        private var throwDistance:int = 30;
+        private var throwDistance:int = 60;
         private var velx:Number = 0;
         private var vely:Number = 0;
         private const MAX_VEL_X = 5;
         
         public function BaseballWeapon(owner) {
             super(owner);
-			goingLeft = owner.goingLeft;
+	    goingLeft = owner.goingLeft;
         }
         
 		override public function setup() {

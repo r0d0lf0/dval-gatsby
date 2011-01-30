@@ -12,7 +12,8 @@
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
 	import flash.media.SoundTransform;
-	import controls.KeyMap;
+	
+
 	
 	import flash.utils.Timer;
     import flash.events.TimerEvent;
@@ -51,15 +52,15 @@
  		    music = new music_level1();  // create an instance of the music
 			if(stage){
 				buildLevel();
-			}else{
+			} else {
 				addEventListener(Event.ADDED_TO_STAGE, initBuild);
 			}
 		}
 		
 		private function initBuild(evt:Event):void{
 		    removeEventListener(Event.ADDED_TO_STAGE, initBuild);
-		    addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-		    addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+		    addEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler);
+		    addEventListener(KeyboardEvent.KEY_UP, this.keyUpHandler);
 			buildLevel();
 		}
 		
@@ -67,6 +68,7 @@
 		    // here's where we handle keyboard changes
 		    if(evt.keyCode == Keyboard.ENTER) {
 		        BUTTON_ENTER = true;
+		        trace("pressed!");
 		    }
 		}
 		

@@ -82,6 +82,7 @@ package engine.maps {
 		    // references to them into appropriate local arrays.  Afterwards, we'll subscribe
 		    // them to each other, and to the map itself
 		    heroHP = scoreboard.getHeroHP();
+		    spawnMoneyBag(1936, 136, 1888, 96, 60);
 		    spawnActor(skyPlane);
 		    spawnActor(treePlane);
 		    treePlane.y = 48;

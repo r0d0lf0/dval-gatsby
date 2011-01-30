@@ -28,6 +28,7 @@ package engine {
 		private static var effectsChannel;
 		private static var extraLivesCounter = 0;
 		private static const extraLivesCoins = 100;
+		private static var deathCount = 0;
 		
 		private static var Hero, Boss;
 		private static var get_gold_hat = new get_gold_hat_sound();
@@ -194,6 +195,7 @@ package engine {
         
         public function removeLife() {
             Scoreboard.lives--;
+            Scoreboard.deathCount++;
             notifyObservers();
         }
         
@@ -223,6 +225,10 @@ package engine {
 		        }
 		    }
 		    return false;
+		}
+		
+		public function getDeathCount() {
+            return deathCount;
 		}
 		
 		public function removeObserver(observer):void {

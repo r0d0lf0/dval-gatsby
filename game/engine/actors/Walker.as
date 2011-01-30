@@ -81,19 +81,15 @@ package engine.actors {
 		}
 		
 		public function checkRight(observer):Boolean {
-		    if((this.x + this.collide_left_ground) < observer.x + observer.width) { // if we're collided with the square's right side currently
-		        if((this.x + this.collide_left_ground) - this.velx >= observer.x + observer.width) { // and we hadn't collided in the previous frame
+		    if((this.x + this.collide_left_ground) < observer.x + observer.width && this.x + this.collide_right_ground > observer.x + observer.width) { // if we're collided with the square's right side currently
 		            return true;
-		        }
 		    }
 		    return false;
 		}
 		
 		public function checkLeft(observer):Boolean {
-		    if((this.x + this.collide_right_ground) > observer.x) { // if we're collided with the block's left side currently
-		        if((this.x + this.collide_right_ground) - this.velx <= observer.x) { // and we hadn't collided in the previous frame
-		            return true;
-		        }
+		    if((this.x + this.collide_right_ground) > observer.x && this.x + this.collide_left_ground < observer.x) { // if we're collided with the block's left side currently
+		        return true;
 		    }
 		    return false;
 		}
@@ -143,14 +139,14 @@ package engine.actors {
 		            land(observer); // land on it again
 		        }
 		    } else if(observer is Block) { // otherwise, if it's a block
-                if(checkRight(observer)) {  // if we hit the right edge of the block
+		        if(observer == stuckTo) { // otherwise, if we're colliding with the thing we're stuck to
+	                land(observer); // continue to follow it
+	            } else if(myAction == FALL && checkTop(observer)) { // if we just fell and collided with the top
+        	        land(observer); // land us on the top
+    	        } else if(checkRight(observer)) {  // if we hit the right edge of the block
 	                this.x = (observer.x + observer.width) - collide_left_ground; // set us to there
 	            } else if(checkLeft(observer)) { // if we hit the left edge of the block
 	                this.x = observer.x - collide_right_ground; // stop us there
-	            } else if(myAction == FALL && checkTop(observer)) { // if we just fell and collided with the top
-    	             land(observer); // land us on the top
-	            } else if(observer == stuckTo) { // otherwise, if we're colliding with the thing we're stuck to
-	                land(observer); // continue to follow it
 	            }
 		    } else if(observer is KillBlock) {
 				receiveDamage(observer);

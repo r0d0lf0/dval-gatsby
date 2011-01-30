@@ -52,6 +52,8 @@ package engine.maps {
 			dropEnemy('EnemyMaleDancer', 1352, 144);
 			
 			dropEnemy('EnemyWaiter', 1424, 144);
+			
+			spawnMoneyBag(848, 160, 872, 48, 60);
 		
 		    heroHP = scoreboard.getHeroHP();
     		updateSubscriptions();

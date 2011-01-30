@@ -294,7 +294,6 @@ package engine.screens{
     					}
     					timerFlag = true;
     				}
-    				trace(actionCounter);
     			}
 	        }	
 	        if(getStatus() != COMPLETE) {

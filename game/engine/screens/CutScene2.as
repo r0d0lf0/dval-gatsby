@@ -2,22 +2,22 @@ package engine.screens{
 
     import flash.display.MovieClip;
     import flash.display.Bitmap;
-	import engine.Map;
-	import flash.events.MouseEvent;
-	import engine.Screen;
-	import flash.net.URLRequest;
-	import flash.display.Loader;
-	import flash.events.KeyboardEvent;
-	import flash.events.Event;
-	import flash.events.ProgressEvent;
+    import engine.Map;
+    import flash.events.MouseEvent;
+    import engine.Screen;
+    import flash.net.URLRequest;
+    import flash.display.Loader;
+    import flash.events.KeyboardEvent;
+    import flash.events.Event;
+    import flash.events.ProgressEvent;
     import engine.IKeyboard;
     import flash.ui.Keyboard;
-	import controls.KeyMap;	
-	import flash.media.SoundMixer;
-	import flash.media.SoundChannel;
-	import flash.media.Sound;
-	import flash.utils.getDefinitionByName;
-	import utils.FlipTimer;
+    import controls.KeyMap;	
+    import flash.media.SoundMixer;
+    import flash.media.SoundChannel;
+    import flash.media.Sound;
+    import flash.utils.getDefinitionByName;
+    import utils.FlipTimer;
 	
 	public dynamic class CutScene2 extends Screen {
 	    
@@ -25,9 +25,9 @@ package engine.screens{
 	    private var my_shirt_counter = 0;
 	    private var daisy_counter = 0;
 	    private var gatsby_counter = 0;
-		private var total_frames:Number = 500;
-		private var childMovie;
-		private var movieLoaded = false;
+	    private var total_frames:Number = 500;
+	    private var childMovie;
+	    private var movieLoaded = false;
 	    private var killFlag = false;
 	    private var BUTTON_SHIFT = false;
 	    private var mLoader;
@@ -173,11 +173,11 @@ package engine.screens{
 	            if(gatsby.x < 64) {
 	                gatsby_counter++;
 	                if(Math.floor(gatsby_counter / 2) >= 1) {
-    	                gatsby.x++;
-    	                gatsby_counter = 0;
-    	            }
+    	                   gatsby.x++;
+    	                   gatsby_counter = 0;
+    	                }
 	            } else {
-	                new FlipTimer(this, "cutsceneOver", 2000);
+	                new FlipTimer(this, "cutsceneOver", 3500);
 	            }
 	        }
 	        

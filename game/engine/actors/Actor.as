@@ -44,8 +44,8 @@
 		public var collide_left:int = 8; // what pixel do we collide on on the left
 		public var collide_right:int = 20; // what pixel do we collide on on the right
 		
-		public var collide_left_ground:int = 8;
-		public var collide_right_ground:int = 20;
+		public var collide_left_ground:int = 12;
+		public var collide_right_ground:int = 16;
 		
 		public var goingLeft = 0;
 		

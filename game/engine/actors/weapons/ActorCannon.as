@@ -2,12 +2,12 @@ package engine.actors.weapons {
     
     import engine.IObserver;
     import engine.actors.Actor;
-	import engine.Scoreboard;
+    import engine.Scoreboard;
     import engine.actors.player.Hero;
-	import flash.utils.getDefinitionByName;
-	import engine.actors.weapons.*;
-	
-	import flash.utils.Timer;
+    import flash.utils.getDefinitionByName;
+    import engine.actors.weapons.*;
+    
+    import flash.utils.Timer;
     import flash.events.TimerEvent;
     
     public class ActorCannon extends Actor implements IObserver {
@@ -27,12 +27,12 @@ package engine.actors.weapons {
         public function ActorCannon() {
             super();
             shotTimer = new Timer(shotDelay,1);
-			shotTimer.addEventListener(TimerEvent.TIMER, this.shotReset);
+	    shotTimer.addEventListener(TimerEvent.TIMER, this.shotReset);
         }
         
         public function shotReset(e) {
             //shotAvailable = true;
-        }        
+        }     
         
         public function fire() {
             if(shotsArray.length < shotsMax && shotAvailable) {
@@ -41,7 +41,7 @@ package engine.actors.weapons {
                 shotsArray.push(newProjectile);
                 myMap.spawnActor(newProjectile, this.x, this.y);
                 shotAvailable = false;
-                shotTimer.reset();
+                //shotTimer.reset();
                 shotTimer.start();
             }
         }

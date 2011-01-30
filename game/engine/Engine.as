@@ -8,7 +8,7 @@
 	import engine.IObserver;
 	import engine.screens.*;
 	import engine.Screen;
-
+        
 	dynamic public class Engine extends Screen {
 	    
 	    private var screenManager:ScreenManager;
@@ -18,7 +18,7 @@
 	    private var playerScore:Number = 0;
 	    private const playerLives:Number = 3;
 	    
-	    static private var screenList:Array = new Array(/*'GameOpen','Level1','CutScene1','Level2','CutScene2',*/'Level3','CutScene3','Level4','GameEnding');
+	    static private var screenList:Array = new Array('GameOpen','Level1','CutScene1','Level2','CutScene2','Level3','CutScene3','Level4','GameEnding');
 		
 		public function Engine():void {
 			//check for flash spacetime coordinates
@@ -54,7 +54,13 @@
                         currentScreen.stop();
                         currentScreenIndex++; // increment our index
                         if(currentScreenIndex >= screenList.length) {  // if we're out of screens
-                            // game's over.  restart
+                            if(!scoreboard.getDeathCount()) { // check for bonus conditions
+                                currentScreen = screenManager.getScreen("TrainEnding");
+                                if(currentScreen is ISubject) {
+                                    currentScreen.addObserver(this);
+                                }
+                                addChild(currentScreen); // and add it to the stage
+                            }
                         } else { // otherwise
                             currentScreen = screenManager.getScreen(screenList[currentScreenIndex]); // load the next screen into our current screen, so the next onEnterFrame will be the first onEnterFrame for currentLevel 
                             if(currentScreen is ISubject) {

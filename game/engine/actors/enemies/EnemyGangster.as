@@ -14,7 +14,7 @@ package engine.actors.enemies {
 		protected var currentStatus = WALKING;
 		
 		protected var actionCounter:Number = 0; // holder var for how many frames go by between actions
-		protected const walkDuration = 40; // how long we spend walking
+		protected const walkDuration = 60; // how long we spend walking
 		protected const shootDelay = 3; // how long we wait between bullets
 		protected const bulletsMax = 3; // how many bullets we're allowed to fire
 		protected var bulletCounter:Number = 0; // how many bullets have we fired 

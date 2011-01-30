@@ -18,10 +18,10 @@ package utils {
             myTimer.start();
         }
 		
-		public function timeUp(evt) {
-		    flipCaller[flipVar](); // call the function we were asked
+	public function timeUp(evt) {
+	    flipCaller[flipVar](); // call the function we were asked
             myTimer.removeEventListener(TimerEvent.TIMER, this.timeUp); // an
-		}
+	}
 		
         
     }

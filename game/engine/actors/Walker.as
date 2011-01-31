@@ -48,7 +48,6 @@ package engine.actors {
 		protected var myAction:uint = 3;
 		
 
-       
        public function Walker() {
            trace("mover created");
        }

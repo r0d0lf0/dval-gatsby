@@ -18,6 +18,7 @@ package engine.actors.enemies {
     	    collide_right = 24; // what pixel do we collide on on the right
     	    jumpVelocity = 20;
 	    gravity = 2;
+	    walkSpeed = 3;
 
 	    myName = "EnemySailor"; // the generic name of our enemy
             mySkin = "SailorSkin"; // the name of the skin for this enemy

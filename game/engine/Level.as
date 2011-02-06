@@ -1,5 +1,6 @@
 ﻿package engine{
     
+    import flash.display.StageDisplayState;
     import flash.display.MovieClip;
     import flash.events.*;
     import flash.events.Event;
@@ -56,27 +57,10 @@
 		addEventListener(Event.ADDED_TO_STAGE, initBuild);
 	    }
 	}
-	
+
 	private function initBuild(evt:Event):void{
 	    removeEventListener(Event.ADDED_TO_STAGE, initBuild);
-	    addEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler);
-	    addEventListener(KeyboardEvent.KEY_UP, this.keyUpHandler);
 	    buildLevel();
-	}
-	
-	public function keyDownHandler(evt):void {
-	    // here's where we handle keyboard changes
-	    if(evt.keyCode == Keyboard.ENTER) {
-		BUTTON_ENTER = true;
-		trace("pressed!");
-	    }
-	}
-	
-	public function keyUpHandler(evt):void {
-	    // here's where we handle keyboard changes
-	    if(evt.keyCode == Keyboard.ENTER) {
-                BUTTON_ENTER = false;
-	    }
 	}
 	
 	protected function startMusic() {
@@ -125,6 +109,7 @@
 	
 	public function onMusicOver(evt) {
 	    musicChannel = music.play(100);
+	    musicChannel.removeEventListener(Event.SOUND_COMPLETE, onMusicOver);
 	}		 
 
 	override public function update(evt = null):Boolean {
@@ -154,6 +139,7 @@
     			}
     		        if(currentMapIndex < (mapList.length + 1)) { // and if we haven't finished the last map
     		            removeChild(currentScreen); // remove the current map
+			    currentScreen = null;
     		            currentScreen = getMap(currentMapIndex);  // get the next one
 			    addChild(scoreboardDisplay); // add the scoreboard
                             currentScreen.setMyLevel(this);

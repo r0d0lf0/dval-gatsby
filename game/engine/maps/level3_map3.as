@@ -37,7 +37,6 @@ package engine.maps {
 					currentEnemy = new EnemyWaiter();
 					break;
 			}
-			
 			currentEnemy.alwaysOn = true;
 			this.addChild(currentEnemy);
 			currentEnemy.x = x;
@@ -58,6 +57,7 @@ package engine.maps {
 			dropEnemy('EnemyWaiter', 1424, 144);
 		
 		    heroHP = scoreboard.getHeroHP();
+			spawnMoneyBag(432, 80, 432, 160);
     		updateSubscriptions();
     		updateStatus(ACTIVE);
     		prevStatus = ACTIVE;

@@ -29,13 +29,13 @@ package engine.screens{
 	    }
 	    
 	    public function keyUpHandler(evt):void {
-		    if(evt.keyCode == Keyboard.SHIFT) {
+		    if(evt.keyCode == Keyboard.SPACE) {
 		        BUTTON_SHIFT = false;
 		    }
 		}
 		
 		public function keyDownHandler(evt):void {
-		    if(evt.keyCode == Keyboard.SHIFT && BUTTON_SHIFT == false) { // if someone's hitting enter anew
+		    if(evt.keyCode == Keyboard.SPACE && BUTTON_SHIFT == false) { // if someone's hitting enter anew
                 killFlag = true;
                 BUTTON_SHIFT = true;
 		    }

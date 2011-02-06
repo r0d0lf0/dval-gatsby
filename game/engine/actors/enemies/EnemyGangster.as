@@ -36,6 +36,8 @@ package engine.actors.enemies {
             speed = 7; // 5 replaced // how many frames should go by before we advance
 			walkSpeed = 2;
 			goingLeft = 1;
+			points = 500;
+
 			
 			frameDelay = 2;
 		}

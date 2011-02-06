@@ -18,65 +18,68 @@ package engine.screens{
     import flash.media.Sound;
     import flash.utils.getDefinitionByName;
     import utils.FlipTimer;
+    
+    public dynamic class CutScene2 extends Screen {
 	
-	public dynamic class CutScene2 extends Screen {
-	    
-	    private var my_counter:Number = 0;
-	    private var my_shirt_counter = 0;
-	    private var daisy_counter = 0;
-	    private var gatsby_counter = 0;
-	    private var total_frames:Number = 500;
-	    private var childMovie;
-	    private var movieLoaded = false;
-	    private var killFlag = false;
-	    private var BUTTON_SHIFT = false;
-	    private var mLoader;
-	    private var music = new cutscene2_music();
-	    private var throw_sound = new shirt_throw_sound();
-	    private var soundChannel;
-	    private var musicChannel;
-	    
-	    private var throwVel = -4;
-	    private var velx = 3;
-	    private var vely = throwVel;
-	    private var shirtPosX = 0;
-	    private var shirtPosY = 0;
-	    private var shirtVelMax = 2;
+	private var my_counter:Number = 0;
+	private var my_shirt_counter = 0;
+	private var daisy_counter = 0;
+	private var gatsby_counter = 0;
+	private var total_frames:Number = 500;
+	private var childMovie;
+	private var movieLoaded = false;
+	private var killFlag = false;
+	private var BUTTON_SHIFT = false;
+	private var mLoader;
+	private var music = new cutscene2_music();
+	private var throw_sound = new shirt_throw_sound();
+	private var soundChannel;
+	private var musicChannel;
+	
+	private var fadeOutCounter = 0;
+	private var fadeLevel = 0; 
 
-	    private var shirtsArray = new Array();
-	    
-	    public var green_background;
-	    public var frame;
-	    
-	    private var daisy;
-	    private var gatsby;
-	    private var gatsbyMove = false;
-	    
-	    public var movieOver = false;
-	    private var keyboardAdded = false;
-	    
-	    
-	    public function CutScene2() {
-			startLoad();	
+	private var throwVel = -4;
+	private var velx = 3;
+	private var vely = throwVel;
+	private var shirtPosX = 0;
+	private var shirtPosY = 0;
+	private var shirtVelMax = 2;
+
+	private var shirtsArray = new Array();
+	
+	public var green_background;
+	public var frame;
+	
+	private var daisy;
+	private var gatsby;
+	private var gatsbyMove = false;
+	
+	public var movieOver = false;
+	private var keyboardAdded = false;
+	
+	
+	public function CutScene2() {
+	    startLoad();	
+	}
+	
+	public function keyUpHandler(evt):void {
+	    if(evt.keyCode == Keyboard.SPACE) {
+		BUTTON_SHIFT = false;
 	    }
-	    
-	    public function keyUpHandler(evt):void {
-		    if(evt.keyCode == Keyboard.SHIFT) {
-		        BUTTON_SHIFT = false;
-		    }
-		}
-		
-		public function keyDownHandler(evt):void {
-		    if(evt.keyCode == Keyboard.SHIFT && BUTTON_SHIFT == false) { // if someone's hitting enter anew
+	}
+	
+	public function keyDownHandler(evt):void {
+	    if(evt.keyCode == Keyboard.SPACE && BUTTON_SHIFT == false) { // if someone's hitting enter anew
                 killFlag = true;
                 BUTTON_SHIFT = true;
                 movieOver = true;
-		    }
-		}
+	    }
+	}
 	
-		public function startLoad()
-		{
-		    
+	public function startLoad()
+	{
+	    
             green_background = new Bitmap(new cutscene2_background(0, 0));
             green_background.x = 68;
             green_background.y = 70;
@@ -89,7 +92,7 @@ package engine.screens{
             
             for(var i = 0; i < shirtsArray.length; i++) {
                 shirtPosX = 32;
-        	    shirtPosY = 128;
+        	shirtPosY = 128;
                 shirtsArray[i].x = shirtPosX;
                 shirtsArray[i].y = shirtPosY;
 
@@ -110,31 +113,50 @@ package engine.screens{
             addChild(frame);
             
             musicChannel = music.play(0);
-		}
-		
-		public function cutsceneOver() {
-		    movieOver = true;
-		}
+	}
+
+	public function fadeOut() {
+	    fadeOutCounter++;
+	    if(fadeOutCounter > 60 && fadeLevel == 0) {
+		fadeLevel = 1;
+		var fadeout1 = new Bitmap(new fade_1(0, 0));
+		fadeout1.x = 68;
+		fadeout1.y = 64;
+		addChild(fadeout1);
+	    } else if(fadeOutCounter > 75 && fadeLevel == 1) {
+		fadeLevel = 2;
+		var fadeout2 = new Bitmap(new fade_2(0, 0));
+		fadeout2.x = 68;
+		fadeout2.y = 64;
+		addChild(fadeout2);
+	    } else if(fadeOutCounter > 90) {
+		cutsceneOver();
+	    }	
+	}
 	
-	    override public function update(evt = null):Boolean{
-	        my_counter++;
-	        
-	        if(!keyboardAdded) {
-	            stage.addEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler); // and subscribe him to the keyboard
+	public function cutsceneOver() {
+	    movieOver = true;
+	}
+	
+	override public function update(evt = null):Boolean{
+	    my_counter++;
+	    
+	    if(!keyboardAdded) {
+	        stage.addEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler); // and subscribe him to the keyboard
     	        stage.addEventListener(KeyboardEvent.KEY_UP, this.keyUpHandler); // in both its forms
     	        keyboardAdded = true;
-	        }
-	        
-	        if(Math.floor(my_counter / 5) >= 1) {
-	            if(green_background.y > -40) {
+	    }
+	    
+	    if(Math.floor(my_counter / 5) >= 1) {
+	        if(green_background.y > -40) {
     	            green_background.y--;
     	        }
     	        my_counter = 0
-	        } 
-	        
-	        my_shirt_counter++;
-	        if(Math.floor(my_shirt_counter / 2) >= 1) {
-	            for(var i = 0; i < shirtsArray.length; i++) {
+	    } 
+	    
+	    my_shirt_counter++;
+	    if(Math.floor(my_shirt_counter / 2) >= 1) {
+	        for(var i = 0; i < shirtsArray.length; i++) {
     	            if(shirtsArray[i].y < 220) {
     	                if(shirtPosX == 32) {
     	                    soundChannel = throw_sound.play(0);
@@ -158,38 +180,39 @@ package engine.screens{
     	            }
     	        }
     	        my_shirt_counter = 0;
-	        }
-	        
-	        daisy_counter++;
-	        if(green_background.y < 0 && daisy.y > 74) {
-	            if(Math.floor(daisy_counter / 2) >= 1) {
-	                daisy.y--;
-	                daisy_counter = 0;
-	            }
-	        }
-	        daisy.update();
-	        
-	        if(daisy.y <= 74) {
-	            if(gatsby.x < 64) {
-	                gatsby_counter++;
-	                if(Math.floor(gatsby_counter / 2) >= 1) {
-    	                   gatsby.x++;
-    	                   gatsby_counter = 0;
-    	                }
-	            } else {
-	                new FlipTimer(this, "cutsceneOver", 3500);
-	            }
-	        }
-	        
-	        if(movieOver) {
-	            SoundMixer.stopAll();
-	            updateStatus(COMPLETE);
-	            return false;
-	        } else {
-	            return true;
-	        }
-	        
-        }
+	    }
 	    
-	}
+	    daisy_counter++;
+	    if(green_background.y < 0 && daisy.y > 74) {
+	        if(Math.floor(daisy_counter / 2) >= 1) {
+	            daisy.y--;
+	            daisy_counter = 0;
+	        }
+	    }
+	    daisy.update();
+	    
+	    if(daisy.y <= 74) {
+	        if(gatsby.x < 64) {
+	            gatsby_counter++;
+	            if(Math.floor(gatsby_counter / 2) >= 1) {
+    	                gatsby.x++;
+    	                gatsby_counter = 0;
+    	            }
+	        } else {
+	            //new FlipTimer(this, "cutsceneOver", 3500);
+		    fadeOut();
+	        }
+	    }
+	    
+	    if(movieOver) {
+	        SoundMixer.stopAll();
+	        updateStatus(COMPLETE);
+	        return false;
+	    } else {
+	        return true;
+	    }
+	    
+        }
+	
+    }
 }

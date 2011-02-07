@@ -57,6 +57,8 @@ package engine.actors.enemies {
 	}
 
 	public function dropDown() {
+	    var myHero = myMap.getHero();
+	    triggerHeight = myHero.y;
 	    if(this.y < triggerHeight) {
 		if(this.y < triggerHeight / 2) {
 		    this.y += 2;

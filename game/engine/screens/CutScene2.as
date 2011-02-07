@@ -199,13 +199,14 @@ package engine.screens{
     	                gatsby_counter = 0;
     	            }
 	        } else {
-	            //new FlipTimer(this, "cutsceneOver", 3500);
-		    fadeOut();
+	            new FlipTimer(this, "fadeOut", 2500);
+		    //fadeOut();
 	        }
 	    }
 	    
 	    if(movieOver) {
 	        SoundMixer.stopAll();
+		stop();
 	        updateStatus(COMPLETE);
 	        return false;
 	    } else {

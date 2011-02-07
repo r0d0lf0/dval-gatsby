@@ -23,7 +23,7 @@
 	private const playerLives:Number = 3;
 	private var gameMask = new game_mask();
 	
-	static private var screenList:Array = new Array('GameOpen','Level1','CutScene1','Level2','CutScene2','Level3','CutScene3','Level4','GameEnding');
+	static private var screenList:Array = new Array(/*'GameOpen','Level1','CutScene1',*/'Level2','CutScene2','Level3','CutScene3','Level4','GameEnding');
 	
 	public function Engine():void {
 	    //check for flash spacetime coordinates
@@ -107,7 +107,7 @@
                     break;
                     case HERO_DEAD: // if our hero died
                     scoreboard.removeLife(); //
-                    if(scoreboard.getLives() <= 0) { // if we're out of lives
+                    if(scoreboard.getLives() < 0) { // if we're out of lives
                         removeChild(currentScreen);
                         currentScreen = new GameOver();
                         addChild(currentScreen);
@@ -118,6 +118,7 @@
                         currentScreen.addObserver(this); // subscribe to it
 			currentScreen.setMapIndex(currentCheckpoint);
                         addChild(currentScreen); // and add it to the stage
+			currentScreen.mask = gameMask;
                     }
                     break;
                     case GAME_OVER: // if the game's over
@@ -127,6 +128,7 @@
 		    scoreboard.setScore(0);
                     currentScreen = screenManager.getScreen(screenList[currentScreenIndex]); // create an instance of our first screen
             	    addChild(currentScreen); // add it to the stage
+		    currentScreen.mask = gameMask;
                     break;
                 }
             }

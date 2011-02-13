@@ -4,12 +4,12 @@ package engine.actors.enemies {
     
     public class EnemyBluePigeon extends EnemyFlyer {
 		
-		override public function setup() {
+	override public function setup() {
 		    
-		    myName = "EnemyBluePigeon"; // the generic name of our enemy
+	    myName = "EnemyBluePigeon"; // the generic name of our enemy
             mySkin = "BluePigeonSkin"; // the name of the skin for this enemy
 		    
-		    startFrame = 0; // the first frame to loop on
+	    startFrame = 0; // the first frame to loop on
             endFrame = 1; // the final frame in the row
             nowFrame = 1; // current frame in row
             loopFrame = 0; // frame at which to loop
@@ -22,7 +22,7 @@ package engine.actors.enemies {
             
             tilesWide = 1;
     	    tilesTall = 1;
-		}
+	}
         
     }
     

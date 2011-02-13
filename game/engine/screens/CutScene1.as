@@ -29,13 +29,13 @@ package engine.screens{
 	    }
 	    
 	    public function keyUpHandler(evt):void {
-		    if(evt.keyCode == Keyboard.SHIFT) {
+		    if(evt.keyCode == Keyboard.SPACE) {
 		        BUTTON_SHIFT = false;
 		    }
 		}
 		
 		public function keyDownHandler(evt):void {
-		    if(evt.keyCode == Keyboard.SHIFT && BUTTON_SHIFT == false) { // if someone's hitting enter anew
+		    if(evt.keyCode == Keyboard.SPACE && BUTTON_SHIFT == false) { // if someone's hitting enter anew
                 killFlag = true;
                 BUTTON_SHIFT = true;
 		    }
@@ -44,7 +44,7 @@ package engine.screens{
 		public function startLoad()
 		{
 			var mLoader:Loader = new Loader();
-			var mRequest:URLRequest = new URLRequest("cut-scene-1.swf");
+			var mRequest:URLRequest = new URLRequest(SWF_DIR + "cut-scene-1.swf");
 			mLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, onCompleteHandler);
 			mLoader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onProgressHandler);
 			mLoader.load(mRequest);

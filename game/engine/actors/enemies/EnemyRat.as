@@ -27,11 +27,12 @@ package engine.actors.enemies {
             loopDir = 1; // loop forward (to the right) by default
             speed = 10; // 5 replaced // how many frames should go by before we advance 
 
-			walkSpeed = 2;
+			walkSpeed = 4;
 			velx = walkSpeed;
 
-			tilesWide = 1;
-			tilesTall = 1;
+            tile = 8;
+			tilesWide = 3;
+			tilesTall = 2;
 		}
         
     }

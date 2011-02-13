@@ -34,6 +34,8 @@ package engine.actors.specials {
             loopRow = 0; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
             speed = 10; // 5 replaced // how many frames should go by before we advance
+            
+            alwaysOn = true;
 		}
         
         override public function notify(subject:*):void {

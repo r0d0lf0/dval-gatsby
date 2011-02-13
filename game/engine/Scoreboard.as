@@ -1,15 +1,18 @@
 package engine {
 	
-	import engine.actors.ActorScore;
-	import engine.actors.specials.ScorePowerup;
-	import flash.media.Sound;
-	import flash.media.SoundChannel;
+    import engine.actors.ActorScore;
+    import engine.actors.specials.ScorePowerup;
+    import engine.actors.specials.MoneyBag;
+    import engine.actors.enemies.Enemy;
+    import engine.actors.enemies.EnemyWalker;
+    import flash.media.Sound;
+    import flash.media.SoundChannel;
     import flash.utils.Timer;
     import flash.events.TimerEvent;
-    
+   
     
     public class Scoreboard implements ISubject {
-        
+    
         private static var _instance:Scoreboard;
         public static var score:int = 0;
         public static var lives:int = 3;
@@ -17,6 +20,8 @@ package engine {
         public static var heroPowerupMode = "Default";
         public static var bossHP:int = 5;
         public static var coins:int = 0;
+	public static var moneyBagHolder:int = 0;
+	public static var moneyBags:int = 0;
         public static var currentLevel:int = 0;
         public static var currentMap:int = 0;
         public static var currentBoss = "BOSS NAME";
@@ -24,24 +29,30 @@ package engine {
         public static var timer:int = timeLimit;
         public static var timerTimer;
         private static var observers:Array = new Array();
-		public static var multiplier = 1;
-		private static var effectsChannel;
-		private static var extraLivesCounter = 0;
-		private static const extraLivesCoins = 100;
-		
-		private static var Hero, Boss;
-		private static var get_gold_hat = new get_gold_hat_sound();
-		private static var lose_gold_hat = new lose_gold_hat_sound();
+	public static var multiplier = 1;
+	private static var effectsChannel;
+	private static var extraLivesCounter = 0;
+	private static const extraLivesCoins = 100;
+	private static var deathCount = 0;	
+	private static var Hero, Boss;
+	private static var get_gold_hat = new get_gold_hat_sound();
+	private static var lose_gold_hat = new lose_gold_hat_sound();
 
-        
+	private static var hitSounds = new Array();
+
         public function Scoreboard(pvt:PrivateClass) {
             timerTimer = new Timer(850);
             timerTimer.addEventListener(TimerEvent.TIMER, this.timerTick);
             startTimer();
+	    hitSounds[0] = new hitsound_1();
+	    hitSounds[1] = new hitsound_2();
+	    hitSounds[2] = new hitsound_3();
+	    hitSounds[3] = new hitsound_4();
+	    hitSounds[4] = new hitsound_5();
         }
         
         public function startTimer() {
-			timerTimer.start();
+	    timerTimer.start();
         }
         
         public function setHeroPowerupMode(newMode) {
@@ -92,9 +103,9 @@ package engine {
         }
         
         public function setHeroHP(HP) {
-			if(HP < 0) {
-				HP = 0;
-			}
+	    if(HP < 0) {
+		HP = 0;
+	    }
             Scoreboard.heroHP = HP;
             notifyObservers();
         }        
@@ -117,27 +128,48 @@ package engine {
             notifyObservers();
         }
 
-		public function setMultiplier(newMultiplier) {
-			Scoreboard.multiplier = newMultiplier;
-		}
+	public function setMultiplier(newMultiplier) {
+	    Scoreboard.multiplier = newMultiplier;
+	}
         
         public function addToScore(giver, amount:Number) {
             var additionalAmount = amount * (Math.pow(2, Scoreboard.multiplier - 1));
             Scoreboard.score += additionalAmount;
-			var myScore = new ActorScore(additionalAmount, giver.x, giver.y);
-			var myMap = giver.getMap();
-			myMap.addChild(myScore);
-			if(giver is ScorePowerup) {
-			    coins++;
-			    if(checkExtraLife()) {
-    			    var myHero = myMap.getHero();
-    			    var xtra = new ActorScore('1UP', myHero.x, myHero.y);
-    			    myMap.addChild(xtra);
-    			    coins = 0;
-    			}
-			}
+	    var myScore = new ActorScore(additionalAmount, giver.x, giver.y);
+	    var myMap = giver.getMap();
+	    myMap.addChild(myScore);
+	    if(giver is ScorePowerup) {
+		coins++;
+		if(checkExtraLife()) {
+    		    var myHero = myMap.getHero();
+    		    var xtra = new ActorScore('1UP', myHero.x, myHero.y);
+    		    myMap.addChild(xtra);
+    		    coins = 0;
+    		}
+	    } else if(giver is MoneyBag) {
+		moneyBagHolder++;
+	    } else if(giver is Enemy || giver is EnemyWalker) {
+		if(Scoreboard.multiplier <= 4) {
+		    effectsChannel = hitSounds[Scoreboard.multiplier].play(0);
+		} else {
+		    effectsChannel = hitSounds[4].play(0);
+		}
+	    }
             notifyObservers();
         }
+
+	public function clearMoneyBagHolder() {
+	    moneyBagHolder = 0;
+	}
+
+	public function countMoneyBags() {
+	    moneyBags += moneyBagHolder;
+	    moneyBagHolder = 0;
+	}
+
+	public function getMoneyBagCount():Number {
+	    return moneyBags;
+	}
         
         public function getCoins():Number {
             return Scoreboard.coins;
@@ -194,6 +226,7 @@ package engine {
         
         public function removeLife() {
             Scoreboard.lives--;
+            Scoreboard.deathCount++;
             notifyObservers();
         }
         
@@ -210,35 +243,40 @@ package engine {
             Scoreboard.lives = newLives;
         }
         
-		public function addObserver(observer):void {
-		    if(!isObserver(observer)) {
-		        observers.push(observer);
-		    }
+	public function addObserver(observer):void {
+	    if(!isObserver(observer)) {
+		observers.push(observer);
+	    }
+	    notifyObservers();
+	}
+	
+	public function isObserver(observer):Boolean {
+	    for(var ob:int=0; ob<observers.length; ob++) {
+		if(observers[ob] == observer) {
+		    return true;
 		}
-		
-		public function isObserver(observer):Boolean {
-		    for(var ob:int=0; ob<observers.length; ob++) {
-		        if(observers[ob] == observer) {
-		            return true;
-		        }
-		    }
-		    return false;
-		}
-		
-		public function removeObserver(observer):void {
-		    for (var ob:int=0; ob<observers.length; ob++) {
+	    }
+	    return false;
+	}
+	
+	public function getDeathCount() {
+            return deathCount;
+	}
+	
+	public function removeObserver(observer):void {
+	    for (var ob:int=0; ob<observers.length; ob++) {
                 if(observers[ob] == observer) {
                     observers.splice (ob,1);
                     break;
                 }
             }
-		}
-		
-		public function notifyObservers():void {
-		    for(var ob=0; ob<observers.length; ob++) {
-		        observers[ob].notify(this);
-		    }
-		}
+	}
+	
+	public function notifyObservers():void {
+	    for(var ob=0; ob<observers.length; ob++) {
+		observers[ob].notify(this);
+	    }
+	}
         
     }
     

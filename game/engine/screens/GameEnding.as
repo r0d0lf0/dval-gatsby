@@ -82,20 +82,18 @@ package engine.screens{
 	    credits_text = getChildByName("credits_text");
 	    credits_text.height = 8000;
 	    //credits_text.htmlText = "And as I sat there brooding on the old, unknown world, I thought of Gatsby's wonder when he first picked out the green light at the end of Daisy's dock. He had come a long way to this blue lawn, and his dream must have seemed so close that he could hardly fail to grasp it. He did not know that it was already behind him, somewhere back in that vast obscurity beyond the city, where the dark fields of the republic rolled on under the night.";
- 	    credits_text.htmlText = "GATSBY BELIEVED IN THE GREEN LIGHT, THE ORGASTIC FUTURE THAT YEAR BY YEAR RECEDES BEFORE US. IT ELUDED US THEN, BUT THAT'S NO MATTER -- TOMORROW WE WILL RUN FASTER, STRETCH OUT OUR ARMS FARTHER... AND ONE FINE MORNING --";
+            credits_text.htmlText = "GATSBY BELIEVED IN THE GREEN LIGHT, THE ORGASTIC FUTURE THAT YEAR BY YEAR RECEDES BEFORE US. IT ELUDED US THEN, BUT THAT'S NO MATTER -- TOMORROW WE WILL RUN FASTER, STRETCH OUT OUR ARMS FARTHER... AND ONE FINE MORNING --";
             credits_text.htmlText += "<br /><br /><br /><br />SO WE BEAT ON, BOATS AGAINST THE CURRENT, BORNE BACK CEASELESSLY INTO THE PAST.";
             credits_text.htmlText += "<br /><br />";
             credits_text.htmlText += "<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />";
-            credits_text.htmlText += "- DIRECTORS -<br />C. HOYAHON<br />P. SATO<br /><br />- STORY -<br />FAN FAN<br />M. SUZUKI<br />MIKEY*<br />F.S. FITSUJURADO<br /><br />- ART WORK -<br />YUKI4343<br />TURBO MCP<br /><br />- PROGRAM WORK -<br />T. YOSHIDA<br />H. TANAKA<br />LICKLE<br /><br />- ENEMY DESIGN -<br />MR. QUINT<br />SU MI SU<br />N. TEZUKA<br /><br />- LEVEL PLAN -<br />R. KIMURA<br />TAROTARO<br /><br />- SOUND COMPOSE -<br />T. SAITO<br />L.R.C<br /><br />- MUSIC COMPOSE -<br />NARU NARU<br />KID RIKI<br />S. WATANABE<br /><br />- TRANSLATION -<br />CHARLIE SMITH<br /><br />- SPECIAL THANKS -<br />KAT KAT<br />BUG*43<br />S. MIYAHON<br />MS. KATO<br />H. AKAMATSU<br />SAKURAZAKI<br />FUJICHAN X<br />RUNMAL<br />INFAKING<br />O. MORI<br />H. SAKAGUCHI<br />BUNBUN<br />S. OGAWA<br />YURICHAN'S MAMA<br />ZZZ<br />T. MAEDA<br /><br />- EXECUTIVE PRODUCER -<br />T. FUJIMOTO<br /><br /><br /><br /><br /><br />THE END<br />CONGRATULATIONS!! <br />THANK YOU FOR PLAY.";
+            credits_text.htmlText += "- DIRECTORS -<br />C. HOYAHON<br />P. SATO<br /><br />- STORY -<br />M. SUZUKI<br />F. SCOTT FITZGERALD<br /><br />- ART WORK -<br />TURBO MCP<br /><br />- PROGRAM WORK -<br />T. YOSHIDA<br />H. TANAKA<br />LICKLE<br /><br />- ENEMY DESIGN -<br />MR. QUINT<br />SU MI SU<br />N. TEZUKA<br /><br />- LEVEL PLAN -<br />R. KIMURA<br /><br />- SOUND COMPOSE -<br />T. SAITO<br /><br />- MUSIC COMPOSE -<br />KID RIKI<br />S. WATANABE<br /><br />- TRANSLATION -<br />CHARLIE SMITH<br /><br />- SPECIAL THANKS -<br />S. MIYAHON<br />H. AKAMATSU<br />SAKURAZAKI<br />M. BRUCCOLI<br />RUNMAL<br />INAFKING<br />H. SAKAGUCHI<br />N. UEMATSU<br />Y. AMANO<br />YUUKICHAN'S PAPA<br />BUNBUN<br /><br />- EXECUTIVE PRODUCER -<br />T. FUJIMOTO<br /><br /><br /><br /><br /><br />THE END<br />CONGRATULATIONS!! <br />THANK YOU FOR PLAY.";
             if(scoreboard.getDeathCount()) {
                 credits_text.htmlText += "<br />TRY FOR NO DEATH GAME!!";
             }
-            
 	    updateStatus(ACTIVE);
 	    pause(2000);
 	    
-
-            castle_sound = new castle_crumble_sound();
+        castle_sound = new castle_crumble_sound();
 	}
 	
 	private function getMovieFromLibrary(mcIName:String){
@@ -171,7 +169,7 @@ package engine.screens{
 	            }
 	        } else if(creditsFinished == false) {
 	            credits_text.y = 212 - Math.floor(frameCounter / 4);
-	            if(credits_text.y < -1900) {
+	            if(credits_text.y < -1800) {
 	                updateStatus(COMPLETE);
 	            }
 	        }

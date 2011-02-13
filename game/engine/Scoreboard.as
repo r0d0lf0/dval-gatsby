@@ -247,6 +247,7 @@ package engine {
 	    if(!isObserver(observer)) {
 		observers.push(observer);
 	    }
+	    notifyObservers();
 	}
 	
 	public function isObserver(observer):Boolean {

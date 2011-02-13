@@ -30,7 +30,7 @@
 	protected var currentScreen;
 	
 	protected var scoreboardDisplay:ScoreboardDisplay;
-	protected var scoreboard:Scoreboard;
+	protected var scoreboard:Scoreboard = Scoreboard.getInstance();
 
 	protected var music;
 	protected var bossMusic;
@@ -49,6 +49,12 @@
 	protected var pause_fx;
 	
  	public function Level():void{
+
+	    scoreboard.setHeroHP(3);
+	    scoreboard.setCurrentBoss(bossName);
+	    scoreboard.setBossHP(bossHP);
+	    scoreboard.setCurrentLevel(stageNumber);
+
  	    music = new music_level1();  // create an instance of the music
 	    pause_fx = new pause_sound();
 	    if(stage){
@@ -75,12 +81,7 @@
 	
 	public function buildLevel():void{
 	    scoreboardDisplay = new ScoreboardDisplay(); // create a new scoreboard display object
-	    scoreboard = Scoreboard.getInstance(); // get a copy of our scoreboard
 	    scoreboard.addObserver(scoreboardDisplay); // and subscribe the display to the scoreboard
-	    scoreboard.setHeroHP(3);
-	    scoreboard.setCurrentBoss(bossName);
-	    scoreboard.setBossHP(bossHP);
-	    scoreboard.setCurrentLevel(stageNumber);
 	    
 	    var startTimer:Timer = new Timer(1000,1);
 	    startTimer.addEventListener(TimerEvent.TIMER, timerListener);

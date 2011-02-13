@@ -21,7 +21,7 @@
 		    mapList = new Array('level2_map1', 'level2_map2'); // use this later for dylan-style level loading by converting strings to classes
 			levelNumber = "LEVEL 2";
 			stageNumber = 2;
-			levelName = "TRAIN TO THE CITY";
+			levelName = "VALLEY OF ASHES";
 			bossName = "ENEMY";
 			bossHP = 5;
 			music = new music_level2();

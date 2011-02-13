@@ -44,7 +44,7 @@ package engine.screens{
 		public function startLoad()
 		{
 			var mLoader:Loader = new Loader();
-			var mRequest:URLRequest = new URLRequest("cut-scene-1.swf");
+			var mRequest:URLRequest = new URLRequest(SWF_DIR + "cut-scene-1.swf");
 			mLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, onCompleteHandler);
 			mLoader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onProgressHandler);
 			mLoader.load(mRequest);

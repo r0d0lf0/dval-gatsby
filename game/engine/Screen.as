@@ -9,6 +9,8 @@ package engine{
     
 	public dynamic class Screen extends MovieClip implements ISubject, IObserver {
         
+	public static const SWF_DIR = "http://s3.greatgatsbygame.com/";
+
         public static const DEFAULT = 1;
         public static const ACTIVE = 2;
         public static const PAUSING = 30;

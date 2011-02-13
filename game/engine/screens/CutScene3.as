@@ -44,7 +44,7 @@ package engine.screens{
 	public function startLoad()
 	{
 	    mLoader = new Loader();
-	    var mRequest:URLRequest = new URLRequest("cut-scene-3.swf");
+	    var mRequest:URLRequest = new URLRequest(SWF_DIR + "cut-scene-3.swf");
 	    mLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, onCompleteHandler);
 	    mLoader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onProgressHandler);
 	    mLoader.load(mRequest);
@@ -76,6 +76,7 @@ package engine.screens{
                     mLoader.unload();
 		    SoundMixer.stopAll();
 		    stage.frameRate = 60;
+		    childMovie = null;
 		    return false;
 		} else if(childMovie.currentFrame >= total_frames && movieLoaded) {
 		    updateStatus(COMPLETE);
@@ -83,6 +84,7 @@ package engine.screens{
     	            stage.removeEventListener(KeyboardEvent.KEY_UP, this.keyUpHandler); // in both its forms
 		    childMovie.stop();
 		    SoundMixer.stopAll();
+		    childMovie = null;
 		    stage.frameRate = 60;
 		    return false;
 		}

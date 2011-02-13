@@ -3,12 +3,13 @@ package engine.actors {
     import engine.actors.Actor;
     import engine.IKeyboard;
     import flash.ui.Keyboard;
-	import controls.KeyMap;
+    import controls.KeyMap;
     import flash.text.TextField;
     import flash.media.Sound;
-	import flash.media.SoundChannel;
-	import flash.utils.Timer;
+    import flash.media.SoundChannel;
+    import flash.utils.Timer;
     import flash.events.TimerEvent;
+    import engine.Scoreboard
     
     // Generic class for a MapObject that is able to be animatable.  MapObject should be the first class, this second, then different
     // moving blocks/aes/baddies should extend this.
@@ -28,9 +29,11 @@ package engine.actors {
         private var myMessage = "Default message";
         private var typingFlag = false;
 
-		private var keys:KeyMap = KeyMap.getInstance();
-		private var keyboardStatus:Array = new Array();
+	private var keys:KeyMap = KeyMap.getInstance();
+	private var keyboardStatus:Array = new Array();
         
+	private var scoreboard = Scoreboard.getInstance();
+
         public const CONTINUE = 1;
         public const EXIT = 2;
         public var exitFunction = CONTINUE;
@@ -44,6 +47,7 @@ package engine.actors {
             textArea.text = "";
             var blinkTimer:Timer = new Timer(500);
             blinkTimer.addEventListener(TimerEvent.TIMER, blinkArrow);
+	    
             blinkTimer.start();
             addChild(DownArrow);
             DownArrow.x = 226;
@@ -69,6 +73,7 @@ package engine.actors {
         public function start() {
             // here's where we start the dialog box
             this.alpha = 1;
+	    scoreboard.stopTimer();
             typingFlag = true;
         }
         
@@ -81,21 +86,21 @@ package engine.actors {
         }
         
         public function keyUpHandler(evt):void {
-		    if(evt.keyCode == Keyboard.SHIFT || evt.keyCode == Keyboard.SPACE) {
-		        BUTTON_SHIFT = false;
-		    }
-		}
-		
-		public function keyDownHandler(evt):void {
-		    if(evt.keyCode == Keyboard.SHIFT || evt.keyCode == Keyboard.SPACE) { // if someone's hitting enter anew
-		        BUTTON_SHIFT = true; // mark our holder as pressed
-		    }
-		}
+	    if(evt.keyCode == Keyboard.SHIFT || evt.keyCode == Keyboard.SPACE) {
+		BUTTON_SHIFT = false;
+	    }
+	}
+	
+	public function keyDownHandler(evt):void {
+	    if(evt.keyCode == Keyboard.SHIFT || evt.keyCode == Keyboard.SPACE) { // if someone's hitting enter anew
+		BUTTON_SHIFT = true; // mark our holder as pressed
+	    }
+	}
         
         // this should get the enterFrame tick like everything else
         override public function update():void {            
-		    if(BUTTON_SHIFT) {
-		        if(typingFlag) { // if we're typing and arent' at teh end yet
+	    if(BUTTON_SHIFT) {
+		if(typingFlag) { // if we're typing and arent' at teh end yet
     	            textCounter = messageArray[currentMessage].length; // jump to the end of the message
     	        } else if(currentMessage < (messageArray.length - 1)) { // otherwise, if there are more messages
     	            currentMessage++; // get the next message
@@ -105,11 +110,12 @@ package engine.actors {
     	                myMap.unPauseMap(this); // unpause the game
     	            } else if(exitFunction == EXIT) {
     	                myMap.unPauseMap(this);
+			scoreboard.startTimer();
     	                myMap.updateStatus(COMPLETE);
     	            } 
     	        }
     	        BUTTON_SHIFT = false;
-		    }
+	    }
 
             
             if(typingFlag) { // if we're typing

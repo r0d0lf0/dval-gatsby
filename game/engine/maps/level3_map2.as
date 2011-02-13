@@ -15,7 +15,7 @@ package engine.maps {
 	}
 	
 	override public function buildMap():void {
-	    spawnMoneyBag(256, 8, 320, 48);
+	    spawnMoneyBag(256, -24, 320, 48);
 	    heroHP = scoreboard.getHeroHP();
     	    updateSubscriptions();
     	    updateStatus(ACTIVE);

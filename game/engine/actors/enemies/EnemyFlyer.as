@@ -40,6 +40,7 @@ package engine.actors.enemies {
 		 heroTriggered = true;
 	     } else if(heroTriggered) {
 		 dropDown();
+		 notifyObservers();
 	     }
 	     
 	     animate();

@@ -23,10 +23,12 @@
 	private const playerLives:Number = 3;
 	private var gameMask = new game_mask();
 	
-	static private var screenList:Array = new Array(/*'GameOpen','Level1','CutScene1',*/'Level2','CutScene2','Level3','CutScene3','Level4','GameEnding');
+	static private var screenList:Array = new Array(/*'GameOpen','Level1','CutScene1','Level2','CutScene2','Level3','CutScene3','Level4',*/'GameEnding');
 	
 	public function Engine():void {
 	    //check for flash spacetime coordinates
+	    // ^ this is a dylan comment!  don't you love that guy?
+	    //                  - from Charlie, 2.10.11, San Francisco, CA
 	    if (stage != null) {
 		start();
 	    } else {

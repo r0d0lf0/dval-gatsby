@@ -10,7 +10,7 @@ package engine.actors.enemies {
 	
 		protected var falling = false;
 		protected const fallSpeed = 2;
-		protected const triggerDistance = 30;
+		protected const triggerDistance = 60;
 		protected var vely = 0;
 		
 		private var chandelierSound = new chandelier_sound();
@@ -20,7 +20,7 @@ package engine.actors.enemies {
 	        mySkin = "ChandelierSkin"; // the name of the skin for this enemy
 	        
 	        collide_left = 14; // what pixel do we collide on on the left
-    		collide_right = 50; // what pixel do we collide on on the right
+    		collide_right = 45; // what pixel do we collide on on the right
 	        
 	        points = 250;
 

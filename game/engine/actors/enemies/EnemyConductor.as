@@ -23,7 +23,7 @@ package engine.actors.enemies {
             nowFrame = 0; // current frame in row
             loopFrame = 0; // frame at which to loop
             loopType = 0; // 0 loops, 1 bounces
-            loopRow = 0; // which row are we on
+            loopRow = 2; // which row are we on
             loopDir = 1; // loop forward (to the right) by default
             speed = 10; // 5 replaced // how many frames should go by before we advance            
 		}
@@ -33,19 +33,21 @@ package engine.actors.enemies {
                 myHero = myMap.getHero();
             } else {
                 if(myHero.stuckTo == this.stuckTo) {
-                    trace("hello!");
                     if(velx > 0) {
                         velx = 6;
                     } else {
                         velx = -6;
                     }
+                    loopRow = 0;
+                    speed = 5;
                 } else {
-                    trace("goodbye!");
                     if(velx > 0) {
                         velx = 1;
                     } else {
                         velx = -1;
                     }
+                    loopRow = 2;
+                    speed = 10;
                 }
             }
         }

@@ -44,8 +44,8 @@
 		public var collide_left:int = 8; // what pixel do we collide on on the left
 		public var collide_right:int = 20; // what pixel do we collide on on the right
 		
-		public var collide_left_ground:int = 8;
-		public var collide_right_ground:int = 20;
+		public var collide_left_ground:int = 12;
+		public var collide_right_ground:int = 16;
 		
 		public var goingLeft = 0;
 		
@@ -69,7 +69,7 @@
 		    setup();
 			this.addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
 		}
-		
+	
 		public function getStatus() {
 			return myStatus;
 		}
@@ -81,6 +81,7 @@
 		//clean up and free resources
 		public function onRemove(evt:Event):void{
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+			onStage = false;
 		}
 		
 		public function getHP() {

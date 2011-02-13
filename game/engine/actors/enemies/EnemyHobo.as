@@ -13,6 +13,9 @@ package engine.actors.enemies {
 		    collide_left = 10; // what pixel do we collide on on the left
     		collide_right = 22; // what pixel do we collide on on the right
     		
+    		collide_left_ground = 10; // what pixel do we collide on on the left
+    		collide_right_ground = 22; // what pixel do we collide on on the right
+    		
     		myName = "EnemyHobo"; // the generic name of our enemy
             mySkin = "HoboSkin"; // the name of the skin for this enemy
     		
@@ -30,9 +33,9 @@ package engine.actors.enemies {
 			frameDelay = 0;
 		}
 		
-		
 		override public function update():void {
             if(HP) {
+                
                 if(stuckTo) {
                     depart(stuckTo);
                     this.y += -gravity;

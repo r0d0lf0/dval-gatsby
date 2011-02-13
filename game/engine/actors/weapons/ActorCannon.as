@@ -2,18 +2,18 @@ package engine.actors.weapons {
     
     import engine.IObserver;
     import engine.actors.Actor;
-	import engine.Scoreboard;
+    import engine.Scoreboard;
     import engine.actors.player.Hero;
-	import flash.utils.getDefinitionByName;
-	import engine.actors.weapons.*;
-	
-	import flash.utils.Timer;
+    import flash.utils.getDefinitionByName;
+    import engine.actors.weapons.*;
+    
+    import flash.utils.Timer;
     import flash.events.TimerEvent;
     
     public class ActorCannon extends Actor implements IObserver {
         
         private var owner;
-        protected var ammoType:String = "Projectile";
+        protected var ammoType:String = "HatProjectile";
         public var shotsArray = new Array();
         public var shotsMax = 1;
         public var shotAvailable = true;
@@ -27,21 +27,21 @@ package engine.actors.weapons {
         public function ActorCannon() {
             super();
             shotTimer = new Timer(shotDelay,1);
-			shotTimer.addEventListener(TimerEvent.TIMER, this.shotReset);
+	    shotTimer.addEventListener(TimerEvent.TIMER, this.shotReset);
         }
         
         public function shotReset(e) {
             //shotAvailable = true;
-        }        
+        }     
         
         public function fire() {
-            if(shotsArray.length < shotsMax && shotAvailable) {
+            if(shotsArray.length < shotsMax && shotAvailable && onStage == true && myMap != null) {
                 var newProjectile = getProjectile();
                 newProjectile.setOwner(this);
                 shotsArray.push(newProjectile);
                 myMap.spawnActor(newProjectile, this.x, this.y);
                 shotAvailable = false;
-                shotTimer.reset();
+                //shotTimer.reset();
                 shotTimer.start();
             }
         }

@@ -20,7 +20,7 @@ package engine.levels{
 		public function Level4():void{
 		    mapList = new Array('level4_map1'); // use this later for dylan-style level loading by converting strings to classes
 			levelNumber = "LEVEL 4";
-			levelName = "BOATS AGAINST THE CURRENT";
+			levelName = "WEST EGG BEACH";
 			stageNumber = 4;
 			bossName = " ";
 			bossHP = 0;

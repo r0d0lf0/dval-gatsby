@@ -53,6 +53,12 @@
 					case 'GameEnding':
 					    return new GameEnding();
 					    break;
+					case 'TrainEnding':
+					    return new TrainEnding();
+					    break;
+					case 'GraveyardEnding':
+					    return new GraveyardEnding();
+					    break;
 				}
 				return false;
 		}

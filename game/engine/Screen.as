@@ -9,6 +9,8 @@ package engine{
     
 	public dynamic class Screen extends MovieClip implements ISubject, IObserver {
         
+	public static const SWF_DIR = "http://s3.greatgatsbygame.com/";
+
         public static const DEFAULT = 1;
         public static const ACTIVE = 2;
         public static const PAUSING = 30;
@@ -16,6 +18,8 @@ package engine{
         public static const COMPLETE = 4;
         public static const HERO_DEAD = 5;
         public static const GAME_OVER = 6
+
+	public var myLevel;
         
         public var status = DEFAULT; // default status, i sort of forget what this is for
 		public var prevStatus = DEFAULT; // holder for previous status
@@ -27,6 +31,10 @@ package engine{
         public function Screen() {
             
         }
+
+	public function setMyLevel(level) {
+	    myLevel = level;
+	}
         
         protected function pause(duration):void {
 		    pausedFlag = true;
